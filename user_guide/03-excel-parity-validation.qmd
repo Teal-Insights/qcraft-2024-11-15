@@ -5,30 +5,27 @@ title: "Excel parity validation"
 Q-CRAFT includes an exported validation bundle that checks the generated
 `qcraft` package against the source Excel workbook. The test drives
 the workbook with Microsoft Excel through `xlwings`, applies the same inputs
-through the package's public `set_*` functions, and compares the public
-`compute_*` outputs cell by cell.
+through the package's public `set_*` functions, and compares calculated outputs
+cell by cell.
 
 ## Current reference result
 
-The current reference run is **FAIL**: **612 / 3,468**
-cell-level comparisons passed at `atol = 1e-06`.
+The current reference run is **PASS**: **371,979 / 371,979**
+cell-level comparisons passed at `atol = 1e-06, rtol = 1e-12`.
 
-- Result: **FAIL**
-- Generated: `2026-07-20T00:34:40+00:00`
-- Passed: **612**
-- Failed: **2,856**
-- Pass rate: **17.65%**
+- Result: **PASS**
+- Generated: `2026-07-26T22:49:42+00:00`
+- Passed: **371,979**
+- Failed: **0**
+- Pass rate: **100.00%**
 - Acceptance bar: **100.00%**
+- Evidence: **exported_library**
 
-The sweep covers **3,468** cell-level comparisons against Excel.
+The sweep covers **371,979** cell-level comparisons against Excel.
 
 ## What Was Tested
 
-The validation checks the exported standalone library, not just the extraction
-graph. It imports `qcraft.api`, creates a fresh context for each scenario,
-sets inputs through the records-shaped public setters, computes the exported
-output series, and compares those values against the workbook's calculated
-output cells.
+The validation checks the exported standalone library, not just the extraction graph. It imports `qcraft.api`, creates a fresh context for each scenario, sets inputs through the records-shaped public setters, computes the exported output series, and compares those values against the workbook's calculated output cells.
 
 ## Inspect Or Re-run
 
@@ -40,7 +37,7 @@ reruns require Windows with Microsoft Excel installed.
 - Validation bundle README: `tests/README.md`
 - Differential test harness: `tests/differential/differential_test_exported_library.py`
 
-To re-run the validation from the exported project:
+To re-run exported-library validation from the exported project:
 
 ```pwsh
 uv run --project . --group validation python -m tests.differential.differential_test_exported_library --layout exported

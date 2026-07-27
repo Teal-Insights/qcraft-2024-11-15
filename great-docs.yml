@@ -22,6 +22,11 @@ parser: google
 # Set to false if your package has cyclic alias issues (e.g., PyO3/Rust bindings)
 dynamic: false
 
+# Source links walk every export through dynamic introspection; on this large
+# generated package that step has hung for 20+ minutes / multi-GB RSS.
+source:
+  enabled: false
+
 # API Discovery Settings
 # ----------------------
 # Exclude items from auto-documentation
@@ -63,9 +68,8 @@ dynamic: false
 
 reference:
   - title: Functions
-    desc: Utility functions
+    desc: Public API
     contents:
-      - compute_all
       - compute_baseline_debt_stabilizing_primary_balance
       - compute_baseline_debt_to_gdp
       - compute_baseline_employment_growth
@@ -81,15 +85,42 @@ reference:
       - compute_baseline_primary_expenditure_pct_gdp
       - compute_baseline_real_gdp_growth
       - compute_baseline_revenue_pct_gdp
-      - compute_scenario_debt_stabilizing_primary_balance
+      - compute_scenario_debt_stabilizing_primary_balance_high
+      - compute_scenario_debt_stabilizing_primary_balance_hot
+      - compute_scenario_debt_stabilizing_primary_balance_hot_adapted
+      - compute_scenario_debt_stabilizing_primary_balance_hot_unadapted
+      - compute_scenario_debt_stabilizing_primary_balance_moderate
+      - compute_scenario_debt_stabilizing_primary_balance_paris
       - compute_scenario_debt_to_gdp
-      - compute_scenario_fiscal_consolidation_gap
-      - compute_scenario_interest_expenditure_pct_gdp
-      - compute_scenario_nominal_gdp_growth
+      - compute_scenario_fiscal_consolidation_gap_milestones_2050
+      - compute_scenario_fiscal_consolidation_gap_milestones_2075
+      - compute_scenario_fiscal_consolidation_gap_milestones_2099
+      - compute_scenario_interest_expenditure_pct_gdp_high
+      - compute_scenario_interest_expenditure_pct_gdp_hot
+      - compute_scenario_interest_expenditure_pct_gdp_hot_adapted
+      - compute_scenario_interest_expenditure_pct_gdp_hot_unadapted
+      - compute_scenario_interest_expenditure_pct_gdp_moderate
+      - compute_scenario_interest_expenditure_pct_gdp_paris
+      - compute_scenario_nominal_gdp_growth_high
+      - compute_scenario_nominal_gdp_growth_hot
+      - compute_scenario_nominal_gdp_growth_hot_adapted
+      - compute_scenario_nominal_gdp_growth_hot_unadapted
+      - compute_scenario_nominal_gdp_growth_moderate
+      - compute_scenario_nominal_gdp_growth_paris
       - compute_scenario_overall_balance_pct_gdp
       - compute_scenario_primary_balance_pct_gdp
-      - compute_scenario_primary_expenditure_pct_gdp
-      - compute_scenario_real_gdp_level_index
+      - compute_scenario_primary_expenditure_pct_gdp_high
+      - compute_scenario_primary_expenditure_pct_gdp_hot
+      - compute_scenario_primary_expenditure_pct_gdp_hot_adapted
+      - compute_scenario_primary_expenditure_pct_gdp_hot_unadapted
+      - compute_scenario_primary_expenditure_pct_gdp_moderate
+      - compute_scenario_primary_expenditure_pct_gdp_paris
+      - compute_scenario_real_gdp_level_index_high
+      - compute_scenario_real_gdp_level_index_hot
+      - compute_scenario_real_gdp_level_index_hot_adapted
+      - compute_scenario_real_gdp_level_index_hot_unadapted
+      - compute_scenario_real_gdp_level_index_moderate
+      - compute_scenario_real_gdp_level_index_paris
       - list_computes
       - list_groups
       - list_reader_leaves
@@ -97,18 +128,34 @@ reference:
       - list_readers
       - list_setters
       - make_context
+      - read_baseline_debt_direction_above_sentinel
+      - read_baseline_debt_direction_below_sentinel
       - read_country
       - read_debt_target
       - read_demography_scenario
+      - read_demography_variant_label_high
+      - read_demography_variant_label_low
+      - read_demography_variant_label_medium
       - read_discrete_primary_expenditure_shocks
       - read_discrete_primary_expenditure_shocks_range
       - read_discrete_revenue_shocks
       - read_discrete_revenue_shocks_range
       - read_expenditure_rigidity
       - read_fiscal_rule_enabled
+      - read_inflation_convergence_logistic_midpoint
+      - read_inflation_convergence_logistic_steepness
+      - read_inflation_convergence_period_index
+      - read_inflation_convergence_period_index_range
       - read_inflation_end
       - read_inflation_start
+      - read_interest_rate_assumption_label_differential
+      - read_interest_rate_assumption_label_nominal
+      - read_interest_rate_assumption_label_real
       - read_interest_rate_mode
+      - read_productivity_convergence_logistic_midpoint
+      - read_productivity_convergence_logistic_steepness
+      - read_productivity_convergence_period_index
+      - read_productivity_convergence_period_index_range
       - read_productivity_end
       - read_productivity_start
       - read_real_interest_rate
@@ -125,7 +172,6 @@ reference:
       - set_productivity_end
       - set_productivity_start
       - set_real_interest_rate
-
 # Site URL
 # --------
 # Canonical address of the deployed documentation site.

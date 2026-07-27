@@ -1,27 +1,1182 @@
 Parity report: exported Q-CRAFT standalone library vs Excel
-Generated: 2026-07-20T00:34:40+00:00
+Generated: 2026-07-26T22:49:42+00:00
 Workbook:  C:\Users\chris\Software\qcraft-extraction-pipeline\data\qcraft-toolv10.xlsx
 Package:   C:\Users\chris\Software\qcraft-extraction-pipeline\dist\qcraft (imported as dist.qcraft.api)
-Tolerance: atol = 1e-06
+Tolerance: atol = 1e-06, rtol = 1e-12
+
+Workbook SHA-256: fe3b719b1777f4c4c69aaeb34004176bd337731f9281455b23949fc0f7ea1644
+
+ENVIRONMENT
+  Python:  3.13.5
+  OS:      Windows-11-10.0.26200-SP0
+  xlwings: 0.36.10
+  Excel:   16.0
 
 PARITY (extraction agreement with Excel, including matched errors)
-Total comparisons: 3468
-Passed:            612
-Failed:            2856
-Pass rate:         17.65%
+Total comparisons: 371979
+Passed:            371979
+Failed:            0
+Pass rate:         100.00%
 Acceptance bar:    100.00%
-Result:            FAIL
+Result:            PASS
 
 HEALTH (both sides numeric; matched errors excluded)
-Healthy:           612
-Matched errors:    0
-Health rate:       17.65%
+Healthy:           371595
+Matched errors:    14389
+Flagged errors:    384 flagged (allowed by --allow-matched-errors)
+Health rate:       99.90%
 Health result:     WARN
 
-First divergence:
-  scenario:  canonical
-  cell:      Baseline!P22  (baseline_primary_balance[2021])
-  excel:     '<exception: XlErrorException: #VALUE!>'
-  mvp:       '<exception: XlErrorException: #VALUE!>'
-  abs_diff:  None
-  rel_diff:  None
+MATCHED ERROR VALUES (both oracles returned the same Excel error; fails the run unless the scenario sets expects_error_values=True or --allow-matched-errors is passed):
+  canonical :: Paris!D36 (scenario_debt_stabilizing_primary_balance_paris[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  canonical :: Moderate!D36 (scenario_debt_stabilizing_primary_balance_moderate[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  canonical :: High!D36 (scenario_debt_stabilizing_primary_balance_high[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  canonical :: Hot!D36 (scenario_debt_stabilizing_primary_balance_hot[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  canonical :: 'Hot Adapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_adapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  canonical :: 'Hot Unadapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_unadapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:country=United States :: Paris!D36 (scenario_debt_stabilizing_primary_balance_paris[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:country=United States :: Moderate!D36 (scenario_debt_stabilizing_primary_balance_moderate[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:country=United States :: High!D36 (scenario_debt_stabilizing_primary_balance_high[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:country=United States :: Hot!D36 (scenario_debt_stabilizing_primary_balance_hot[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:country=United States :: 'Hot Adapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_adapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:country=United States :: 'Hot Unadapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_unadapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:country=Japan :: Paris!D36 (scenario_debt_stabilizing_primary_balance_paris[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:country=Japan :: Moderate!D36 (scenario_debt_stabilizing_primary_balance_moderate[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:country=Japan :: High!D36 (scenario_debt_stabilizing_primary_balance_high[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:country=Japan :: Hot!D36 (scenario_debt_stabilizing_primary_balance_hot[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:country=Japan :: 'Hot Adapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_adapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:country=Japan :: 'Hot Unadapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_unadapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:country=Germany :: Paris!D36 (scenario_debt_stabilizing_primary_balance_paris[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:country=Germany :: Moderate!D36 (scenario_debt_stabilizing_primary_balance_moderate[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:country=Germany :: High!D36 (scenario_debt_stabilizing_primary_balance_high[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:country=Germany :: Hot!D36 (scenario_debt_stabilizing_primary_balance_hot[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:country=Germany :: 'Hot Adapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_adapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:country=Germany :: 'Hot Unadapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_unadapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:country=Brazil :: Paris!D36 (scenario_debt_stabilizing_primary_balance_paris[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:country=Brazil :: Moderate!D36 (scenario_debt_stabilizing_primary_balance_moderate[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:country=Brazil :: High!D36 (scenario_debt_stabilizing_primary_balance_high[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:country=Brazil :: Hot!D36 (scenario_debt_stabilizing_primary_balance_hot[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:country=Brazil :: 'Hot Adapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_adapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:country=Brazil :: 'Hot Unadapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_unadapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:country=India :: Paris!D36 (scenario_debt_stabilizing_primary_balance_paris[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:country=India :: Moderate!D36 (scenario_debt_stabilizing_primary_balance_moderate[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:country=India :: High!D36 (scenario_debt_stabilizing_primary_balance_high[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:country=India :: Hot!D36 (scenario_debt_stabilizing_primary_balance_hot[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:country=India :: 'Hot Adapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_adapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:country=India :: 'Hot Unadapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_unadapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:country=China :: Paris!D36 (scenario_debt_stabilizing_primary_balance_paris[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:country=China :: Moderate!D36 (scenario_debt_stabilizing_primary_balance_moderate[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:country=China :: High!D36 (scenario_debt_stabilizing_primary_balance_high[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:country=China :: Hot!D36 (scenario_debt_stabilizing_primary_balance_hot[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:country=China :: 'Hot Adapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_adapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:country=China :: 'Hot Unadapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_unadapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:country=Nigeria :: Paris!D36 (scenario_debt_stabilizing_primary_balance_paris[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:country=Nigeria :: Moderate!D36 (scenario_debt_stabilizing_primary_balance_moderate[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:country=Nigeria :: High!D36 (scenario_debt_stabilizing_primary_balance_high[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:country=Nigeria :: Hot!D36 (scenario_debt_stabilizing_primary_balance_hot[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:country=Nigeria :: 'Hot Adapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_adapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:country=Nigeria :: 'Hot Unadapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_unadapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:country=Vietnam :: Paris!D36 (scenario_debt_stabilizing_primary_balance_paris[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:country=Vietnam :: Moderate!D36 (scenario_debt_stabilizing_primary_balance_moderate[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:country=Vietnam :: High!D36 (scenario_debt_stabilizing_primary_balance_high[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:country=Vietnam :: Hot!D36 (scenario_debt_stabilizing_primary_balance_hot[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:country=Vietnam :: 'Hot Adapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_adapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:country=Vietnam :: 'Hot Unadapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_unadapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:country=Zimbabwe :: Paris!D36 (scenario_debt_stabilizing_primary_balance_paris[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:country=Zimbabwe :: Moderate!D36 (scenario_debt_stabilizing_primary_balance_moderate[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:country=Zimbabwe :: High!D36 (scenario_debt_stabilizing_primary_balance_high[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:country=Zimbabwe :: Hot!D36 (scenario_debt_stabilizing_primary_balance_hot[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:country=Zimbabwe :: 'Hot Adapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_adapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:country=Zimbabwe :: 'Hot Unadapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_unadapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:demography=High :: Paris!D36 (scenario_debt_stabilizing_primary_balance_paris[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:demography=High :: Moderate!D36 (scenario_debt_stabilizing_primary_balance_moderate[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:demography=High :: High!D36 (scenario_debt_stabilizing_primary_balance_high[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:demography=High :: Hot!D36 (scenario_debt_stabilizing_primary_balance_hot[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:demography=High :: 'Hot Adapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_adapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:demography=High :: 'Hot Unadapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_unadapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:demography=Low :: Paris!D36 (scenario_debt_stabilizing_primary_balance_paris[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:demography=Low :: Moderate!D36 (scenario_debt_stabilizing_primary_balance_moderate[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:demography=Low :: High!D36 (scenario_debt_stabilizing_primary_balance_high[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:demography=Low :: Hot!D36 (scenario_debt_stabilizing_primary_balance_hot[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:demography=Low :: 'Hot Adapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_adapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:demography=Low :: 'Hot Unadapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_unadapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:productivity_start=3.0 :: Paris!D36 (scenario_debt_stabilizing_primary_balance_paris[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:productivity_start=3.0 :: Moderate!D36 (scenario_debt_stabilizing_primary_balance_moderate[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:productivity_start=3.0 :: High!D36 (scenario_debt_stabilizing_primary_balance_high[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:productivity_start=3.0 :: Hot!D36 (scenario_debt_stabilizing_primary_balance_hot[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:productivity_start=3.0 :: 'Hot Adapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_adapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:productivity_start=3.0 :: 'Hot Unadapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_unadapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:productivity_start=0.0 :: Paris!D36 (scenario_debt_stabilizing_primary_balance_paris[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:productivity_start=0.0 :: Moderate!D36 (scenario_debt_stabilizing_primary_balance_moderate[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:productivity_start=0.0 :: High!D36 (scenario_debt_stabilizing_primary_balance_high[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:productivity_start=0.0 :: Hot!D36 (scenario_debt_stabilizing_primary_balance_hot[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:productivity_start=0.0 :: 'Hot Adapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_adapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:productivity_start=0.0 :: 'Hot Unadapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_unadapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:productivity_start=-5.0 :: Paris!D36 (scenario_debt_stabilizing_primary_balance_paris[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:productivity_start=-5.0 :: Moderate!D36 (scenario_debt_stabilizing_primary_balance_moderate[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:productivity_start=-5.0 :: High!D36 (scenario_debt_stabilizing_primary_balance_high[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:productivity_start=-5.0 :: Hot!D36 (scenario_debt_stabilizing_primary_balance_hot[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:productivity_start=-5.0 :: 'Hot Adapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_adapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:productivity_start=-5.0 :: 'Hot Unadapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_unadapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:productivity_start=100.0 :: Paris!D36 (scenario_debt_stabilizing_primary_balance_paris[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:productivity_start=100.0 :: Moderate!D36 (scenario_debt_stabilizing_primary_balance_moderate[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:productivity_start=100.0 :: High!D36 (scenario_debt_stabilizing_primary_balance_high[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:productivity_start=100.0 :: Hot!D36 (scenario_debt_stabilizing_primary_balance_hot[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:productivity_start=100.0 :: 'Hot Adapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_adapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:productivity_start=100.0 :: 'Hot Unadapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_unadapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:productivity_end=2.0 :: Paris!D36 (scenario_debt_stabilizing_primary_balance_paris[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:productivity_end=2.0 :: Moderate!D36 (scenario_debt_stabilizing_primary_balance_moderate[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:productivity_end=2.0 :: High!D36 (scenario_debt_stabilizing_primary_balance_high[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:productivity_end=2.0 :: Hot!D36 (scenario_debt_stabilizing_primary_balance_hot[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:productivity_end=2.0 :: 'Hot Adapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_adapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:productivity_end=2.0 :: 'Hot Unadapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_unadapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:productivity_end=0.0 :: Paris!D36 (scenario_debt_stabilizing_primary_balance_paris[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:productivity_end=0.0 :: Moderate!D36 (scenario_debt_stabilizing_primary_balance_moderate[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:productivity_end=0.0 :: High!D36 (scenario_debt_stabilizing_primary_balance_high[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:productivity_end=0.0 :: Hot!D36 (scenario_debt_stabilizing_primary_balance_hot[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:productivity_end=0.0 :: 'Hot Adapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_adapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:productivity_end=0.0 :: 'Hot Unadapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_unadapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:productivity_end=-2.0 :: Paris!D36 (scenario_debt_stabilizing_primary_balance_paris[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:productivity_end=-2.0 :: Moderate!D36 (scenario_debt_stabilizing_primary_balance_moderate[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:productivity_end=-2.0 :: High!D36 (scenario_debt_stabilizing_primary_balance_high[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:productivity_end=-2.0 :: Hot!D36 (scenario_debt_stabilizing_primary_balance_hot[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:productivity_end=-2.0 :: 'Hot Adapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_adapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:productivity_end=-2.0 :: 'Hot Unadapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_unadapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:productivity_end=100.0 :: Paris!D36 (scenario_debt_stabilizing_primary_balance_paris[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:productivity_end=100.0 :: Moderate!D36 (scenario_debt_stabilizing_primary_balance_moderate[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:productivity_end=100.0 :: High!D36 (scenario_debt_stabilizing_primary_balance_high[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:productivity_end=100.0 :: Hot!D36 (scenario_debt_stabilizing_primary_balance_hot[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:productivity_end=100.0 :: 'Hot Adapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_adapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:productivity_end=100.0 :: 'Hot Unadapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_unadapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:inflation_start=5.0 :: Paris!D36 (scenario_debt_stabilizing_primary_balance_paris[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:inflation_start=5.0 :: Moderate!D36 (scenario_debt_stabilizing_primary_balance_moderate[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:inflation_start=5.0 :: High!D36 (scenario_debt_stabilizing_primary_balance_high[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:inflation_start=5.0 :: Hot!D36 (scenario_debt_stabilizing_primary_balance_hot[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:inflation_start=5.0 :: 'Hot Adapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_adapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:inflation_start=5.0 :: 'Hot Unadapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_unadapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:inflation_start=0.0 :: Paris!D36 (scenario_debt_stabilizing_primary_balance_paris[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:inflation_start=0.0 :: Moderate!D36 (scenario_debt_stabilizing_primary_balance_moderate[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:inflation_start=0.0 :: High!D36 (scenario_debt_stabilizing_primary_balance_high[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:inflation_start=0.0 :: Hot!D36 (scenario_debt_stabilizing_primary_balance_hot[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:inflation_start=0.0 :: 'Hot Adapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_adapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:inflation_start=0.0 :: 'Hot Unadapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_unadapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:inflation_start=-5.0 :: Paris!D36 (scenario_debt_stabilizing_primary_balance_paris[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:inflation_start=-5.0 :: Moderate!D36 (scenario_debt_stabilizing_primary_balance_moderate[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:inflation_start=-5.0 :: High!D36 (scenario_debt_stabilizing_primary_balance_high[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:inflation_start=-5.0 :: Hot!D36 (scenario_debt_stabilizing_primary_balance_hot[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:inflation_start=-5.0 :: 'Hot Adapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_adapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:inflation_start=-5.0 :: 'Hot Unadapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_unadapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:inflation_start=100.0 :: Paris!D36 (scenario_debt_stabilizing_primary_balance_paris[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:inflation_start=100.0 :: Moderate!D36 (scenario_debt_stabilizing_primary_balance_moderate[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:inflation_start=100.0 :: High!D36 (scenario_debt_stabilizing_primary_balance_high[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:inflation_start=100.0 :: Hot!D36 (scenario_debt_stabilizing_primary_balance_hot[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:inflation_start=100.0 :: 'Hot Adapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_adapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:inflation_start=100.0 :: 'Hot Unadapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_unadapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:inflation_end=2.5 :: Paris!D36 (scenario_debt_stabilizing_primary_balance_paris[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:inflation_end=2.5 :: Moderate!D36 (scenario_debt_stabilizing_primary_balance_moderate[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:inflation_end=2.5 :: High!D36 (scenario_debt_stabilizing_primary_balance_high[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:inflation_end=2.5 :: Hot!D36 (scenario_debt_stabilizing_primary_balance_hot[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:inflation_end=2.5 :: 'Hot Adapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_adapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:inflation_end=2.5 :: 'Hot Unadapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_unadapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:inflation_end=0.0 :: Paris!D36 (scenario_debt_stabilizing_primary_balance_paris[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:inflation_end=0.0 :: Moderate!D36 (scenario_debt_stabilizing_primary_balance_moderate[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:inflation_end=0.0 :: High!D36 (scenario_debt_stabilizing_primary_balance_high[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:inflation_end=0.0 :: Hot!D36 (scenario_debt_stabilizing_primary_balance_hot[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:inflation_end=0.0 :: 'Hot Adapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_adapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:inflation_end=0.0 :: 'Hot Unadapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_unadapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:inflation_end=-2.5 :: Paris!D36 (scenario_debt_stabilizing_primary_balance_paris[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:inflation_end=-2.5 :: Moderate!D36 (scenario_debt_stabilizing_primary_balance_moderate[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:inflation_end=-2.5 :: High!D36 (scenario_debt_stabilizing_primary_balance_high[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:inflation_end=-2.5 :: Hot!D36 (scenario_debt_stabilizing_primary_balance_hot[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:inflation_end=-2.5 :: 'Hot Adapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_adapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:inflation_end=-2.5 :: 'Hot Unadapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_unadapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:inflation_end=100.0 :: Paris!D36 (scenario_debt_stabilizing_primary_balance_paris[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:inflation_end=100.0 :: Moderate!D36 (scenario_debt_stabilizing_primary_balance_moderate[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:inflation_end=100.0 :: High!D36 (scenario_debt_stabilizing_primary_balance_high[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:inflation_end=100.0 :: Hot!D36 (scenario_debt_stabilizing_primary_balance_hot[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:inflation_end=100.0 :: 'Hot Adapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_adapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:inflation_end=100.0 :: 'Hot Unadapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_unadapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:interest_rate_mode=Interest-growth differential :: Paris!D36 (scenario_debt_stabilizing_primary_balance_paris[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:interest_rate_mode=Interest-growth differential :: Moderate!D36 (scenario_debt_stabilizing_primary_balance_moderate[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:interest_rate_mode=Interest-growth differential :: High!D36 (scenario_debt_stabilizing_primary_balance_high[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:interest_rate_mode=Interest-growth differential :: Hot!D36 (scenario_debt_stabilizing_primary_balance_hot[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:interest_rate_mode=Interest-growth differential :: 'Hot Adapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_adapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:interest_rate_mode=Interest-growth differential :: 'Hot Unadapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_unadapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:interest_rate_mode=Real interest rate :: Paris!D36 (scenario_debt_stabilizing_primary_balance_paris[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:interest_rate_mode=Real interest rate :: Moderate!D36 (scenario_debt_stabilizing_primary_balance_moderate[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:interest_rate_mode=Real interest rate :: High!D36 (scenario_debt_stabilizing_primary_balance_high[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:interest_rate_mode=Real interest rate :: Hot!D36 (scenario_debt_stabilizing_primary_balance_hot[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:interest_rate_mode=Real interest rate :: 'Hot Adapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_adapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:interest_rate_mode=Real interest rate :: 'Hot Unadapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_unadapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:real_interest_rate=2.5 :: Paris!D36 (scenario_debt_stabilizing_primary_balance_paris[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:real_interest_rate=2.5 :: Moderate!D36 (scenario_debt_stabilizing_primary_balance_moderate[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:real_interest_rate=2.5 :: High!D36 (scenario_debt_stabilizing_primary_balance_high[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:real_interest_rate=2.5 :: Hot!D36 (scenario_debt_stabilizing_primary_balance_hot[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:real_interest_rate=2.5 :: 'Hot Adapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_adapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:real_interest_rate=2.5 :: 'Hot Unadapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_unadapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:real_interest_rate=0.0 :: Paris!D36 (scenario_debt_stabilizing_primary_balance_paris[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:real_interest_rate=0.0 :: Moderate!D36 (scenario_debt_stabilizing_primary_balance_moderate[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:real_interest_rate=0.0 :: High!D36 (scenario_debt_stabilizing_primary_balance_high[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:real_interest_rate=0.0 :: Hot!D36 (scenario_debt_stabilizing_primary_balance_hot[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:real_interest_rate=0.0 :: 'Hot Adapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_adapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:real_interest_rate=0.0 :: 'Hot Unadapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_unadapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:real_interest_rate=-5.0 :: Paris!D36 (scenario_debt_stabilizing_primary_balance_paris[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:real_interest_rate=-5.0 :: Moderate!D36 (scenario_debt_stabilizing_primary_balance_moderate[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:real_interest_rate=-5.0 :: High!D36 (scenario_debt_stabilizing_primary_balance_high[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:real_interest_rate=-5.0 :: Hot!D36 (scenario_debt_stabilizing_primary_balance_hot[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:real_interest_rate=-5.0 :: 'Hot Adapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_adapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:real_interest_rate=-5.0 :: 'Hot Unadapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_unadapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:real_interest_rate=20.0 :: Paris!D36 (scenario_debt_stabilizing_primary_balance_paris[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:real_interest_rate=20.0 :: Moderate!D36 (scenario_debt_stabilizing_primary_balance_moderate[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:real_interest_rate=20.0 :: High!D36 (scenario_debt_stabilizing_primary_balance_high[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:real_interest_rate=20.0 :: Hot!D36 (scenario_debt_stabilizing_primary_balance_hot[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:real_interest_rate=20.0 :: 'Hot Adapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_adapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:real_interest_rate=20.0 :: 'Hot Unadapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_unadapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:real_interest_rate=-20.0 :: Paris!D36 (scenario_debt_stabilizing_primary_balance_paris[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:real_interest_rate=-20.0 :: Moderate!D36 (scenario_debt_stabilizing_primary_balance_moderate[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:real_interest_rate=-20.0 :: High!D36 (scenario_debt_stabilizing_primary_balance_high[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:real_interest_rate=-20.0 :: Hot!D36 (scenario_debt_stabilizing_primary_balance_hot[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:real_interest_rate=-20.0 :: 'Hot Adapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_adapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:real_interest_rate=-20.0 :: 'Hot Unadapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_unadapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:fiscal_rule=No :: Paris!D36 (scenario_debt_stabilizing_primary_balance_paris[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:fiscal_rule=No :: Moderate!D36 (scenario_debt_stabilizing_primary_balance_moderate[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:fiscal_rule=No :: High!D36 (scenario_debt_stabilizing_primary_balance_high[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:fiscal_rule=No :: Hot!D36 (scenario_debt_stabilizing_primary_balance_hot[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:fiscal_rule=No :: 'Hot Adapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_adapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:fiscal_rule=No :: 'Hot Unadapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_unadapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:debt_target=90.0 :: Paris!D36 (scenario_debt_stabilizing_primary_balance_paris[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:debt_target=90.0 :: Moderate!D36 (scenario_debt_stabilizing_primary_balance_moderate[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:debt_target=90.0 :: High!D36 (scenario_debt_stabilizing_primary_balance_high[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:debt_target=90.0 :: Hot!D36 (scenario_debt_stabilizing_primary_balance_hot[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:debt_target=90.0 :: 'Hot Adapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_adapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:debt_target=90.0 :: 'Hot Unadapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_unadapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:debt_target=0.0 :: Paris!D36 (scenario_debt_stabilizing_primary_balance_paris[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:debt_target=0.0 :: Moderate!D36 (scenario_debt_stabilizing_primary_balance_moderate[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:debt_target=0.0 :: High!D36 (scenario_debt_stabilizing_primary_balance_high[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:debt_target=0.0 :: Hot!D36 (scenario_debt_stabilizing_primary_balance_hot[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:debt_target=0.0 :: 'Hot Adapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_adapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:debt_target=0.0 :: 'Hot Unadapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_unadapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:debt_target=150.0 :: Paris!D36 (scenario_debt_stabilizing_primary_balance_paris[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:debt_target=150.0 :: Moderate!D36 (scenario_debt_stabilizing_primary_balance_moderate[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:debt_target=150.0 :: High!D36 (scenario_debt_stabilizing_primary_balance_high[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:debt_target=150.0 :: Hot!D36 (scenario_debt_stabilizing_primary_balance_hot[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:debt_target=150.0 :: 'Hot Adapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_adapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:debt_target=150.0 :: 'Hot Unadapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_unadapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:debt_target=300.0 :: Paris!D36 (scenario_debt_stabilizing_primary_balance_paris[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:debt_target=300.0 :: Moderate!D36 (scenario_debt_stabilizing_primary_balance_moderate[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:debt_target=300.0 :: High!D36 (scenario_debt_stabilizing_primary_balance_high[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:debt_target=300.0 :: Hot!D36 (scenario_debt_stabilizing_primary_balance_hot[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:debt_target=300.0 :: 'Hot Adapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_adapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:debt_target=300.0 :: 'Hot Unadapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_unadapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:expenditure_rigidity=0.0 :: Paris!D36 (scenario_debt_stabilizing_primary_balance_paris[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:expenditure_rigidity=0.0 :: Moderate!D36 (scenario_debt_stabilizing_primary_balance_moderate[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:expenditure_rigidity=0.0 :: High!D36 (scenario_debt_stabilizing_primary_balance_high[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:expenditure_rigidity=0.0 :: Hot!D36 (scenario_debt_stabilizing_primary_balance_hot[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:expenditure_rigidity=0.0 :: 'Hot Adapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_adapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:expenditure_rigidity=0.0 :: 'Hot Unadapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_unadapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:expenditure_rigidity=0.25 :: Paris!D36 (scenario_debt_stabilizing_primary_balance_paris[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:expenditure_rigidity=0.25 :: Moderate!D36 (scenario_debt_stabilizing_primary_balance_moderate[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:expenditure_rigidity=0.25 :: High!D36 (scenario_debt_stabilizing_primary_balance_high[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:expenditure_rigidity=0.25 :: Hot!D36 (scenario_debt_stabilizing_primary_balance_hot[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:expenditure_rigidity=0.25 :: 'Hot Adapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_adapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:expenditure_rigidity=0.25 :: 'Hot Unadapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_unadapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:expenditure_rigidity=0.5 :: Paris!D36 (scenario_debt_stabilizing_primary_balance_paris[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:expenditure_rigidity=0.5 :: Moderate!D36 (scenario_debt_stabilizing_primary_balance_moderate[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:expenditure_rigidity=0.5 :: High!D36 (scenario_debt_stabilizing_primary_balance_high[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:expenditure_rigidity=0.5 :: Hot!D36 (scenario_debt_stabilizing_primary_balance_hot[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:expenditure_rigidity=0.5 :: 'Hot Adapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_adapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:expenditure_rigidity=0.5 :: 'Hot Unadapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_unadapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:expenditure_rigidity=0.75 :: Paris!D36 (scenario_debt_stabilizing_primary_balance_paris[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:expenditure_rigidity=0.75 :: Moderate!D36 (scenario_debt_stabilizing_primary_balance_moderate[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:expenditure_rigidity=0.75 :: High!D36 (scenario_debt_stabilizing_primary_balance_high[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:expenditure_rigidity=0.75 :: Hot!D36 (scenario_debt_stabilizing_primary_balance_hot[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:expenditure_rigidity=0.75 :: 'Hot Adapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_adapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:expenditure_rigidity=0.75 :: 'Hot Unadapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_unadapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:discrete_revenue_shock=Paris:2035 :: Paris!D36 (scenario_debt_stabilizing_primary_balance_paris[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:discrete_revenue_shock=Paris:2035 :: Moderate!D36 (scenario_debt_stabilizing_primary_balance_moderate[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:discrete_revenue_shock=Paris:2035 :: High!D36 (scenario_debt_stabilizing_primary_balance_high[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:discrete_revenue_shock=Paris:2035 :: Hot!D36 (scenario_debt_stabilizing_primary_balance_hot[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:discrete_revenue_shock=Paris:2035 :: 'Hot Adapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_adapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:discrete_revenue_shock=Paris:2035 :: 'Hot Unadapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_unadapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:discrete_expenditure_shock=Paris:2035 :: Paris!D36 (scenario_debt_stabilizing_primary_balance_paris[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:discrete_expenditure_shock=Paris:2035 :: Moderate!D36 (scenario_debt_stabilizing_primary_balance_moderate[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:discrete_expenditure_shock=Paris:2035 :: High!D36 (scenario_debt_stabilizing_primary_balance_high[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:discrete_expenditure_shock=Paris:2035 :: Hot!D36 (scenario_debt_stabilizing_primary_balance_hot[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:discrete_expenditure_shock=Paris:2035 :: 'Hot Adapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_adapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:discrete_expenditure_shock=Paris:2035 :: 'Hot Unadapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_unadapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  boundary:discrete_revenue_shock=Paris:2030 :: Paris!D36 (scenario_debt_stabilizing_primary_balance_paris[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  boundary:discrete_revenue_shock=Paris:2030 :: Moderate!D36 (scenario_debt_stabilizing_primary_balance_moderate[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  boundary:discrete_revenue_shock=Paris:2030 :: High!D36 (scenario_debt_stabilizing_primary_balance_high[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  boundary:discrete_revenue_shock=Paris:2030 :: Hot!D36 (scenario_debt_stabilizing_primary_balance_hot[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  boundary:discrete_revenue_shock=Paris:2030 :: 'Hot Adapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_adapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  boundary:discrete_revenue_shock=Paris:2030 :: 'Hot Unadapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_unadapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  boundary:discrete_revenue_shock=Paris:2099 :: Paris!D36 (scenario_debt_stabilizing_primary_balance_paris[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  boundary:discrete_revenue_shock=Paris:2099 :: Moderate!D36 (scenario_debt_stabilizing_primary_balance_moderate[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  boundary:discrete_revenue_shock=Paris:2099 :: High!D36 (scenario_debt_stabilizing_primary_balance_high[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  boundary:discrete_revenue_shock=Paris:2099 :: Hot!D36 (scenario_debt_stabilizing_primary_balance_hot[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  boundary:discrete_revenue_shock=Paris:2099 :: 'Hot Adapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_adapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  boundary:discrete_revenue_shock=Paris:2099 :: 'Hot Unadapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_unadapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:discrete_revenue_shock=Hot unadapted:2050 :: Paris!D36 (scenario_debt_stabilizing_primary_balance_paris[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:discrete_revenue_shock=Hot unadapted:2050 :: Moderate!D36 (scenario_debt_stabilizing_primary_balance_moderate[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:discrete_revenue_shock=Hot unadapted:2050 :: High!D36 (scenario_debt_stabilizing_primary_balance_high[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:discrete_revenue_shock=Hot unadapted:2050 :: Hot!D36 (scenario_debt_stabilizing_primary_balance_hot[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:discrete_revenue_shock=Hot unadapted:2050 :: 'Hot Adapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_adapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:discrete_revenue_shock=Hot unadapted:2050 :: 'Hot Unadapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_unadapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:discrete_expenditure_shock=Moderate:2030 :: Paris!D36 (scenario_debt_stabilizing_primary_balance_paris[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:discrete_expenditure_shock=Moderate:2030 :: Moderate!D36 (scenario_debt_stabilizing_primary_balance_moderate[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:discrete_expenditure_shock=Moderate:2030 :: High!D36 (scenario_debt_stabilizing_primary_balance_high[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:discrete_expenditure_shock=Moderate:2030 :: Hot!D36 (scenario_debt_stabilizing_primary_balance_hot[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:discrete_expenditure_shock=Moderate:2030 :: 'Hot Adapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_adapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  single_axis:discrete_expenditure_shock=Moderate:2030 :: 'Hot Unadapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_unadapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  interaction:discrete_shocks=multi :: Paris!D36 (scenario_debt_stabilizing_primary_balance_paris[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  interaction:discrete_shocks=multi :: Moderate!D36 (scenario_debt_stabilizing_primary_balance_moderate[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  interaction:discrete_shocks=multi :: High!D36 (scenario_debt_stabilizing_primary_balance_high[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  interaction:discrete_shocks=multi :: Hot!D36 (scenario_debt_stabilizing_primary_balance_hot[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  interaction:discrete_shocks=multi :: 'Hot Adapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_adapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  interaction:discrete_shocks=multi :: 'Hot Unadapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_unadapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  interaction:rigidity=0.0|revenue_shock=Paris:2035 :: Paris!D36 (scenario_debt_stabilizing_primary_balance_paris[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  interaction:rigidity=0.0|revenue_shock=Paris:2035 :: Moderate!D36 (scenario_debt_stabilizing_primary_balance_moderate[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  interaction:rigidity=0.0|revenue_shock=Paris:2035 :: High!D36 (scenario_debt_stabilizing_primary_balance_high[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  interaction:rigidity=0.0|revenue_shock=Paris:2035 :: Hot!D36 (scenario_debt_stabilizing_primary_balance_hot[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  interaction:rigidity=0.0|revenue_shock=Paris:2035 :: 'Hot Adapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_adapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  interaction:rigidity=0.0|revenue_shock=Paris:2035 :: 'Hot Unadapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_unadapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  factorial:demography=High|fiscal_rule=Yes|rigidity=0.0 :: Paris!D36 (scenario_debt_stabilizing_primary_balance_paris[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  factorial:demography=High|fiscal_rule=Yes|rigidity=0.0 :: Moderate!D36 (scenario_debt_stabilizing_primary_balance_moderate[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  factorial:demography=High|fiscal_rule=Yes|rigidity=0.0 :: High!D36 (scenario_debt_stabilizing_primary_balance_high[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  factorial:demography=High|fiscal_rule=Yes|rigidity=0.0 :: Hot!D36 (scenario_debt_stabilizing_primary_balance_hot[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  factorial:demography=High|fiscal_rule=Yes|rigidity=0.0 :: 'Hot Adapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_adapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  factorial:demography=High|fiscal_rule=Yes|rigidity=0.0 :: 'Hot Unadapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_unadapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  factorial:demography=High|fiscal_rule=Yes|rigidity=0.5 :: Paris!D36 (scenario_debt_stabilizing_primary_balance_paris[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  factorial:demography=High|fiscal_rule=Yes|rigidity=0.5 :: Moderate!D36 (scenario_debt_stabilizing_primary_balance_moderate[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  factorial:demography=High|fiscal_rule=Yes|rigidity=0.5 :: High!D36 (scenario_debt_stabilizing_primary_balance_high[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  factorial:demography=High|fiscal_rule=Yes|rigidity=0.5 :: Hot!D36 (scenario_debt_stabilizing_primary_balance_hot[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  factorial:demography=High|fiscal_rule=Yes|rigidity=0.5 :: 'Hot Adapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_adapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  factorial:demography=High|fiscal_rule=Yes|rigidity=0.5 :: 'Hot Unadapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_unadapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  factorial:demography=High|fiscal_rule=Yes|rigidity=1.0 :: Paris!D36 (scenario_debt_stabilizing_primary_balance_paris[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  factorial:demography=High|fiscal_rule=Yes|rigidity=1.0 :: Moderate!D36 (scenario_debt_stabilizing_primary_balance_moderate[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  factorial:demography=High|fiscal_rule=Yes|rigidity=1.0 :: High!D36 (scenario_debt_stabilizing_primary_balance_high[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  factorial:demography=High|fiscal_rule=Yes|rigidity=1.0 :: Hot!D36 (scenario_debt_stabilizing_primary_balance_hot[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  factorial:demography=High|fiscal_rule=Yes|rigidity=1.0 :: 'Hot Adapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_adapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  factorial:demography=High|fiscal_rule=Yes|rigidity=1.0 :: 'Hot Unadapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_unadapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  factorial:demography=High|fiscal_rule=No|rigidity=0.0 :: Paris!D36 (scenario_debt_stabilizing_primary_balance_paris[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  factorial:demography=High|fiscal_rule=No|rigidity=0.0 :: Moderate!D36 (scenario_debt_stabilizing_primary_balance_moderate[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  factorial:demography=High|fiscal_rule=No|rigidity=0.0 :: High!D36 (scenario_debt_stabilizing_primary_balance_high[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  factorial:demography=High|fiscal_rule=No|rigidity=0.0 :: Hot!D36 (scenario_debt_stabilizing_primary_balance_hot[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  factorial:demography=High|fiscal_rule=No|rigidity=0.0 :: 'Hot Adapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_adapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  factorial:demography=High|fiscal_rule=No|rigidity=0.0 :: 'Hot Unadapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_unadapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  factorial:demography=High|fiscal_rule=No|rigidity=0.5 :: Paris!D36 (scenario_debt_stabilizing_primary_balance_paris[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  factorial:demography=High|fiscal_rule=No|rigidity=0.5 :: Moderate!D36 (scenario_debt_stabilizing_primary_balance_moderate[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  factorial:demography=High|fiscal_rule=No|rigidity=0.5 :: High!D36 (scenario_debt_stabilizing_primary_balance_high[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  factorial:demography=High|fiscal_rule=No|rigidity=0.5 :: Hot!D36 (scenario_debt_stabilizing_primary_balance_hot[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  factorial:demography=High|fiscal_rule=No|rigidity=0.5 :: 'Hot Adapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_adapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  factorial:demography=High|fiscal_rule=No|rigidity=0.5 :: 'Hot Unadapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_unadapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  factorial:demography=High|fiscal_rule=No|rigidity=1.0 :: Paris!D36 (scenario_debt_stabilizing_primary_balance_paris[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  factorial:demography=High|fiscal_rule=No|rigidity=1.0 :: Moderate!D36 (scenario_debt_stabilizing_primary_balance_moderate[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  factorial:demography=High|fiscal_rule=No|rigidity=1.0 :: High!D36 (scenario_debt_stabilizing_primary_balance_high[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  factorial:demography=High|fiscal_rule=No|rigidity=1.0 :: Hot!D36 (scenario_debt_stabilizing_primary_balance_hot[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  factorial:demography=High|fiscal_rule=No|rigidity=1.0 :: 'Hot Adapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_adapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  factorial:demography=High|fiscal_rule=No|rigidity=1.0 :: 'Hot Unadapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_unadapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  factorial:demography=Low|fiscal_rule=Yes|rigidity=0.0 :: Paris!D36 (scenario_debt_stabilizing_primary_balance_paris[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  factorial:demography=Low|fiscal_rule=Yes|rigidity=0.0 :: Moderate!D36 (scenario_debt_stabilizing_primary_balance_moderate[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  factorial:demography=Low|fiscal_rule=Yes|rigidity=0.0 :: High!D36 (scenario_debt_stabilizing_primary_balance_high[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  factorial:demography=Low|fiscal_rule=Yes|rigidity=0.0 :: Hot!D36 (scenario_debt_stabilizing_primary_balance_hot[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  factorial:demography=Low|fiscal_rule=Yes|rigidity=0.0 :: 'Hot Adapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_adapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  factorial:demography=Low|fiscal_rule=Yes|rigidity=0.0 :: 'Hot Unadapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_unadapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  factorial:demography=Low|fiscal_rule=Yes|rigidity=0.5 :: Paris!D36 (scenario_debt_stabilizing_primary_balance_paris[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  factorial:demography=Low|fiscal_rule=Yes|rigidity=0.5 :: Moderate!D36 (scenario_debt_stabilizing_primary_balance_moderate[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  factorial:demography=Low|fiscal_rule=Yes|rigidity=0.5 :: High!D36 (scenario_debt_stabilizing_primary_balance_high[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  factorial:demography=Low|fiscal_rule=Yes|rigidity=0.5 :: Hot!D36 (scenario_debt_stabilizing_primary_balance_hot[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  factorial:demography=Low|fiscal_rule=Yes|rigidity=0.5 :: 'Hot Adapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_adapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  factorial:demography=Low|fiscal_rule=Yes|rigidity=0.5 :: 'Hot Unadapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_unadapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  factorial:demography=Low|fiscal_rule=Yes|rigidity=1.0 :: Paris!D36 (scenario_debt_stabilizing_primary_balance_paris[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  factorial:demography=Low|fiscal_rule=Yes|rigidity=1.0 :: Moderate!D36 (scenario_debt_stabilizing_primary_balance_moderate[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  factorial:demography=Low|fiscal_rule=Yes|rigidity=1.0 :: High!D36 (scenario_debt_stabilizing_primary_balance_high[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  factorial:demography=Low|fiscal_rule=Yes|rigidity=1.0 :: Hot!D36 (scenario_debt_stabilizing_primary_balance_hot[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  factorial:demography=Low|fiscal_rule=Yes|rigidity=1.0 :: 'Hot Adapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_adapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  factorial:demography=Low|fiscal_rule=Yes|rigidity=1.0 :: 'Hot Unadapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_unadapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  factorial:demography=Low|fiscal_rule=No|rigidity=0.0 :: Paris!D36 (scenario_debt_stabilizing_primary_balance_paris[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  factorial:demography=Low|fiscal_rule=No|rigidity=0.0 :: Moderate!D36 (scenario_debt_stabilizing_primary_balance_moderate[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  factorial:demography=Low|fiscal_rule=No|rigidity=0.0 :: High!D36 (scenario_debt_stabilizing_primary_balance_high[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  factorial:demography=Low|fiscal_rule=No|rigidity=0.0 :: Hot!D36 (scenario_debt_stabilizing_primary_balance_hot[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  factorial:demography=Low|fiscal_rule=No|rigidity=0.0 :: 'Hot Adapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_adapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  factorial:demography=Low|fiscal_rule=No|rigidity=0.0 :: 'Hot Unadapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_unadapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  factorial:demography=Low|fiscal_rule=No|rigidity=0.5 :: Paris!D36 (scenario_debt_stabilizing_primary_balance_paris[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  factorial:demography=Low|fiscal_rule=No|rigidity=0.5 :: Moderate!D36 (scenario_debt_stabilizing_primary_balance_moderate[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  factorial:demography=Low|fiscal_rule=No|rigidity=0.5 :: High!D36 (scenario_debt_stabilizing_primary_balance_high[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  factorial:demography=Low|fiscal_rule=No|rigidity=0.5 :: Hot!D36 (scenario_debt_stabilizing_primary_balance_hot[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  factorial:demography=Low|fiscal_rule=No|rigidity=0.5 :: 'Hot Adapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_adapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  factorial:demography=Low|fiscal_rule=No|rigidity=0.5 :: 'Hot Unadapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_unadapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  factorial:demography=Low|fiscal_rule=No|rigidity=1.0 :: Paris!D36 (scenario_debt_stabilizing_primary_balance_paris[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  factorial:demography=Low|fiscal_rule=No|rigidity=1.0 :: Moderate!D36 (scenario_debt_stabilizing_primary_balance_moderate[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  factorial:demography=Low|fiscal_rule=No|rigidity=1.0 :: High!D36 (scenario_debt_stabilizing_primary_balance_high[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  factorial:demography=Low|fiscal_rule=No|rigidity=1.0 :: Hot!D36 (scenario_debt_stabilizing_primary_balance_hot[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  factorial:demography=Low|fiscal_rule=No|rigidity=1.0 :: 'Hot Adapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_adapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>
+  factorial:demography=Low|fiscal_rule=No|rigidity=1.0 :: 'Hot Unadapted'!D36 (scenario_debt_stabilizing_primary_balance_hot_unadapted[2009])
+    excel: '#REF!'
+    mvp:   <XlError.REF: '#REF!'>

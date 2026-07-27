@@ -33,6 +33,14 @@ class EvalContextBase:
     iterate_delta: float = 0.001
     iteration_values: dict[str, CellValue] = field(default_factory=dict)
 
+    def __repr__(self) -> str:
+        # Avoid the dataclass default repr: `cache` holds every evaluated cell.
+        return (
+            f"{type(self).__name__}("
+            f"inputs={self.inputs!r}, "
+            f"cache_entries={len(self.cache)})"
+        )
+
 @dataclass(slots=True)
 class EvalContext(EvalContextBase):
     """Per-run evaluation state with dependency tracking for input invalidation."""

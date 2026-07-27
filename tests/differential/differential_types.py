@@ -6,6 +6,7 @@ from dataclasses import dataclass
 from typing import Any, Mapping
 
 ATOL = 1e-6
+RTOL = 1e-12
 
 
 @dataclass(frozen=True)

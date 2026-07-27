@@ -1,5 +1,3 @@
-**UNDER CONSTRUCTION/PROOF OF CONCEPT**
-
 # Q-CRAFT
 
 Python implementation of the IMF Quantitative Climate Risk Assessment Fiscal Tool.

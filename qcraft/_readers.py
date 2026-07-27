@@ -15,13 +15,10 @@ def read_country(ctx: EvalContext) -> CellValue:
     The OBS_VALUE field maps directly to the Dashboard cell C12, returning the country name as a string.
 
     Args:
-        ctx (EvalContext | None): Existing evaluation context, if available.
-        inputs (dict[str, object] | None): Optional input map when ctx is omitted.
+        ctx (EvalContext): Evaluation context.
 
     Returns:
-        Records: Computed output records.
-            Required record fields:
-                - OBS_VALUE: Name of the country selected for the baseline and climate scenarios.
+        CellValue: Value read from the bound cell or range.
 
     Source binding:
         Workbook range: Dashboard!C12
@@ -44,13 +41,10 @@ def read_demography_scenario(ctx: EvalContext) -> CellValue:
     Each record maps to the single dashboard cell that holds the scenario identifier.
 
     Args:
-        ctx (EvalContext | None): Existing evaluation context, if available.
-        inputs (dict[str, object] | None): Optional input map when ctx is omitted.
+        ctx (EvalContext): Evaluation context.
 
     Returns:
-        Records: Computed output records.
-            Required record fields:
-                - OBS_VALUE: The chosen demographic scenario (e.g., Medium, High, or Low).
+        CellValue: Value read from the bound cell or range.
 
     Source binding:
         Workbook range: Dashboard!C17
@@ -73,13 +67,10 @@ def read_productivity_start(ctx: EvalContext) -> CellValue:
     The OBS_VALUE field is read from a single cell in the Dashboard worksheet and corresponds to the scalar productivity_start parameter.
 
     Args:
-        ctx (EvalContext | None): Existing evaluation context, if available.
-        inputs (dict[str, object] | None): Optional input map when ctx is omitted.
+        ctx (EvalContext): Evaluation context.
 
     Returns:
-        Records: Computed output records.
-            Required record fields:
-                - OBS_VALUE: The productivity growth rate (in percent) at the beginning of the Q-CRAFT projection period (2029), used to initialize the long-term productivity trajectory.
+        CellValue: Value read from the bound cell or range.
 
     Source binding:
         Workbook range: Dashboard!C20
@@ -102,13 +93,10 @@ def read_productivity_end(ctx: EvalContext) -> CellValue:
     The single record's `OBS_VALUE` maps to the scalar value in cell C21 of the Dashboard worksheet.
 
     Args:
-        ctx (EvalContext | None): Existing evaluation context, if available.
-        inputs (dict[str, object] | None): Optional input map when ctx is omitted.
+        ctx (EvalContext): Evaluation context.
 
     Returns:
-        Records: Computed output records.
-            Required record fields:
-                - OBS_VALUE: The assumed structural labour productivity growth rate for the end period (2090–2100), expressed as a percent per year.
+        CellValue: Value read from the bound cell or range.
 
     Source binding:
         Workbook range: Dashboard!C21
@@ -131,13 +119,10 @@ def read_inflation_start(ctx: EvalContext) -> CellValue:
     Each record corresponds to the scalar inflation start value in cell Dashboard!C24.
 
     Args:
-        ctx (EvalContext | None): Existing evaluation context, if available.
-        inputs (dict[str, object] | None): Optional input map when ctx is omitted.
+        ctx (EvalContext): Evaluation context.
 
     Returns:
-        Records: Computed output records.
-            Required record fields:
-                - OBS_VALUE: The assumed start year inflation rate (percent).
+        CellValue: Value read from the bound cell or range.
 
     Source binding:
         Workbook range: Dashboard!C24
@@ -160,13 +145,10 @@ def read_inflation_end(ctx: EvalContext) -> CellValue:
     Each record corresponds to the scalar value in cell Dashboard!C25.
 
     Args:
-        ctx (EvalContext | None): Existing evaluation context, if available.
-        inputs (dict[str, object] | None): Optional input map when ctx is omitted.
+        ctx (EvalContext): Evaluation context.
 
     Returns:
-        Records: Computed output records.
-            Required record fields:
-                - OBS_VALUE: The long-run inflation rate used after the WEO projection horizon.
+        CellValue: Value read from the bound cell or range.
 
     Source binding:
         Workbook range: Dashboard!C25
@@ -189,13 +171,10 @@ def read_interest_rate_mode(ctx: EvalContext) -> CellValue:
     The single record returned corresponds to the value in cell C28 of the Dashboard sheet.
 
     Args:
-        ctx (EvalContext | None): Existing evaluation context, if available.
-        inputs (dict[str, object] | None): Optional input map when ctx is omitted.
+        ctx (EvalContext): Evaluation context.
 
     Returns:
-        Records: Computed output records.
-            Required record fields:
-                - OBS_VALUE: The interest rate assumption mode selected in the Dashboard (e.g., constant nominal rate, constant interest–growth differential, or constant real rate).
+        CellValue: Value read from the bound cell or range.
 
     Source binding:
         Workbook range: Dashboard!C28
@@ -218,13 +197,10 @@ def read_real_interest_rate(ctx: EvalContext) -> CellValue:
     The record corresponds to the value in the Dashboard cell for real interest rate.
 
     Args:
-        ctx (EvalContext | None): Existing evaluation context, if available.
-        inputs (dict[str, object] | None): Optional input map when ctx is omitted.
+        ctx (EvalContext): Evaluation context.
 
     Returns:
-        Records: Computed output records.
-            Required record fields:
-                - OBS_VALUE: The real interest rate value.
+        CellValue: Value read from the bound cell or range.
 
     Source binding:
         Workbook range: Dashboard!C29
@@ -247,13 +223,10 @@ def read_fiscal_rule_enabled(ctx: EvalContext) -> CellValue:
     Each record corresponds to the fiscal rule enabled setting in cell C33 of the Dashboard worksheet.
 
     Args:
-        ctx (EvalContext | None): Existing evaluation context, if available.
-        inputs (dict[str, object] | None): Optional input map when ctx is omitted.
+        ctx (EvalContext): Evaluation context.
 
     Returns:
-        Records: Computed output records.
-            Required record fields:
-                - OBS_VALUE: Indicates whether the user has opted to apply a fiscal rule debt target.
+        CellValue: Value read from the bound cell or range.
 
     Source binding:
         Workbook range: Dashboard!C33
@@ -276,13 +249,10 @@ def read_debt_target(ctx: EvalContext) -> CellValue:
     The function reads a single cell, mapping its value to the OBS_VALUE field of the returned record.
 
     Args:
-        ctx (EvalContext | None): Existing evaluation context, if available.
-        inputs (dict[str, object] | None): Optional input map when ctx is omitted.
+        ctx (EvalContext): Evaluation context.
 
     Returns:
-        Records: Computed output records.
-            Required record fields:
-                - OBS_VALUE: The debt-to-GDP ratio target (in percent of GDP) selected for the fiscal rule assumption.
+        CellValue: Value read from the bound cell or range.
 
     Source binding:
         Workbook range: Dashboard!C34
@@ -305,13 +275,10 @@ def read_expenditure_rigidity(ctx: EvalContext) -> CellValue:
     Each record contains one observation value that maps to cell C38 in the Dashboard worksheet.
 
     Args:
-        ctx (EvalContext | None): Existing evaluation context, if available.
-        inputs (dict[str, object] | None): Optional input map when ctx is omitted.
+        ctx (EvalContext): Evaluation context.
 
     Returns:
-        Records: Computed output records.
-            Required record fields:
-                - OBS_VALUE: The expenditure rigidity parameter value, ranging from 0 (fully flexible primary expenditure) to 1 (completely rigid primary expenditure).
+        CellValue: Value read from the bound cell or range.
 
     Source binding:
         Workbook range: Dashboard!C38
@@ -758,15 +725,10 @@ def read_discrete_revenue_shocks(
     Each record matches a cell in the revenue-shock section of the Discrete Risks matrix, with scenario labels filled down from column A and column headers providing time periods.
 
     Args:
-        ctx (EvalContext | None): Existing evaluation context, if available.
-        inputs (dict[str, object] | None): Optional input map when ctx is omitted.
+        ctx (EvalContext): Evaluation context.
 
     Returns:
-        Records: Computed output records.
-            Required record fields:
-                - SCENARIO: Climate scenario label for the discrete revenue shock.
-                - TIME_PERIOD: Year when the revenue shock materializes.
-                - OBS_VALUE: Revenue loss as a percentage of GDP for the given scenario and year.
+        CellValue: Value read from the bound cell or range.
 
     Source binding:
         Workbook range: Discrete Risks!C2:BT13
@@ -789,15 +751,10 @@ def read_discrete_revenue_shocks_range(ctx: EvalContext) -> CellValue:
     Each record corresponds to a revenue-shock cell in the interleaved scenario bands in the Discrete Risks worksheet, with scenario labels filled downwards and years taken from the column headers.
 
     Args:
-        ctx (EvalContext | None): Existing evaluation context, if available.
-        inputs (dict[str, object] | None): Optional input map when ctx is omitted.
+        ctx (EvalContext): Evaluation context.
 
     Returns:
-        Records: Computed output records.
-            Required record fields:
-                - SCENARIO: Climate scenario to which the revenue shock belongs.
-                - TIME_PERIOD: Year of the revenue shock.
-                - OBS_VALUE: Revenue shock expressed as a percentage of GDP.
+        CellValue: Value read from the bound cell or range.
 
     Source binding:
         Workbook range: Discrete Risks!C2:BT13
@@ -1244,15 +1201,10 @@ def read_discrete_primary_expenditure_shocks(
     Each record corresponds to a scenario–year pair; the primary expenditure shock is extracted from the interleaved grouped-row matrix.
 
     Args:
-        ctx (EvalContext | None): Existing evaluation context, if available.
-        inputs (dict[str, object] | None): Optional input map when ctx is omitted.
+        ctx (EvalContext): Evaluation context.
 
     Returns:
-        Records: Computed output records.
-            Required record fields:
-                - SCENARIO: Climate scenario label for the discrete primary expenditure shock.
-                - TIME_PERIOD: Year of the discrete primary expenditure shock.
-                - OBS_VALUE: Primary expenditure shock, expressed as a percentage of GDP.
+        CellValue: Value read from the bound cell or range.
 
     Source binding:
         Workbook range: Discrete Risks!C2:BT13
@@ -1275,15 +1227,10 @@ def read_discrete_primary_expenditure_shocks_range(ctx: EvalContext) -> CellValu
     Each record corresponds to one data cell in the primary-expenditure rows of the Discrete Risks matrix, with SCENARIO derived from the row band label and TIME_PERIOD from the column header.
 
     Args:
-        ctx (EvalContext | None): Existing evaluation context, if available.
-        inputs (dict[str, object] | None): Optional input map when ctx is omitted.
+        ctx (EvalContext): Evaluation context.
 
     Returns:
-        Records: Computed output records.
-            Required record fields:
-                - SCENARIO: Climate scenario to which the shock path belongs.
-                - TIME_PERIOD: Year in which the shock occurs.
-                - OBS_VALUE: Magnitude of the shock expressed as a percentage of GDP.
+        CellValue: Value read from the bound cell or range.
 
     Source binding:
         Workbook range: Discrete Risks!C2:BT13
@@ -1294,3 +1241,565 @@ def read_discrete_primary_expenditure_shocks_range(ctx: EvalContext) -> CellValu
         read_discrete_primary_expenditure_shocks_range(ctx=ctx)
     """
     return xl_range(ctx, 'Discrete Risks!C2:BT13')
+
+_LEAF_INDEX_BASELINE_DEBT_DIRECTION_ABOVE_SENTINEL = {
+    (): 'Baseline!B47',
+}
+
+def read_baseline_debt_direction_above_sentinel(ctx: EvalContext) -> CellValue:
+    """Read the sentinel value that routes the fiscal gap when baseline debt is above target.
+
+    Returns the constant sentinel used in the debt dynamics to determine if the debt trajectory direction triggers the above-target fiscal gap calculation.
+    The returned record corresponds to the single cell in the Baseline worksheet that stores this sentinel constant.
+
+    Args:
+        ctx (EvalContext): Evaluation context.
+
+    Returns:
+        CellValue: Value read from the bound cell or range.
+
+    Source binding:
+        Workbook range: Baseline!B47
+        Layout: scalar
+        Value type: float
+
+    Examples:
+        read_baseline_debt_direction_above_sentinel(ctx=ctx)
+    """
+    return xl_cell(ctx, 'Baseline!B47')
+
+_LEAF_INDEX_BASELINE_DEBT_DIRECTION_BELOW_SENTINEL = {
+    (): 'Baseline!B48',
+}
+
+def read_baseline_debt_direction_below_sentinel(ctx: EvalContext) -> CellValue:
+    """Reads the sentinel value used to route debt-below-target fiscal gap calculations in the baseline scenario.
+
+    Returns the sentinel value that the debt trajectory direction flag is compared against to determine if fiscal gap calculations for debt below target apply.
+    Reads a scalar from cell Baseline!B48.
+
+    Args:
+        ctx (EvalContext): Evaluation context.
+
+    Returns:
+        CellValue: Value read from the bound cell or range.
+
+    Source binding:
+        Workbook range: Baseline!B48
+        Layout: scalar
+        Value type: float
+
+    Examples:
+        read_baseline_debt_direction_below_sentinel(ctx=ctx)
+    """
+    return xl_cell(ctx, 'Baseline!B48')
+
+_LEAF_INDEX_DEMOGRAPHY_VARIANT_LABEL_MEDIUM = {
+    (): 'Demography!B8',
+}
+
+def read_demography_variant_label_medium(ctx: EvalContext) -> CellValue:
+    """Read the demographic scenario variant label "Medium" from the Demography sheet.
+
+    Returns the selected demographic scenario variant label.
+    The single record's OBS_VALUE directly corresponds to the scalar string in the workbook cell.
+
+    Args:
+        ctx (EvalContext): Evaluation context.
+
+    Returns:
+        CellValue: Value read from the bound cell or range.
+
+    Source binding:
+        Workbook range: Demography!B8
+        Layout: scalar
+        Value type: string
+
+    Examples:
+        read_demography_variant_label_medium(ctx=ctx)
+    """
+    return xl_cell(ctx, 'Demography!B8')
+
+_LEAF_INDEX_DEMOGRAPHY_VARIANT_LABEL_HIGH = {
+    (): 'Demography!B9',
+}
+
+def read_demography_variant_label_high(ctx: EvalContext) -> CellValue:
+    """Read the label for the High demographic scenario from the Demography worksheet.
+
+    Returns the variant name label for the High population projection scenario.
+    Each record corresponds to a single scalar value read from cell B9 of the Demography sheet.
+
+    Args:
+        ctx (EvalContext): Evaluation context.
+
+    Returns:
+        CellValue: Value read from the bound cell or range.
+
+    Source binding:
+        Workbook range: Demography!B9
+        Layout: scalar
+        Value type: string
+
+    Examples:
+        read_demography_variant_label_high(ctx=ctx)
+    """
+    return xl_cell(ctx, 'Demography!B9')
+
+_LEAF_INDEX_DEMOGRAPHY_VARIANT_LABEL_LOW = {
+    (): 'Demography!B10',
+}
+
+def read_demography_variant_label_low(ctx: EvalContext) -> CellValue:
+    """Read the label for the low demographic variant.
+
+    Returns the demographic variant label string from the Demography worksheet.
+    The record's 'OBS_VALUE' field contains the cell value from Demography!B10.
+
+    Args:
+        ctx (EvalContext): Evaluation context.
+
+    Returns:
+        CellValue: Value read from the bound cell or range.
+
+    Source binding:
+        Workbook range: Demography!B10
+        Layout: scalar
+        Value type: string
+
+    Examples:
+        read_demography_variant_label_low(ctx=ctx)
+    """
+    return xl_cell(ctx, 'Demography!B10')
+
+_LEAF_INDEX_PRODUCTIVITY_CONVERGENCE_LOGISTIC_STEEPNESS = {
+    (): 'Productivity!G21',
+}
+
+def read_productivity_convergence_logistic_steepness(ctx: EvalContext) -> CellValue:
+    """Read the logistic steepness exponent for the productivity convergence curve.
+
+    Returns the currently set logistic steepness exponent.
+    The scalar record maps directly to cell Productivity!G21; its OBS_VALUE holds the steepness exponent.
+
+    Args:
+        ctx (EvalContext): Evaluation context.
+
+    Returns:
+        CellValue: Value read from the bound cell or range.
+
+    Source binding:
+        Workbook range: Productivity!G21
+        Layout: scalar
+        Value type: float
+
+    Examples:
+        read_productivity_convergence_logistic_steepness(ctx=ctx)
+    """
+    return xl_cell(ctx, 'Productivity!G21')
+
+_LEAF_INDEX_PRODUCTIVITY_CONVERGENCE_LOGISTIC_MIDPOINT = {
+    (): 'Productivity!J21',
+}
+
+def read_productivity_convergence_logistic_midpoint(ctx: EvalContext) -> CellValue:
+    """Reads the logistic midpoint parameter for the productivity convergence trajectory.
+
+    Returns the current value of the logistic midpoint offset (in years) from the Productivity worksheet.
+    Each record binds directly to the scalar value in the workbook cell `Productivity!J21`.
+
+    Args:
+        ctx (EvalContext): Evaluation context.
+
+    Returns:
+        CellValue: Value read from the bound cell or range.
+
+    Source binding:
+        Workbook range: Productivity!J21
+        Layout: scalar
+        Value type: float
+
+    Examples:
+        read_productivity_convergence_logistic_midpoint(ctx=ctx)
+    """
+    return xl_cell(ctx, 'Productivity!J21')
+
+_LEAF_INDEX_PRODUCTIVITY_CONVERGENCE_PERIOD_INDEX = {
+    (('TIME_PERIOD', 2001),): 'Productivity!B23',
+    (('TIME_PERIOD', 2002),): 'Productivity!C23',
+    (('TIME_PERIOD', 2003),): 'Productivity!D23',
+    (('TIME_PERIOD', 2004),): 'Productivity!E23',
+    (('TIME_PERIOD', 2005),): 'Productivity!F23',
+    (('TIME_PERIOD', 2006),): 'Productivity!G23',
+    (('TIME_PERIOD', 2007),): 'Productivity!H23',
+    (('TIME_PERIOD', 2008),): 'Productivity!I23',
+    (('TIME_PERIOD', 2009),): 'Productivity!J23',
+    (('TIME_PERIOD', 2010),): 'Productivity!K23',
+    (('TIME_PERIOD', 2011),): 'Productivity!L23',
+    (('TIME_PERIOD', 2012),): 'Productivity!M23',
+    (('TIME_PERIOD', 2013),): 'Productivity!N23',
+    (('TIME_PERIOD', 2014),): 'Productivity!O23',
+    (('TIME_PERIOD', 2015),): 'Productivity!P23',
+    (('TIME_PERIOD', 2016),): 'Productivity!Q23',
+    (('TIME_PERIOD', 2017),): 'Productivity!R23',
+    (('TIME_PERIOD', 2018),): 'Productivity!S23',
+    (('TIME_PERIOD', 2019),): 'Productivity!T23',
+    (('TIME_PERIOD', 2020),): 'Productivity!U23',
+    (('TIME_PERIOD', 2021),): 'Productivity!V23',
+    (('TIME_PERIOD', 2022),): 'Productivity!W23',
+    (('TIME_PERIOD', 2023),): 'Productivity!X23',
+    (('TIME_PERIOD', 2024),): 'Productivity!Y23',
+    (('TIME_PERIOD', 2025),): 'Productivity!Z23',
+    (('TIME_PERIOD', 2026),): 'Productivity!AA23',
+    (('TIME_PERIOD', 2027),): 'Productivity!AB23',
+    (('TIME_PERIOD', 2028),): 'Productivity!AC23',
+    (('TIME_PERIOD', 2029),): 'Productivity!AD23',
+    (('TIME_PERIOD', 2030),): 'Productivity!AE23',
+    (('TIME_PERIOD', 2031),): 'Productivity!AF23',
+    (('TIME_PERIOD', 2032),): 'Productivity!AG23',
+    (('TIME_PERIOD', 2033),): 'Productivity!AH23',
+    (('TIME_PERIOD', 2034),): 'Productivity!AI23',
+    (('TIME_PERIOD', 2035),): 'Productivity!AJ23',
+    (('TIME_PERIOD', 2036),): 'Productivity!AK23',
+    (('TIME_PERIOD', 2037),): 'Productivity!AL23',
+    (('TIME_PERIOD', 2038),): 'Productivity!AM23',
+    (('TIME_PERIOD', 2039),): 'Productivity!AN23',
+    (('TIME_PERIOD', 2040),): 'Productivity!AO23',
+    (('TIME_PERIOD', 2041),): 'Productivity!AP23',
+    (('TIME_PERIOD', 2042),): 'Productivity!AQ23',
+    (('TIME_PERIOD', 2043),): 'Productivity!AR23',
+    (('TIME_PERIOD', 2044),): 'Productivity!AS23',
+    (('TIME_PERIOD', 2045),): 'Productivity!AT23',
+    (('TIME_PERIOD', 2046),): 'Productivity!AU23',
+    (('TIME_PERIOD', 2047),): 'Productivity!AV23',
+    (('TIME_PERIOD', 2048),): 'Productivity!AW23',
+    (('TIME_PERIOD', 2049),): 'Productivity!AX23',
+    (('TIME_PERIOD', 2050),): 'Productivity!AY23',
+    (('TIME_PERIOD', 2051),): 'Productivity!AZ23',
+    (('TIME_PERIOD', 2052),): 'Productivity!BA23',
+    (('TIME_PERIOD', 2053),): 'Productivity!BB23',
+    (('TIME_PERIOD', 2054),): 'Productivity!BC23',
+    (('TIME_PERIOD', 2055),): 'Productivity!BD23',
+    (('TIME_PERIOD', 2056),): 'Productivity!BE23',
+    (('TIME_PERIOD', 2057),): 'Productivity!BF23',
+    (('TIME_PERIOD', 2058),): 'Productivity!BG23',
+    (('TIME_PERIOD', 2059),): 'Productivity!BH23',
+    (('TIME_PERIOD', 2060),): 'Productivity!BI23',
+    (('TIME_PERIOD', 2061),): 'Productivity!BJ23',
+    (('TIME_PERIOD', 2062),): 'Productivity!BK23',
+    (('TIME_PERIOD', 2063),): 'Productivity!BL23',
+    (('TIME_PERIOD', 2064),): 'Productivity!BM23',
+    (('TIME_PERIOD', 2065),): 'Productivity!BN23',
+    (('TIME_PERIOD', 2066),): 'Productivity!BO23',
+    (('TIME_PERIOD', 2067),): 'Productivity!BP23',
+    (('TIME_PERIOD', 2068),): 'Productivity!BQ23',
+    (('TIME_PERIOD', 2069),): 'Productivity!BR23',
+    (('TIME_PERIOD', 2070),): 'Productivity!BS23',
+}
+
+def read_productivity_convergence_period_index(
+    ctx: EvalContext,
+    *,
+    time_period: int,
+) -> CellValue:
+    """Read the productivity convergence period index series.
+
+    Returns the period index t (1..70) for each year used to drive the logistic convergence trajectory in the Productivity worksheet.
+    Each record corresponds to a year from row 23 of the Productivity sheet, with TIME_PERIOD taken from the column headers and OBS_VALUE read from the cell.
+
+    Args:
+        ctx (EvalContext): Evaluation context.
+
+    Returns:
+        CellValue: Value read from the bound cell or range.
+
+    Source binding:
+        Workbook range: Productivity!B23:BS23
+        Layout: series
+        Value type: float
+
+    Examples:
+        read_productivity_convergence_period_index(ctx=ctx)
+    """
+    key_tuple = (('TIME_PERIOD', time_period),)
+    address = _LEAF_INDEX_PRODUCTIVITY_CONVERGENCE_PERIOD_INDEX.get(key_tuple)
+    if address is None:
+        raise ValueError(f"no leaf matches key {dict(key_tuple)!r}")
+    return xl_cell(ctx, address)
+
+def read_productivity_convergence_period_index_range(ctx: EvalContext) -> CellValue:
+    """Read the productivity convergence period index series from the Productivity sheet.
+
+    Returns the period indices that drive the logistic convergence of productivity growth over the projection horizon.
+    Each record corresponds to a column in the row 23 data range, mapping years to sequential indices.
+
+    Args:
+        ctx (EvalContext): Evaluation context.
+
+    Returns:
+        CellValue: Value read from the bound cell or range.
+
+    Source binding:
+        Workbook range: Productivity!B23:BS23
+        Layout: series
+        Value type: float
+
+    Examples:
+        read_productivity_convergence_period_index_range(ctx=ctx)
+    """
+    return xl_range(ctx, 'Productivity!B23:BS23')
+
+_LEAF_INDEX_INFLATION_CONVERGENCE_LOGISTIC_STEEPNESS = {
+    (): 'Inflation!G6',
+}
+
+def read_inflation_convergence_logistic_steepness(ctx: EvalContext) -> CellValue:
+    """Reads the logistic steepness exponent for the inflation convergence curve.
+
+    Returns the logistic steepness exponent G used in the inflation convergence curve formula.
+    The scalar value is read from cell Inflation!G6.
+
+    Args:
+        ctx (EvalContext): Evaluation context.
+
+    Returns:
+        CellValue: Value read from the bound cell or range.
+
+    Source binding:
+        Workbook range: Inflation!G6
+        Layout: scalar
+        Value type: float
+
+    Examples:
+        read_inflation_convergence_logistic_steepness(ctx=ctx)
+    """
+    return xl_cell(ctx, 'Inflation!G6')
+
+_LEAF_INDEX_INFLATION_CONVERGENCE_LOGISTIC_MIDPOINT = {
+    (): 'Inflation!J6',
+}
+
+def read_inflation_convergence_logistic_midpoint(ctx: EvalContext) -> CellValue:
+    """Read the logistic curve midpoint offset for inflation convergence.
+
+    Returns the midpoint period offset used in the logistic convergence of inflation rates.
+    The record corresponds to the value in cell 'Inflation!J6'.
+
+    Args:
+        ctx (EvalContext): Evaluation context.
+
+    Returns:
+        CellValue: Value read from the bound cell or range.
+
+    Source binding:
+        Workbook range: Inflation!J6
+        Layout: scalar
+        Value type: float
+
+    Examples:
+        read_inflation_convergence_logistic_midpoint(ctx=ctx)
+    """
+    return xl_cell(ctx, 'Inflation!J6')
+
+_LEAF_INDEX_INFLATION_CONVERGENCE_PERIOD_INDEX = {
+    (('TIME_PERIOD', 2002),): 'Inflation!B8',
+    (('TIME_PERIOD', 2003),): 'Inflation!C8',
+    (('TIME_PERIOD', 2004),): 'Inflation!D8',
+    (('TIME_PERIOD', 2005),): 'Inflation!E8',
+    (('TIME_PERIOD', 2006),): 'Inflation!F8',
+    (('TIME_PERIOD', 2007),): 'Inflation!G8',
+    (('TIME_PERIOD', 2008),): 'Inflation!H8',
+    (('TIME_PERIOD', 2009),): 'Inflation!I8',
+    (('TIME_PERIOD', 2010),): 'Inflation!J8',
+    (('TIME_PERIOD', 2011),): 'Inflation!K8',
+    (('TIME_PERIOD', 2012),): 'Inflation!L8',
+    (('TIME_PERIOD', 2013),): 'Inflation!M8',
+    (('TIME_PERIOD', 2014),): 'Inflation!N8',
+    (('TIME_PERIOD', 2015),): 'Inflation!O8',
+    (('TIME_PERIOD', 2016),): 'Inflation!P8',
+    (('TIME_PERIOD', 2017),): 'Inflation!Q8',
+    (('TIME_PERIOD', 2018),): 'Inflation!R8',
+    (('TIME_PERIOD', 2019),): 'Inflation!S8',
+    (('TIME_PERIOD', 2020),): 'Inflation!T8',
+    (('TIME_PERIOD', 2021),): 'Inflation!U8',
+    (('TIME_PERIOD', 2022),): 'Inflation!V8',
+    (('TIME_PERIOD', 2023),): 'Inflation!W8',
+    (('TIME_PERIOD', 2024),): 'Inflation!X8',
+    (('TIME_PERIOD', 2025),): 'Inflation!Y8',
+    (('TIME_PERIOD', 2026),): 'Inflation!Z8',
+    (('TIME_PERIOD', 2027),): 'Inflation!AA8',
+    (('TIME_PERIOD', 2028),): 'Inflation!AB8',
+    (('TIME_PERIOD', 2029),): 'Inflation!AC8',
+    (('TIME_PERIOD', 2030),): 'Inflation!AD8',
+    (('TIME_PERIOD', 2031),): 'Inflation!AE8',
+    (('TIME_PERIOD', 2032),): 'Inflation!AF8',
+    (('TIME_PERIOD', 2033),): 'Inflation!AG8',
+    (('TIME_PERIOD', 2034),): 'Inflation!AH8',
+    (('TIME_PERIOD', 2035),): 'Inflation!AI8',
+    (('TIME_PERIOD', 2036),): 'Inflation!AJ8',
+    (('TIME_PERIOD', 2037),): 'Inflation!AK8',
+    (('TIME_PERIOD', 2038),): 'Inflation!AL8',
+    (('TIME_PERIOD', 2039),): 'Inflation!AM8',
+    (('TIME_PERIOD', 2040),): 'Inflation!AN8',
+    (('TIME_PERIOD', 2041),): 'Inflation!AO8',
+    (('TIME_PERIOD', 2042),): 'Inflation!AP8',
+    (('TIME_PERIOD', 2043),): 'Inflation!AQ8',
+    (('TIME_PERIOD', 2044),): 'Inflation!AR8',
+    (('TIME_PERIOD', 2045),): 'Inflation!AS8',
+    (('TIME_PERIOD', 2046),): 'Inflation!AT8',
+    (('TIME_PERIOD', 2047),): 'Inflation!AU8',
+    (('TIME_PERIOD', 2048),): 'Inflation!AV8',
+    (('TIME_PERIOD', 2049),): 'Inflation!AW8',
+    (('TIME_PERIOD', 2050),): 'Inflation!AX8',
+    (('TIME_PERIOD', 2051),): 'Inflation!AY8',
+    (('TIME_PERIOD', 2052),): 'Inflation!AZ8',
+    (('TIME_PERIOD', 2053),): 'Inflation!BA8',
+    (('TIME_PERIOD', 2054),): 'Inflation!BB8',
+    (('TIME_PERIOD', 2055),): 'Inflation!BC8',
+    (('TIME_PERIOD', 2056),): 'Inflation!BD8',
+    (('TIME_PERIOD', 2057),): 'Inflation!BE8',
+    (('TIME_PERIOD', 2058),): 'Inflation!BF8',
+    (('TIME_PERIOD', 2059),): 'Inflation!BG8',
+    (('TIME_PERIOD', 2060),): 'Inflation!BH8',
+    (('TIME_PERIOD', 2061),): 'Inflation!BI8',
+    (('TIME_PERIOD', 2062),): 'Inflation!BJ8',
+    (('TIME_PERIOD', 2063),): 'Inflation!BK8',
+    (('TIME_PERIOD', 2064),): 'Inflation!BL8',
+    (('TIME_PERIOD', 2065),): 'Inflation!BM8',
+    (('TIME_PERIOD', 2066),): 'Inflation!BN8',
+    (('TIME_PERIOD', 2067),): 'Inflation!BO8',
+    (('TIME_PERIOD', 2068),): 'Inflation!BP8',
+    (('TIME_PERIOD', 2069),): 'Inflation!BQ8',
+    (('TIME_PERIOD', 2070),): 'Inflation!BR8',
+    (('TIME_PERIOD', 2071),): 'Inflation!BS8',
+}
+
+def read_inflation_convergence_period_index(
+    ctx: EvalContext,
+    *,
+    time_period: int,
+) -> CellValue:
+    """Read the inflation convergence period index for each projection year.
+
+    Returns the index values used in the logistic convergence trajectory for inflation projections.
+    Each record corresponds to a cell in the Inflation sheet row containing the period index.
+
+    Args:
+        ctx (EvalContext): Evaluation context.
+
+    Returns:
+        CellValue: Value read from the bound cell or range.
+
+    Source binding:
+        Workbook range: Inflation!B8:BS8
+        Layout: series
+        Value type: float
+
+    Examples:
+        read_inflation_convergence_period_index(ctx=ctx)
+    """
+    key_tuple = (('TIME_PERIOD', time_period),)
+    address = _LEAF_INDEX_INFLATION_CONVERGENCE_PERIOD_INDEX.get(key_tuple)
+    if address is None:
+        raise ValueError(f"no leaf matches key {dict(key_tuple)!r}")
+    return xl_cell(ctx, address)
+
+def read_inflation_convergence_period_index_range(ctx: EvalContext) -> CellValue:
+    """Read the inflation convergence period index series from the Inflation sheet.
+
+    Returns a list of records with the year and the corresponding convergence period index value.
+    Each record corresponds to a cell in Inflation!B8:BS8; the year comes from the column header and the index value from the cell.
+
+    Args:
+        ctx (EvalContext): Evaluation context.
+
+    Returns:
+        CellValue: Value read from the bound cell or range.
+
+    Source binding:
+        Workbook range: Inflation!B8:BS8
+        Layout: series
+        Value type: float
+
+    Examples:
+        read_inflation_convergence_period_index_range(ctx=ctx)
+    """
+    return xl_range(ctx, 'Inflation!B8:BS8')
+
+_LEAF_INDEX_INTEREST_RATE_ASSUMPTION_LABEL_NOMINAL = {
+    (): "'Interest Rate'!A17",
+}
+
+def read_interest_rate_assumption_label_nominal(ctx: EvalContext) -> CellValue:
+    """Return the label of the active long-run interest rate assumption.
+
+    Returns the text label for the selected interest rate assumption row.
+    The record corresponds to the label cell in the Interest Rate worksheet.
+
+    Args:
+        ctx (EvalContext): Evaluation context.
+
+    Returns:
+        CellValue: Value read from the bound cell or range.
+
+    Source binding:
+        Workbook range: Interest Rate!A17
+        Layout: scalar
+        Value type: string
+
+    Examples:
+        read_interest_rate_assumption_label_nominal(ctx=ctx)
+    """
+    return xl_cell(ctx, "'Interest Rate'!A17")
+
+_LEAF_INDEX_INTEREST_RATE_ASSUMPTION_LABEL_DIFFERENTIAL = {
+    (): "'Interest Rate'!A18",
+}
+
+def read_interest_rate_assumption_label_differential(ctx: EvalContext) -> CellValue:
+    """Reads the label for the interest-growth differential assumption row from the Interest Rate sheet.
+
+    Returns the label for the long-run interest-growth differential assumption.
+    A single record with the OBS_VALUE field populated from cell `Interest Rate!A18`.
+
+    Args:
+        ctx (EvalContext): Evaluation context.
+
+    Returns:
+        CellValue: Value read from the bound cell or range.
+
+    Source binding:
+        Workbook range: Interest Rate!A18
+        Layout: scalar
+        Value type: string
+
+    Examples:
+        read_interest_rate_assumption_label_differential(ctx=ctx)
+    """
+    return xl_cell(ctx, "'Interest Rate'!A18")
+
+_LEAF_INDEX_INTEREST_RATE_ASSUMPTION_LABEL_REAL = {
+    (): "'Interest Rate'!A19",
+}
+
+def read_interest_rate_assumption_label_real(ctx: EvalContext) -> CellValue:
+    """Reads the row label that identifies the real interest rate assumption used in long-run projections.
+
+    Returns the label for the active long-run real interest rate assumption row.
+    Each record corresponds to the scalar value in cell A19 of the Interest Rate sheet.
+
+    Args:
+        ctx (EvalContext): Evaluation context.
+
+    Returns:
+        CellValue: Value read from the bound cell or range.
+
+    Source binding:
+        Workbook range: Interest Rate!A19
+        Layout: scalar
+        Value type: string
+
+    Examples:
+        read_interest_rate_assumption_label_real(ctx=ctx)
+    """
+    return xl_cell(ctx, "'Interest Rate'!A19")

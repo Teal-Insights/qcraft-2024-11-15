@@ -545,12 +545,8 @@ def _coerce_non_scalar_records(
 # Interest Rate!A17:A19). Demography requires character-for-character matches
 # including the trailing space on ``High ``; interest-rate mode still accepts a
 # logical prefix alias for the ``(a)`` suffix variant.
-_DEMOGRAPHY_SCENARIO_LABELS: tuple[str, ...] = ("Medium", "High ", "Low")
-_INTEREST_RATE_MODE_LABELS: tuple[str, ...] = (
-    "Nominal interest rate",
-    "Interest-growth differential",
-    "Real interest rate (a)",
-)
+_DEMOGRAPHY_SCENARIO_LABELS: tuple[str, ...] = ('Medium', 'High ', 'Low')
+_INTEREST_RATE_MODE_LABELS: tuple[str, ...] = ('Nominal interest rate', 'Interest-growth differential', 'Real interest rate (a)')
 
 
 def require_exact_public_input_label(value: str, choices: Sequence[str]) -> str:
@@ -617,7 +613,6 @@ def resolve_measure_labels(
             updated[measure_field] = resolve_public_input_label(value, choices)
         resolved.append(updated)
     return resolved
-
 
 def coerce_setter_input(
     data: SetterInput,

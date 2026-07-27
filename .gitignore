@@ -3,14 +3,6 @@
 *.pyc
 __pycache__/
 .venv/
+great-docs/
 _validate_user_guide_cells.py
 tests/results/local/
-
-# Great Docs build directory (ephemeral, do not commit)
-great-docs/
-
-# Great Docs versioned-build artifacts
-_great_docs_build/
-.great-docs-build/
-.great-docs-cache/
-.great-docs/

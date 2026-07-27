@@ -2,24 +2,19 @@
 title: "Functional Overview"
 ---
 
-Q-CRAFT generates long-term fiscal projections under different climate scenarios using publicly available data. With the Python API, you configure scenarios through setter functions and retrieve results through compute functions, all managed by an evaluation context.
+Q-CRAFT generates long-term fiscal projections under different climate change scenarios using publicly available data from the IMF, United Nations, and World Bank. In its Python-first form, you configure the tool through the `qcraft.api` module: create a context, apply your assumptions with dedicated setter functions, and retrieve projections via compute functions.
 
-## Setting Up the Baseline Scenario
+### A. Configuration conventions
 
-The baseline scenario is configured with a series of setter calls. After each call, the context is updated, and subsequent computations reflect the chosen parameters.
+The API replaces the Excel spreadsheet’s color-coded worksheets with a clear programmatic interface. Pre‑loaded data is automatically available; input assumptions are set using scalars, keyed records, or DataFrames. Output results come as lists of records that can be easily tabulated with Polars.
 
-1. **Country** – `set_country(ctx, 'Afghanistan')`
-2. **Demographic scenario** – `set_demography_scenario(ctx, 'Medium')`
-3. **Productivity growth** – `set_productivity_start(ctx, 5.0)` and `set_productivity_end(ctx, 1.2)`
-4. **Inflation** – `set_inflation_start(ctx, 3.5)` and `set_inflation_end(ctx, 3.5)`
-5. **Interest rate mode** – `set_interest_rate_mode(ctx, 'Nominal interest rate')`
-6. **Real interest rate** – `set_real_interest_rate(ctx, 1.0)`
-7. **Fiscal rule** – `set_fiscal_rule_enabled(ctx, 'No')` and `set_debt_target(ctx, 0.0)`
+### B. Setting up the baseline scenario
 
-After the setup, compute baseline outputs with functions like `compute_baseline_debt_to_gdp`, `compute_baseline_primary_balance_pct_gdp`, etc.
+Begin by creating an evaluation context and chaining the setter calls that correspond to the Dashboard selections. The following runnable cell demonstrates the complete baseline setup, then computes population and employment growth.
 
 ```{python}
 import polars as pl
+
 from qcraft.api import (
     make_context,
     set_country,
@@ -29,67 +24,97 @@ from qcraft.api import (
     set_inflation_start,
     set_inflation_end,
     set_interest_rate_mode,
-    set_real_interest_rate,
     set_fiscal_rule_enabled,
     set_debt_target,
-    compute_baseline_debt_to_gdp,
+    set_expenditure_rigidity,
+    compute_baseline_population_growth,
+    compute_baseline_employment_growth,
 )
 
-ctx = make_context()
 
-set_country(ctx, 'Afghanistan')
-set_demography_scenario(ctx, 'Medium')
+def results_frame(records: list[dict[str, object]]) -> pl.DataFrame:
+    return (
+        pl.DataFrame(records)
+        .sort("TIME_PERIOD")
+        .select(
+            "TIME_PERIOD",
+            pl.col("OBS_VALUE").alias("Value"),
+        )
+    )
+
+
+ctx = make_context()
+set_country(ctx, "Afghanistan")
+set_demography_scenario(ctx, "Medium")
 set_productivity_start(ctx, 5.0)
 set_productivity_end(ctx, 1.2)
 set_inflation_start(ctx, 3.5)
 set_inflation_end(ctx, 3.5)
-set_interest_rate_mode(ctx, 'Nominal interest rate')
-set_real_interest_rate(ctx, 1.0)
-set_fiscal_rule_enabled(ctx, 'No')
-set_debt_target(ctx, 0.0)
-
-debt_records = compute_baseline_debt_to_gdp(ctx=ctx)
-pl.DataFrame(debt_records).sort("TIME_PERIOD").select(
-    "TIME_PERIOD",
-    pl.col("OBS_VALUE").alias("Debt (% GDP)")
-).head(5)
-```
-
-## Generating Climate Scenarios
-
-Q-CRAFT simulates six climate scenarios: **Paris**, **Moderate**, **High**, **Hot**, **Hot adapted**, and **Hot unadapted**. The expenditure rigidity parameter controls how primary expenditure reacts to climate‑induced GDP losses. Set it with `set_expenditure_rigidity(ctx, 1.0)` (fully rigid) or a value between 0 and 1.
-
-Discrete fiscal risks (natural disasters, etc.) can be registered as revenue and expenditure shocks using `set_discrete_revenue_shocks` and `set_discrete_primary_expenditure_shocks`. These functions accept a list of records, each with `SCENARIO`, `TIME_PERIOD`, and `OBS_VALUE` (percent of GDP). For example:
-
-```{python}
-from qcraft.api import (
-    set_expenditure_rigidity,
-    set_discrete_revenue_shocks,
-    set_discrete_primary_expenditure_shocks,
-)
-
+set_interest_rate_mode(ctx, "Nominal interest rate")
+set_fiscal_rule_enabled(ctx, "Yes")
+set_debt_target(ctx, 60.0)
 set_expenditure_rigidity(ctx, 1.0)
 
+population = results_frame(compute_baseline_population_growth(ctx=ctx))
+employment = results_frame(compute_baseline_employment_growth(ctx=ctx))
+population.tail(5)
+```
+
+After this setup, Q-CRAFT automatically calculates the full baseline scenario. Behind the scenes it projects employment (using working‑age population), nominal GDP (via employment, productivity, and inflation), and fiscal aggregates under the chosen interest‑rate mode and fiscal rule.
+
+#### Demographic assumptions
+
+`set_demography_scenario` selects the UN population variant (`"Medium"`, `"High "`, or `"Low"`). This drives the working‑age population series used for employment growth.
+
+These labels are matched against the workbook exactly, including the trailing space in `"High "` — passing `"High"` raises `ValueError`. The accepted literals are also available at runtime from `read_demography_variant_label_medium`, `read_demography_variant_label_high`, and `read_demography_variant_label_low`.
+
+#### Productivity assumptions
+
+`set_productivity_start(ctx, start_rate)` and `set_productivity_end(ctx, end_rate)` define the annual labour‑productivity growth trajectory from the near term to 2100. The start rate typically matches the last WEO‑projected year, while the end rate reflects long‑run structural productivity. The API computes a logistic convergence path between them.
+
+#### Inflation assumption
+
+`set_inflation_start` and `set_inflation_end` set the inflation profile. In most cases you will set both to the central bank’s target (or to the WEO 2028 value if it is already on target). The resulting GDP deflator growth is used in nominal GDP projections.
+
+#### Interest rate assumptions
+
+`set_interest_rate_mode` controls how long‑term nominal interest rates are determined:
+- `"Nominal interest rate"` keeps the 2028 nominal rate constant.
+- `"Interest-growth differential"` holds the difference between the interest rate and GDP growth constant.
+- `"Real interest rate"` holds the real rate constant (requires a further call to `set_real_interest_rate`, whose supported domain is −20 to 20 percent).
+
+As with the demography variants, these are workbook-exact labels — note the hyphen in `"Interest-growth differential"` — and can be read back from `read_interest_rate_assumption_label_nominal`, `read_interest_rate_assumption_label_differential`, and `read_interest_rate_assumption_label_real`.
+
+The choice should reflect country‑specific financing conditions, concessionary access, and demographic trends.
+
+#### Fiscal rule
+
+Enable a fiscal rule with `set_fiscal_rule_enabled(ctx, "Yes")` and set the debt‑to‑GDP target with `set_debt_target`. When active, the tool computes the primary balance needed to stabilise debt and reports the consolidation gap.
+
+### C. Generating climate scenarios
+
+Once the baseline is configured, climate scenarios can be explored. Six IPCC‑based pathways are available: **Paris** (SSP1‑2.6), **Moderate** (SSP2‑4.5), **High** (SSP3‑7.0), **Hot** (90th‑percentile warming), **Hot adapted**, and **Hot unadapted**. Each scenario modifies GDP levels using empirical damage functions starting in 2030, while revenue‑to‑GDP ratios stay at baseline levels and primary expenditure is made rigid to varying degrees.
+
+#### Expenditure rigidity
+
+`set_expenditure_rigidity` sets how primary expenditure responds to climate‑induced GDP declines:
+- `1.0` means expenditure remains unchanged in local‑currency terms (fully rigid).
+- `0.0` means expenditure adjusts to keep the same primary‑expenditure‑to‑GDP ratio as the baseline.
+
+Intermediate values represent partial adjustment.
+
+#### Discrete risks
+
+Discrete fiscal shocks (e.g., natural disasters) can be layered onto climate scenarios using `set_discrete_revenue_shocks` and `set_discrete_primary_expenditure_shocks`. Both accept records keyed by `SCENARIO` and `TIME_PERIOD` with `OBS_VALUE` as a percentage of GDP. These shocks affect revenue and spending without altering GDP.
+
+```python
+# Example (not runnable here)
 set_discrete_revenue_shocks(ctx, [
-    {'SCENARIO': 'Paris', 'TIME_PERIOD': 2030, 'OBS_VALUE': None},
-    {'SCENARIO': 'Paris', 'TIME_PERIOD': 2031, 'OBS_VALUE': 0.5},
-])
-
-set_discrete_primary_expenditure_shocks(ctx, [
-    {'SCENARIO': 'Paris', 'TIME_PERIOD': 2030, 'OBS_VALUE': 0.5},
-    {'SCENARIO': 'Paris', 'TIME_PERIOD': 2031, 'OBS_VALUE': None},
+    {'SCENARIO': 'Paris', 'TIME_PERIOD': 2030, 'OBS_VALUE': -0.5},
+    {'SCENARIO': 'Paris', 'TIME_PERIOD': 2031, 'OBS_VALUE': 0.0},
 ])
 ```
 
-Then compute scenario outputs across all six paths with matrix‑returning functions:
+#### Scenario output
 
-```{python}
-from qcraft.api import compute_scenario_debt_to_gdp
-
-scenario_debt = compute_scenario_debt_to_gdp(ctx=ctx)
-pl.DataFrame(scenario_debt).sort(["SCENARIO", "TIME_PERIOD"]).select(
-    "SCENARIO", "TIME_PERIOD", pl.col("OBS_VALUE").alias("Debt (% GDP)")
-).filter(pl.col("TIME_PERIOD") >= 2050).head(10)
-```
-
-Similar compute functions exist for primary balance (`compute_scenario_primary_balance_pct_gdp`), overall balance (`compute_scenario_overall_balance_pct_gdp`), and many other aggregates, enabling full comparison of climate impacts on fiscal sustainability.
+A rich set of `compute_scenario_*` functions is available to retrieve primary balance, overall balance, debt‑to‑GDP, nominal GDP growth, real GDP level indices, and interest expenditure under each climate pathway. They follow the same pattern as the baseline computes and can be analysed with Polars.

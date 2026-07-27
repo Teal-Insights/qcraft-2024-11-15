@@ -20,11 +20,12 @@ import csv
 import importlib
 import logging
 import sys
+from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
 from types import ModuleType
-from typing import Any, Literal, cast
+from typing import Any, Literal
 
 _REPO_ROOT = Path(__file__).resolve().parents[2]
 if str(_REPO_ROOT) not in sys.path:
@@ -36,8 +37,8 @@ from tests.differential.comparison_utils import (
     apply_health_expectation,
     classify_comparison,
 )
-from tests.differential.differential_excel import parity_exit_code, read_cell_value
-from tests.differential.differential_types import ATOL, Scenario
+from tests.differential.differential_excel import parity_exit_code
+from tests.differential.differential_types import ATOL, RTOL, Scenario
 
 logger = logging.getLogger(__name__)
 
@@ -55,6 +56,7 @@ class DifferentialConfig:
     report_dir: Path
     library_name: str
     atol: float = ATOL
+    rtol: float = RTOL
     allow_matched_errors: bool = False
 
 
@@ -192,6 +194,7 @@ def resolve_config(
         report_dir=(report_dir or defaults.report_dir).resolve(),
         library_name=library_name,
         atol=ATOL,
+        rtol=RTOL,
         allow_matched_errors=allow_matched_errors,
     )
 
@@ -216,10 +219,11 @@ def compare_cell(
     mvp: Any,
     *,
     atol: float,
+    rtol: float,
     expects_error_values: bool = False,
 ) -> Comparison:
     passed, healthy, outcome, abs_diff, rel_diff, note = classify_comparison(
-        excel, mvp, atol=atol
+        excel, mvp, atol=atol, rtol=rtol
     )
     healthy = apply_health_expectation(
         expects_error_values=expects_error_values,
@@ -253,6 +257,7 @@ def compare_scenario(
     cell_labels: tuple[tuple[str, str], ...],
     *,
     atol: float,
+    rtol: float,
 ) -> list[Comparison]:
     return [
         compare_cell(
@@ -260,8 +265,9 @@ def compare_scenario(
             cell_address,
             cell_label,
             excel_outputs.get(cell_address),
-            mvp_outputs.get(cell_address),
+            mvp_outputs.get(cell_label),
             atol=atol,
+            rtol=rtol,
             expects_error_values=scenario.expects_error_values,
         )
         for cell_label, cell_address in cell_labels
@@ -272,18 +278,35 @@ def crash_comparisons(
     scenario: Scenario,
     cell_labels: tuple[tuple[str, str], ...],
     exc: BaseException,
+    *,
+    crashed_oracle: str = "unknown",
+    excel_outputs: Mapping[str, Any] | None = None,
+    mvp_outputs: Mapping[str, Any] | None = None,
 ) -> list[Comparison]:
     err_repr = f"<exception: {type(exc).__name__}: {exc}>"
+    if crashed_oracle in ("excel", "mvp"):
+        note = f"{crashed_oracle} oracle crashed"
+    else:
+        note = f"{crashed_oracle} stage crashed ({err_repr})"
     return [
         Comparison(
             scenario_id=scenario.id,
             cell_address=cell_address,
             cell_label=cell_label,
-            excel_value=err_repr,
-            mvp_value=err_repr,
+            excel_value=(
+                err_repr
+                if crashed_oracle == "excel"
+                else (excel_outputs or {}).get(cell_address)
+            ),
+            mvp_value=(
+                err_repr
+                if crashed_oracle == "mvp"
+                else (mvp_outputs or {}).get(cell_label)
+            ),
             abs_diff=None,
             rel_diff=None,
             passed=False,
+            note=note,
         )
         for cell_label, cell_address in cell_labels
     ]
@@ -313,11 +336,31 @@ def write_csv_report(comparisons: list[Comparison], path: Path) -> None:
             )
 
 
+def _environment_info(excel_version: str | None) -> dict[str, str]:
+    import platform
+    import sys
+
+    try:
+        import xlwings
+
+        xlwings_version = xlwings.__version__
+    except Exception:  # pragma: no cover - xlwings always present in this repo
+        xlwings_version = "unavailable"
+    return {
+        "python": sys.version.split()[0],
+        "os": platform.platform(),
+        "xlwings": xlwings_version,
+        "excel": excel_version or "not launched",
+    }
+
+
 def write_txt_summary(
     comparisons: list[Comparison],
     path: Path,
     *,
     config: DifferentialConfig,
+    environment: Mapping[str, str],
+    workbook_sha256: str,
 ) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     total = len(comparisons)
@@ -348,7 +391,13 @@ def write_txt_summary(
         handle.write(
             f"Package:   {config.package_dir} (imported as {config.package_name})\n"
         )
-        handle.write(f"Tolerance: atol = {config.atol}\n\n")
+        handle.write(f"Tolerance: atol = {config.atol}, rtol = {config.rtol}\n\n")
+        handle.write(f"Workbook SHA-256: {workbook_sha256}\n\n")
+        handle.write("ENVIRONMENT\n")
+        handle.write(f"  Python:  {environment['python']}\n")
+        handle.write(f"  OS:      {environment['os']}\n")
+        handle.write(f"  xlwings: {environment['xlwings']}\n")
+        handle.write(f"  Excel:   {environment['excel']}\n\n")
         handle.write(
             "PARITY (extraction agreement with Excel, including matched errors)\n"
         )
@@ -378,6 +427,15 @@ def write_txt_summary(
             handle.write(f"  mvp:       {first.mvp_value!r}\n")
             handle.write(f"  abs_diff:  {first.abs_diff!r}\n")
             handle.write(f"  rel_diff:  {first.rel_diff!r}\n")
+        if failures:
+            handle.write(f"\nFAILING COMPARISONS ({len(failures)}):\n")
+            for comparison in failures:
+                handle.write(
+                    f"  {comparison.scenario_id} :: {comparison.cell_address} "
+                    f"({comparison.cell_label}) excel={comparison.excel_value!r} "
+                    f"mvp={comparison.mvp_value!r} abs_diff={comparison.abs_diff!r} "
+                    f"rel_diff={comparison.rel_diff!r}\n"
+                )
         if flagged:
             handle.write(
                 "\nMATCHED ERROR VALUES (both oracles returned the same Excel "
@@ -398,73 +456,65 @@ def load_exported_library(import_root: Path, package_name: str) -> ModuleType:
     return importlib.import_module(package_name)
 
 
-def run_excel_oracle(
-    workbook_path: Path,
-    scenario: Scenario,
-    output_addresses: tuple[str, ...],
-) -> dict[str, Any]:
-    import xlwings as xw
+def read_cells_batched(sheets: Any, addresses: Sequence[str]) -> dict[str, Any]:
+    """Read cells with one COM span-read per (sheet, row) instead of per cell."""
+    import re
 
-    logger.info("Excel oracle: %s", scenario.id)
-    app = xw.App(visible=False, add_book=False)
-    try:
-        workbook = app.books.open(str(workbook_path))
+    from fastpyxl.utils.cell import column_index_from_string, get_column_letter
+
+    parsed: dict[tuple[str, str], list[tuple[str, str]]] = {}
+    for address in addresses:
+        sheet, cell = parse_address(normalize_key(address))
+        match = re.match(r"([A-Z]+)(\d+)", cell)
+        if match is None:
+            raise ValueError(f"Cannot parse cell reference {cell!r} from {address!r}")
+        column, row = match.groups()
+        parsed.setdefault((sheet, row), []).append((column, address))
+
+    values: dict[str, Any] = {}
+    for (sheet, row), columns in parsed.items():
+        indices = sorted(column_index_from_string(c) for c, _ in columns)
+        first, last = indices[0], indices[-1]
+        span = (
+            f"{get_column_letter(first)}{row}"
+            if first == last
+            else f"{get_column_letter(first)}{row}:{get_column_letter(last)}{row}"
+        )
+        raw = sheets[sheet].range(span).options(err_to_str=True).value
+        row_values = [raw] if first == last else list(raw)
+        for column, address in columns:
+            values[address] = row_values[column_index_from_string(column) - first]
+    return values
+
+
+class XlwingsExcelOracle:
+    """Golden-master oracle: fresh isolated Excel instance per scenario."""
+
+    def __init__(self, workbook_path: Path) -> None:
+        self.workbook_path = workbook_path
+        self.excel_version: str | None = None
+
+    def __call__(
+        self, scenario: Scenario, output_addresses: tuple[str, ...]
+    ) -> dict[str, Any]:
+        import xlwings as xw
+
+        logger.info("Excel oracle: %s", scenario.id)
+        app = xw.App(visible=False, add_book=False)
         try:
-            app.calculation = "manual"
-            for address, value in inputs_for_excel(scenario).items():
-                sheet, cell = parse_address(normalize_key(address))
-                workbook.sheets[sheet].range(cell).value = value
-            workbook.app.calculate()
-
-            def read(address: str) -> Any:
-                return read_cell_value(workbook.sheets, address)
-
-            return {address: read(address) for address in output_addresses}
+            self.excel_version = str(app.version)
+            workbook = app.books.open(str(self.workbook_path))
+            try:
+                app.calculation = "manual"
+                for address, value in inputs_for_excel(scenario).items():
+                    sheet, cell = parse_address(normalize_key(address))
+                    workbook.sheets[sheet].range(cell).value = value
+                workbook.app.calculate()
+                return read_cells_batched(workbook.sheets, output_addresses)
+            finally:
+                workbook.close()
         finally:
-            workbook.close()
-    finally:
-        app.quit()
-
-
-def _records_to_cells(
-    records: list[dict[str, Any]],
-    cells: tuple[str, ...],
-) -> dict[str, Any]:
-    if len(records) != len(cells):
-        raise ValueError(f"expected {len(cells)} records, got {len(records)}")
-    raw_periods = [record.get("TIME_PERIOD") for record in records]
-    if all(period is not None for period in raw_periods):
-        periods = cast(list[Any], raw_periods)
-        if any(a >= b for a, b in zip(periods, periods[1:], strict=False)):
-            raise ValueError(
-                f"records' TIME_PERIOD values are not strictly increasing: {periods!r}"
-            )
-    by_cell: dict[str, Any] = {}
-    for index, (record, cell) in enumerate(zip(records, cells, strict=True)):
-        if "OBS_VALUE" not in record:
-            raise ValueError(f"record {index}: missing OBS_VALUE: {record!r}")
-        by_cell[cell] = record["OBS_VALUE"]
-    return by_cell
-
-
-# Optional hook: return compared outputs keyed by cell address without zipping
-# full compute_* series. Workbook-specific modules may set this to compare output
-# subsets (see tests/differential/qcraft_scenario_matrix.py).
-mvp_outputs_for_scenario: Any = None
-
-
-def run_mvp_oracle(api: ModuleType, scenario: Scenario) -> dict[str, Any]:
-    logger.info("MVP oracle:   %s", scenario.id)
-    if mvp_outputs_for_scenario is not None:
-        return mvp_outputs_for_scenario(api, scenario)
-    ctx = api.make_context()
-    apply_inputs_to_mvp(api, ctx, scenario)
-    outputs: dict[str, Any] = {}
-    for entrypoint, cells in output_ranges():
-        compute_fn = getattr(api, f"compute_{entrypoint}")
-        records = compute_fn(ctx=ctx)
-        outputs.update(_records_to_cells(records, cells))
-    return outputs
+            app.quit()
 
 
 def _verify_paths(config: DifferentialConfig) -> None:
@@ -484,72 +534,168 @@ def _verify_paths(config: DifferentialConfig) -> None:
         )
 
 
+def _workbook_sha256(path: Path) -> str:
+    import hashlib
+
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def _verify_input_symmetry(scenarios: tuple[Scenario, ...]) -> None:
+    """Standard §4.3: every Excel write must be expressible via a public setter.
+
+    A cell outside EXPRESSIBLE_INPUT_CELLS would make the two oracles receive
+    different inputs — an unsatisfiable comparison, not a parity failure.
+    """
+    from tests.differential.qcraft_scenario_matrix import EXPRESSIBLE_INPUT_CELLS
+
+    offenders: dict[str, list[str]] = {}
+    for scenario in scenarios:
+        rogue = sorted(set(inputs_for_excel(scenario)) - EXPRESSIBLE_INPUT_CELLS)
+        if rogue:
+            offenders[scenario.id] = rogue
+    if offenders:
+        details = "; ".join(
+            f"{scenario_id}: {cells}" for scenario_id, cells in offenders.items()
+        )
+        raise RuntimeError(
+            "Input-symmetry pre-flight failed — these Excel writes have no "
+            f"public-setter counterpart in the exported API: {details}. "
+            "Either bind them as inputs (and re-export) or remove them from "
+            "the scenario's Excel writes."
+        )
+
+
 def _check_staleness(config: DifferentialConfig) -> None:
+    fixture = (
+        config.package_dir.parent / "tests" / "fixtures" / config.workbook_path.name
+    )
+    if fixture.is_file():
+        current = _workbook_sha256(config.workbook_path)
+        exported = _workbook_sha256(fixture)
+        if current != exported:
+            raise RuntimeError(
+                "Workbook SHA-256 mismatch: the workbook has changed since the "
+                f"package was exported (current {current[:12]}…, export-time "
+                f"{exported[:12]}…). Re-run the extraction pipeline before "
+                "trusting parity results."
+            )
+        return
     data_path = config.package_dir / "data.py"
     if not data_path.is_file():
         return
-    workbook_mtime = config.workbook_path.stat().st_mtime
-    data_mtime = data_path.stat().st_mtime
-    if workbook_mtime > data_mtime:
+    if config.workbook_path.stat().st_mtime > data_path.stat().st_mtime:
         logger.warning(
             "Workbook is newer than exported data.py; regenerate dist/ if constants changed."
         )
 
 
+_REQUIRED_WORKBOOK_HOOKS: tuple[str, ...] = (
+    "build_scenarios",
+    "output_cell_labels",
+    "inputs_for_excel",
+    "apply_inputs_to_mvp",
+    "mvp_outputs_for_scenario",
+)
+
+
 def _validate_workbook_hooks() -> None:
-    scenarios = build_scenarios()
-    if not scenarios:
+    hooks = {
+        "build_scenarios": build_scenarios,
+        "output_cell_labels": output_cell_labels,
+        "inputs_for_excel": inputs_for_excel,
+        "apply_inputs_to_mvp": apply_inputs_to_mvp,
+        "mvp_outputs_for_scenario": mvp_outputs_for_scenario,
+    }
+    missing = [name for name in _REQUIRED_WORKBOOK_HOOKS if not callable(hooks[name])]
+    if missing:
         raise RuntimeError(
-            "No differential scenarios configured. Author build_scenarios(), "
-            "output_cell_labels(), output_ranges(), inputs_for_excel(), and "
-            "apply_inputs_to_mvp() in "
+            "Missing workbook-specific hook(s): "
+            f"{', '.join(missing)}. Author them in "
             "tests/differential/qcraft_scenario_matrix.py."
+        )
+    if not build_scenarios():
+        raise RuntimeError(
+            "No differential scenarios configured. build_scenarios() returned none."
         )
     if not output_cell_labels():
         raise RuntimeError(
             "output_cell_labels() returned no cells. Mirror your output bindings "
             "as (label, address) pairs."
         )
-    if not output_ranges() and mvp_outputs_for_scenario is None:
-        raise RuntimeError(
-            "output_ranges() returned no compute groups. Map each compute_* "
-            "entrypoint to its output cell addresses, or provide "
-            "mvp_outputs_for_scenario()."
-        )
 
 
-def run_differential_test(config: DifferentialConfig) -> int:
-    _validate_workbook_hooks()
+def run_differential_test(
+    config: DifferentialConfig,
+    *,
+    excel_oracle: Any = None,
+    mvp_oracle: Any = None,
+) -> int:
     _verify_paths(config)
+    _validate_workbook_hooks()
     _check_staleness(config)
 
-    api = load_exported_library(config.import_root, config.package_name)
     scenarios = build_scenarios()
+    _verify_input_symmetry(scenarios)
+
+    if excel_oracle is None:
+        excel_oracle = XlwingsExcelOracle(config.workbook_path)
+    if mvp_oracle is None:
+        api = load_exported_library(config.import_root, config.package_name)
+        mvp_oracle = lambda scenario: mvp_outputs_for_scenario(api, scenario)  # noqa: E731
+
     cell_labels = output_cell_labels()
     output_addresses = tuple(address for _, address in cell_labels)
 
     comparisons: list[Comparison] = []
     for scenario in scenarios:
         try:
-            excel_outputs = run_excel_oracle(
-                config.workbook_path,
-                scenario,
-                output_addresses,
-            )
-            mvp_outputs = run_mvp_oracle(api, scenario)
+            excel_outputs = excel_oracle(scenario, output_addresses)
         except Exception as exc:
-            logger.exception("Scenario %s crashed; recording as failure.", scenario.id)
-            comparisons.extend(crash_comparisons(scenario, cell_labels, exc))
+            logger.exception("Excel oracle crashed on %s.", scenario.id)
+            comparisons.extend(
+                crash_comparisons(scenario, cell_labels, exc, crashed_oracle="excel")
+            )
             continue
-        comparisons.extend(
-            compare_scenario(
+        try:
+            mvp_outputs = mvp_oracle(scenario)
+        except Exception as exc:
+            logger.exception("MVP oracle crashed on %s.", scenario.id)
+            comparisons.extend(
+                crash_comparisons(
+                    scenario,
+                    cell_labels,
+                    exc,
+                    crashed_oracle="mvp",
+                    excel_outputs=excel_outputs,
+                )
+            )
+            continue
+        try:
+            scenario_comparisons = compare_scenario(
                 scenario,
                 excel_outputs,
                 mvp_outputs,
                 cell_labels,
                 atol=config.atol,
+                rtol=config.rtol,
             )
-        )
+        except Exception as exc:
+            logger.exception("Comparison stage crashed on %s.", scenario.id)
+            comparisons.extend(
+                crash_comparisons(
+                    scenario,
+                    cell_labels,
+                    exc,
+                    crashed_oracle="comparison",
+                    excel_outputs=excel_outputs,
+                    mvp_outputs=mvp_outputs,
+                )
+            )
+            continue
+        comparisons.extend(scenario_comparisons)
+
+    workbook_sha256 = _workbook_sha256(config.workbook_path)
+    environment = _environment_info(getattr(excel_oracle, "excel_version", None))
 
     config.report_dir.mkdir(parents=True, exist_ok=True)
     write_csv_report(comparisons, config.report_dir / "parity_report.csv")
@@ -557,6 +703,8 @@ def run_differential_test(config: DifferentialConfig) -> int:
         comparisons,
         config.report_dir / "parity_report.txt",
         config=config,
+        environment=environment,
+        workbook_sha256=workbook_sha256,
     )
 
     failed = sum(1 for comparison in comparisons if not comparison.passed)
@@ -605,9 +753,8 @@ from tests.differential.qcraft_scenario_matrix import (  # noqa: E402
     apply_inputs_to_mvp,
     build_scenarios,
     inputs_for_excel,
-    mvp_outputs_for_scenario,  # noqa: F811
+    mvp_outputs_for_scenario,
     output_cell_labels,
-    output_ranges,
 )
 
 
