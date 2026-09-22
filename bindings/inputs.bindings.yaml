@@ -1,0 +1,589 @@
+schema_version: 1.19.0
+concept_scheme:
+  id: qcraft_model
+  concepts:
+  - id: OBS_VALUE
+    name: Observation value
+    dtype: number
+  - id: TIME_PERIOD
+    name: Time period
+    dtype: int
+  - id: UNIT_MEASURE
+    name: Unit of measure
+    dtype: string
+  - id: SCENARIO
+    name: Climate scenario
+    dtype: string
+  - id: COUNTRY
+    name: Country
+    dtype: string
+  - id: INDICATOR
+    name: Macro-fiscal indicator
+    dtype: string
+  - id: PARAMETER
+    name: Model parameter
+    dtype: string
+  - id: SHOCK_PARAMETER
+    name: Discrete shock parameter
+    dtype: string
+  - id: DEMOGRAPHY_VARIANT
+    name: Demographic projection variant
+    dtype: string
+  - id: FISCAL_MEASURE
+    name: Debt-stabilising primary balance table measure (PB, PB*, PB Gap)
+    dtype: string
+series:
+- id: country
+  sheet: Dashboard
+  data_range: Dashboard!C12
+  layout: scalar
+  input: {}
+  domain:
+    enum:
+    - Afghanistan
+    - Albania
+    - Algeria
+    - Andorra
+    - Angola
+    - Antigua and Barbuda
+    - Anguilla
+    - Argentina
+    - Armenia
+    - Aruba
+    - Australia
+    - Austria
+    - Azerbaijan
+    - The Bahamas
+    - Bahrain
+    - Bangladesh
+    - Barbados
+    - Belarus
+    - Belgium
+    - Belize
+    - Benin
+    - Bhutan
+    - Bolivia
+    - Bosnia and Herzegovina
+    - Botswana
+    - Brazil
+    - Brunei Darussalam
+    - Bulgaria
+    - Burkina Faso
+    - Burundi
+    - Cabo Verde
+    - Cambodia
+    - Cameroon
+    - Canada
+    - Central African Republic
+    - Chad
+    - Chile
+    - China
+    - Colombia
+    - Comoros
+    - Democratic Republic of the Congo
+    - Republic of Congo
+    - Costa Rica
+    - Côte d'Ivoire
+    - Croatia
+    - Cyprus
+    - Czech Republic
+    - Denmark
+    - Djibouti
+    - Dominica
+    - Dominican Republic
+    - Ecuador
+    - Egypt
+    - El Salvador
+    - Equatorial Guinea
+    - Eritrea
+    - Estonia
+    - Eswatini
+    - Ethiopia
+    - Fiji
+    - Finland
+    - France
+    - Gabon
+    - The Gambia
+    - Georgia
+    - Germany
+    - Ghana
+    - Greece
+    - Grenada
+    - Guatemala
+    - Guinea
+    - Guinea-Bissau
+    - Guyana
+    - Haiti
+    - Honduras
+    - Hong Kong SAR
+    - Hungary
+    - Iceland
+    - India
+    - Indonesia
+    - Islamic Republic of Iran
+    - Iraq
+    - Ireland
+    - Israel
+    - Italy
+    - Jamaica
+    - Japan
+    - Jordan
+    - Kazakhstan
+    - Kenya
+    - Kiribati
+    - Korea
+    - Kosovo
+    - Kuwait
+    - Kyrgyz Republic
+    - Lao P.D.R.
+    - Latvia
+    - Lebanon
+    - Lesotho
+    - Liberia
+    - Libya
+    - Lithuania
+    - Luxembourg
+    - Macao SAR
+    - Madagascar
+    - Malawi
+    - Malaysia
+    - Maldives
+    - Mali
+    - Malta
+    - Marshall Islands
+    - Mauritania
+    - Mauritius
+    - Mexico
+    - Micronesia
+    - Moldova
+    - Mongolia
+    - Montenegro
+    - Montserrat
+    - Morocco
+    - Mozambique
+    - Myanmar
+    - Namibia
+    - Nauru
+    - Nepal
+    - Netherlands
+    - New Zealand
+    - Nicaragua
+    - Niger
+    - Nigeria
+    - North Macedonia
+    - Norway
+    - Oman
+    - Pakistan
+    - Palau
+    - Panama
+    - Papua New Guinea
+    - Paraguay
+    - Peru
+    - Philippines
+    - Poland
+    - Portugal
+    - Puerto Rico
+    - Qatar
+    - Romania
+    - Russia
+    - Rwanda
+    - Samoa
+    - San Marino
+    - São Tomé and Príncipe
+    - Saudi Arabia
+    - Senegal
+    - Serbia
+    - Seychelles
+    - Sierra Leone
+    - Singapore
+    - Slovak Republic
+    - Slovenia
+    - Solomon Islands
+    - Somalia
+    - South Africa
+    - South Sudan
+    - Spain
+    - Sri Lanka
+    - St. Kitts and Nevis
+    - St. Lucia
+    - St. Vincent and the Grenadines
+    - Sudan
+    - Suriname
+    - Sweden
+    - Switzerland
+    - Syria
+    - Taiwan Province of China
+    - Tajikistan
+    - Tanzania
+    - Thailand
+    - Timor-Leste
+    - Togo
+    - Tonga
+    - Trinidad and Tobago
+    - Tunisia
+    - Türkiye
+    - Turkmenistan
+    - Tuvalu
+    - Uganda
+    - Ukraine
+    - United Arab Emirates
+    - United Kingdom
+    - United States
+    - Uruguay
+    - Uzbekistan
+    - Vanuatu
+    - Venezuela
+    - Vietnam
+    - West Bank and Gaza
+    - Yemen
+    - Zambia
+    - Zimbabwe
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: string
+      bind:
+        kind: data_cell
+        read: string
+    dimensions: []
+  key: []
+  series_context:
+    PARAMETER: country
+  groups:
+  - path:
+    - setup
+    order: 1
+- id: demography_scenario
+  sheet: Dashboard
+  data_range: Dashboard!C17
+  layout: scalar
+  input: {}
+  domain:
+    enum:
+    - Medium
+    - High
+    - Low
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: string
+      bind:
+        kind: data_cell
+        read: string
+    dimensions: []
+  key: []
+  series_context:
+    PARAMETER: demography_scenario
+  groups:
+  - path:
+    - setup
+    order: 2
+- id: productivity_start
+  sheet: Dashboard
+  data_range: Dashboard!C20
+  layout: scalar
+  input: {}
+  domain:
+    real_between: &id001
+      min: -100
+      max: 100
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: float
+      bind:
+        kind: data_cell
+        read: float
+    dimensions: []
+  key: []
+  series_context:
+    PARAMETER: productivity_start
+  groups:
+  - path:
+    - setup
+    order: 3
+- id: productivity_end
+  sheet: Dashboard
+  data_range: Dashboard!C21
+  layout: scalar
+  input: {}
+  domain:
+    real_between: *id001
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: float
+      bind:
+        kind: data_cell
+        read: float
+    dimensions: []
+  key: []
+  series_context:
+    PARAMETER: productivity_end
+  groups:
+  - path:
+    - setup
+    order: 4
+- id: inflation_start
+  sheet: Dashboard
+  data_range: Dashboard!C24
+  layout: scalar
+  input: {}
+  domain:
+    real_between: *id001
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: float
+      bind:
+        kind: data_cell
+        read: float
+    dimensions: []
+  key: []
+  series_context:
+    PARAMETER: inflation_start
+  groups:
+  - path:
+    - setup
+    order: 5
+- id: inflation_end
+  sheet: Dashboard
+  data_range: Dashboard!C25
+  layout: scalar
+  input: {}
+  domain:
+    real_between: *id001
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: float
+      bind:
+        kind: data_cell
+        read: float
+    dimensions: []
+  key: []
+  series_context:
+    PARAMETER: inflation_end
+  groups:
+  - path:
+    - setup
+    order: 6
+- id: interest_rate_mode
+  sheet: Dashboard
+  data_range: Dashboard!C28
+  layout: scalar
+  input: {}
+  domain:
+    enum:
+    - Nominal interest rate
+    - Interest-growth differential
+    - Real interest rate (a)
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: string
+      bind:
+        kind: data_cell
+        read: string
+    dimensions: []
+  key: []
+  series_context:
+    PARAMETER: interest_rate_mode
+  groups:
+  - path:
+    - setup
+    order: 7
+- id: real_interest_rate
+  sheet: Dashboard
+  data_range: Dashboard!C29
+  layout: scalar
+  input: {}
+  domain:
+    real_between:
+      min: -20
+      max: 20
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: float
+      bind:
+        kind: data_cell
+        read: float
+    dimensions: []
+  key: []
+  series_context:
+    PARAMETER: real_interest_rate
+  groups:
+  - path:
+    - setup
+    order: 8
+- id: fiscal_rule_enabled
+  sheet: Dashboard
+  data_range: Dashboard!C33
+  layout: scalar
+  input: {}
+  domain:
+    enum:
+    - 'Yes'
+    - 'No'
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: string
+      bind:
+        kind: data_cell
+        read: string
+    dimensions: []
+  key: []
+  series_context:
+    PARAMETER: fiscal_rule_enabled
+  groups:
+  - path:
+    - setup
+    order: 9
+- id: debt_target
+  sheet: Dashboard
+  data_range: Dashboard!C34
+  layout: scalar
+  input: {}
+  domain:
+    real_between:
+      min: 0
+      max: 300
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: float
+      bind:
+        kind: data_cell
+        read: float
+    dimensions: []
+  key: []
+  series_context:
+    PARAMETER: debt_target
+  groups:
+  - path:
+    - setup
+    order: 10
+- id: expenditure_rigidity
+  sheet: Dashboard
+  data_range: Dashboard!C38
+  layout: scalar
+  input: {}
+  domain:
+    real_between:
+      min: 0
+      max: 1
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: float
+      bind:
+        kind: data_cell
+        read: float
+    dimensions: []
+  key: []
+  series_context:
+    PARAMETER: expenditure_rigidity
+  groups:
+  - path:
+    - climate
+    order: 1
+- id: discrete_revenue_shocks
+  sheet: Discrete Risks
+  data_range: Discrete Risks!C2:BT13
+  layout: matrix
+  exclude_rows:
+  - 3
+  - 5
+  - 7
+  - 9
+  - 11
+  - 13
+  input: {}
+  domain:
+    real_between: *id001
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: float
+      bind:
+        kind: data_cell
+        read: float
+    dimensions:
+    - id: SCENARIO
+      concept: SCENARIO
+      role: key
+      scope: cell
+      bind:
+        kind: row_label
+        label_column: A
+        fill: true
+        read: string
+    - id: TIME_PERIOD
+      concept: TIME_PERIOD
+      role: key
+      scope: cell
+      bind:
+        kind: column_header
+        header_row: 1
+        read: int
+  key:
+  - SCENARIO
+  - TIME_PERIOD
+  groups:
+  - path:
+    - discrete_risks
+    order: 1
+  notes: 'Grouped-row matrix: scenario band labels in column A fill down to paired
+    primary-expenditure rows; exclude_rows selects revenue or expenditure shock paths
+    within the interleaved band layout.'
+- id: discrete_primary_expenditure_shocks
+  sheet: Discrete Risks
+  data_range: Discrete Risks!C2:BT13
+  layout: matrix
+  exclude_rows:
+  - 2
+  - 4
+  - 6
+  - 8
+  - 10
+  - 12
+  input: {}
+  domain:
+    real_between: *id001
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: float
+      bind:
+        kind: data_cell
+        read: float
+    dimensions:
+    - id: SCENARIO
+      concept: SCENARIO
+      role: key
+      scope: cell
+      bind:
+        kind: row_label
+        label_column: A
+        fill: true
+        read: string
+    - id: TIME_PERIOD
+      concept: TIME_PERIOD
+      role: key
+      scope: cell
+      bind:
+        kind: column_header
+        header_row: 1
+        read: int
+  key:
+  - SCENARIO
+  - TIME_PERIOD
+  groups:
+  - path:
+    - discrete_risks
+    order: 2
+  notes: 'Grouped-row matrix: scenario band labels in column A fill down to paired
+    primary-expenditure rows; exclude_rows selects revenue or expenditure shock paths
+    within the interleaved band layout.'

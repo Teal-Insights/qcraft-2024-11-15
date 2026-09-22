@@ -1,0 +1,2147 @@
+schema_version: 1.19.0
+series:
+- id: baseline_primary_expenditure_pct_gdp
+  sheet: Baseline
+  data_range: Baseline!D21:CP21
+  layout: series
+  output:
+    compute:
+      name: compute_baseline_primary_expenditure_pct_gdp
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: float
+      bind:
+        kind: data_cell
+        read: float
+    dimensions:
+    - id: TIME_PERIOD
+      concept: TIME_PERIOD
+      role: key
+      scope: cell
+      bind:
+        kind: column_header
+        header_row: 2
+        read: int
+    attributes:
+    - concept: UNIT_MEASURE
+      role: attribute
+      value: PC_GDP
+      include_in_record: true
+  key:
+  - TIME_PERIOD
+  series_context:
+    INDICATOR: Primary expenditure
+  groups:
+  - path:
+    - baseline_outputs
+    order: 1
+- id: baseline_interest_expenditure_pct_gdp
+  sheet: Baseline
+  data_range: Baseline!D20:CP20
+  layout: series
+  output:
+    compute:
+      name: compute_baseline_interest_expenditure_pct_gdp
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: float
+      bind:
+        kind: data_cell
+        read: float
+    dimensions:
+    - id: TIME_PERIOD
+      concept: TIME_PERIOD
+      role: key
+      scope: cell
+      bind:
+        kind: column_header
+        header_row: 2
+        read: int
+    attributes:
+    - concept: UNIT_MEASURE
+      role: attribute
+      value: PC_GDP
+      include_in_record: true
+  key:
+  - TIME_PERIOD
+  series_context:
+    INDICATOR: Interest expenditure
+  groups:
+  - path:
+    - baseline_outputs
+    order: 2
+- id: baseline_interest_rate
+  sheet: Baseline
+  data_range: Baseline!D33:CP33
+  layout: series
+  output:
+    compute:
+      name: compute_baseline_interest_rate
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: float
+      bind:
+        kind: data_cell
+        read: float
+    dimensions:
+    - id: TIME_PERIOD
+      concept: TIME_PERIOD
+      role: key
+      scope: cell
+      bind:
+        kind: column_header
+        header_row: 2
+        read: int
+    attributes:
+    - concept: UNIT_MEASURE
+      role: attribute
+      value: PC
+      include_in_record: true
+  key:
+  - TIME_PERIOD
+  series_context:
+    INDICATOR: Weighted nominal interest rate
+  groups:
+  - path:
+    - baseline_outputs
+    order: 3
+- id: baseline_primary_balance_pct_gdp
+  sheet: Baseline
+  data_range: Baseline!D22:CP22
+  layout: series
+  output:
+    compute:
+      name: compute_baseline_primary_balance_pct_gdp
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: float
+      bind:
+        kind: data_cell
+        read: float
+    dimensions:
+    - id: TIME_PERIOD
+      concept: TIME_PERIOD
+      role: key
+      scope: cell
+      bind:
+        kind: column_header
+        header_row: 2
+        read: int
+    attributes:
+    - concept: UNIT_MEASURE
+      role: attribute
+      value: PC_GDP
+      include_in_record: true
+  key:
+  - TIME_PERIOD
+  series_context:
+    INDICATOR: Primary balance
+  groups:
+  - path:
+    - baseline_outputs
+    order: 4
+- id: baseline_overall_balance_pct_gdp
+  sheet: Baseline
+  data_range: Baseline!D23:CP23
+  layout: series
+  output:
+    compute:
+      name: compute_baseline_overall_balance_pct_gdp
+      helper:
+        name: baseline_overall_balance_pct_gdp
+        dims:
+        - TIME_PERIOD
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: float
+      bind:
+        kind: data_cell
+        read: float
+    dimensions:
+    - id: TIME_PERIOD
+      concept: TIME_PERIOD
+      role: key
+      scope: cell
+      bind:
+        kind: column_header
+        header_row: 2
+        read: int
+    attributes:
+    - concept: UNIT_MEASURE
+      role: attribute
+      value: PC_GDP
+      include_in_record: true
+  key:
+  - TIME_PERIOD
+  series_context:
+    INDICATOR: Overall balance
+  groups:
+  - path:
+    - baseline_outputs
+    order: 5
+- id: baseline_debt_to_gdp
+  sheet: Baseline
+  data_range: Baseline!D36:CP36
+  layout: series
+  output:
+    compute:
+      name: compute_baseline_debt_to_gdp
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: float
+      bind:
+        kind: data_cell
+        read: float
+    dimensions:
+    - id: TIME_PERIOD
+      concept: TIME_PERIOD
+      role: key
+      scope: cell
+      bind:
+        kind: column_header
+        header_row: 2
+        read: int
+    attributes:
+    - concept: UNIT_MEASURE
+      role: attribute
+      value: PC_GDP
+      include_in_record: true
+  key:
+  - TIME_PERIOD
+  series_context:
+    INDICATOR: Gross debt
+  groups:
+  - path:
+    - baseline_outputs
+    order: 6
+- id: baseline_debt_stabilizing_primary_balance
+  sheet: Baseline
+  data_range: Baseline!E37:CP37
+  layout: series
+  output:
+    compute:
+      name: compute_baseline_debt_stabilizing_primary_balance
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: float
+      bind:
+        kind: data_cell
+        read: float
+    dimensions:
+    - id: TIME_PERIOD
+      concept: TIME_PERIOD
+      role: key
+      scope: cell
+      bind:
+        kind: column_header
+        header_row: 2
+        read: int
+    attributes:
+    - concept: UNIT_MEASURE
+      role: attribute
+      value: PC_GDP
+      include_in_record: true
+  key:
+  - TIME_PERIOD
+  series_context:
+    INDICATOR: Debt-stabilising primary balance
+  groups:
+  - path:
+    - baseline_outputs
+    order: 7
+  notes: Formulas start at E37; D37 is a fixed-leaf anchor excluded from the binding
+    range.
+- id: baseline_fiscal_consolidation_gap
+  sheet: Baseline
+  data_range: Baseline!U40:CP40
+  layout: series
+  output:
+    compute:
+      name: compute_baseline_fiscal_consolidation_gap
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: float
+      bind:
+        kind: data_cell
+        read: float
+    dimensions:
+    - id: TIME_PERIOD
+      concept: TIME_PERIOD
+      role: key
+      scope: cell
+      bind:
+        kind: column_header
+        header_row: 2
+        read: int
+    attributes:
+    - concept: UNIT_MEASURE
+      role: attribute
+      value: PC_GDP
+      include_in_record: true
+  key:
+  - TIME_PERIOD
+  series_context:
+    INDICATOR: Fiscal consolidation gap
+  groups:
+  - path:
+    - baseline_outputs
+    order: 8
+  notes: Formulas start at U40 (2026); D40:T40 are fixed-leaf padding excluded from
+    the binding range.
+- id: baseline_nominal_gdp_growth
+  sheet: Baseline
+  data_range: Baseline!D15:CP15
+  layout: series
+  output:
+    compute:
+      name: compute_baseline_nominal_gdp_growth
+      helper:
+        name: baseline_nominal_gdp_growth
+        dims:
+        - TIME_PERIOD
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: float
+      bind:
+        kind: data_cell
+        read: float
+    dimensions:
+    - id: TIME_PERIOD
+      concept: TIME_PERIOD
+      role: key
+      scope: cell
+      bind:
+        kind: column_header
+        header_row: 2
+        read: int
+    attributes:
+    - concept: UNIT_MEASURE
+      role: attribute
+      value: PC
+      include_in_record: true
+  key:
+  - TIME_PERIOD
+  series_context:
+    INDICATOR: Nominal GDP growth
+  groups:
+  - path:
+    - baseline_outputs
+    order: 9
+- id: baseline_real_gdp_growth
+  sheet: Baseline
+  data_range: Baseline!D13:CP13
+  layout: series
+  output:
+    compute:
+      name: compute_baseline_real_gdp_growth
+      helper:
+        name: baseline_real_gdp_growth
+        dims:
+        - TIME_PERIOD
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: float
+      bind:
+        kind: data_cell
+        read: float
+    dimensions:
+    - id: TIME_PERIOD
+      concept: TIME_PERIOD
+      role: key
+      scope: cell
+      bind:
+        kind: column_header
+        header_row: 2
+        read: int
+    attributes:
+    - concept: UNIT_MEASURE
+      role: attribute
+      value: PC
+      include_in_record: true
+  key:
+  - TIME_PERIOD
+  series_context:
+    INDICATOR: Real GDP growth
+  groups:
+  - path:
+    - baseline_outputs
+    order: 10
+- id: baseline_revenue_pct_gdp
+  sheet: Baseline
+  data_range: Baseline!D18:CP18
+  layout: series
+  output:
+    compute:
+      name: compute_baseline_revenue_pct_gdp
+      helper:
+        name: baseline_revenue_pct_gdp
+        dims:
+        - TIME_PERIOD
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: float
+      bind:
+        kind: data_cell
+        read: float
+    dimensions:
+    - id: TIME_PERIOD
+      concept: TIME_PERIOD
+      role: key
+      scope: cell
+      bind:
+        kind: column_header
+        header_row: 2
+        read: int
+    attributes:
+    - concept: UNIT_MEASURE
+      role: attribute
+      value: PC_GDP
+      include_in_record: true
+  key:
+  - TIME_PERIOD
+  series_context:
+    INDICATOR: Revenue
+  groups:
+  - path:
+    - baseline_outputs
+    order: 11
+- id: baseline_employment_growth
+  sheet: Baseline
+  data_range: Baseline!D11:CP11
+  layout: series
+  output:
+    compute:
+      name: compute_baseline_employment_growth
+      helper:
+        name: baseline_employment_growth
+        dims:
+        - TIME_PERIOD
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: float
+      bind:
+        kind: data_cell
+        read: float
+    dimensions:
+    - id: TIME_PERIOD
+      concept: TIME_PERIOD
+      role: key
+      scope: cell
+      bind:
+        kind: column_header
+        header_row: 2
+        read: int
+    attributes:
+    - concept: UNIT_MEASURE
+      role: attribute
+      value: PC
+      include_in_record: true
+  key:
+  - TIME_PERIOD
+  series_context:
+    INDICATOR: Employment growth
+  groups:
+  - path:
+    - baseline_outputs
+    order: 12
+- id: baseline_labour_productivity_growth
+  sheet: Baseline
+  data_range: Baseline!D12:CP12
+  layout: series
+  output:
+    compute:
+      name: compute_baseline_labour_productivity_growth
+      helper:
+        name: baseline_labour_productivity_growth
+        dims:
+        - TIME_PERIOD
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: float
+      bind:
+        kind: data_cell
+        read: float
+    dimensions:
+    - id: TIME_PERIOD
+      concept: TIME_PERIOD
+      role: key
+      scope: cell
+      bind:
+        kind: column_header
+        header_row: 2
+        read: int
+    attributes:
+    - concept: UNIT_MEASURE
+      role: attribute
+      value: PC
+      include_in_record: true
+  key:
+  - TIME_PERIOD
+  series_context:
+    INDICATOR: Labour productivity growth
+  groups:
+  - path:
+    - baseline_outputs
+    order: 13
+- id: baseline_gdp_deflator_growth
+  sheet: Baseline
+  data_range: Baseline!D14:CP14
+  layout: series
+  output:
+    compute:
+      name: compute_baseline_gdp_deflator_growth
+      helper:
+        name: baseline_gdp_deflator_growth
+        dims:
+        - TIME_PERIOD
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: float
+      bind:
+        kind: data_cell
+        read: float
+    dimensions:
+    - id: TIME_PERIOD
+      concept: TIME_PERIOD
+      role: key
+      scope: cell
+      bind:
+        kind: column_header
+        header_row: 2
+        read: int
+    attributes:
+    - concept: UNIT_MEASURE
+      role: attribute
+      value: PC
+      include_in_record: true
+  key:
+  - TIME_PERIOD
+  series_context:
+    INDICATOR: GDP deflator growth
+  groups:
+  - path:
+    - baseline_outputs
+    order: 14
+- id: baseline_population_growth
+  sheet: Baseline
+  data_range: Baseline!D16:CP16
+  layout: series
+  output:
+    compute:
+      name: compute_baseline_population_growth
+      helper:
+        name: baseline_population_growth
+        dims:
+        - TIME_PERIOD
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: float
+      bind:
+        kind: data_cell
+        read: float
+    dimensions:
+    - id: TIME_PERIOD
+      concept: TIME_PERIOD
+      role: key
+      scope: cell
+      bind:
+        kind: column_header
+        header_row: 2
+        read: int
+    attributes:
+    - concept: UNIT_MEASURE
+      role: attribute
+      value: PC
+      include_in_record: true
+  key:
+  - TIME_PERIOD
+  series_context:
+    INDICATOR: Population growth
+  groups:
+  - path:
+    - baseline_outputs
+    order: 15
+- id: scenario_primary_balance_pct_gdp
+  sheet: Output Scenarios
+  data_range:
+  - Output Scenarios!V93:CO93
+  - Output Scenarios!V94:CO94
+  - Output Scenarios!V95:CO95
+  - Output Scenarios!V96:CO96
+  - Output Scenarios!V97:CO97
+  - Output Scenarios!V98:CO98
+  layout: matrix
+  output:
+    compute:
+      name: compute_scenario_primary_balance_pct_gdp
+      helper:
+        name: scenario_primary_balance_pct_gdp
+        dims:
+        - SCENARIO
+        - TIME_PERIOD
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: float
+      bind:
+        kind: data_cell
+        read: float
+    dimensions:
+    - id: SCENARIO
+      concept: SCENARIO
+      role: key
+      scope: cell
+      bind:
+        kind: row_label
+        label_column: B
+        read: string
+        normalize: strip
+    - id: TIME_PERIOD
+      concept: TIME_PERIOD
+      role: key
+      scope: cell
+      bind:
+        kind: column_header
+        header_row: 91
+        read: int
+    attributes:
+    - concept: UNIT_MEASURE
+      role: attribute
+      value: PC_GDP
+      include_in_record: true
+  key:
+  - SCENARIO
+  - TIME_PERIOD
+  groups:
+  - path:
+    - scenario_outputs
+    order: 1
+  notes: Climate scenario paths only (excludes the baseline comparison row).
+- id: scenario_overall_balance_pct_gdp
+  sheet: Output Scenarios
+  data_range:
+  - Output Scenarios!V102:CO102
+  - Output Scenarios!V103:CO103
+  - Output Scenarios!V104:CO104
+  - Output Scenarios!V105:CO105
+  - Output Scenarios!V106:CO106
+  - Output Scenarios!V107:CO107
+  layout: matrix
+  output:
+    compute:
+      name: compute_scenario_overall_balance_pct_gdp
+      helper:
+        name: scenario_overall_balance_pct_gdp
+        dims:
+        - SCENARIO
+        - TIME_PERIOD
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: float
+      bind:
+        kind: data_cell
+        read: float
+    dimensions:
+    - id: SCENARIO
+      concept: SCENARIO
+      role: key
+      scope: cell
+      bind:
+        kind: row_label
+        label_column: B
+        read: string
+        normalize: strip
+    - id: TIME_PERIOD
+      concept: TIME_PERIOD
+      role: key
+      scope: cell
+      bind:
+        kind: column_header
+        header_row: 100
+        read: int
+    attributes:
+    - concept: UNIT_MEASURE
+      role: attribute
+      value: PC_GDP
+      include_in_record: true
+  key:
+  - SCENARIO
+  - TIME_PERIOD
+  groups:
+  - path:
+    - scenario_outputs
+    order: 2
+  notes: Climate scenario paths only (excludes the baseline comparison row).
+- id: scenario_debt_to_gdp
+  sheet: Output Scenarios
+  data_range:
+  - Output Scenarios!V111:CO111
+  - Output Scenarios!V112:CO112
+  - Output Scenarios!V113:CO113
+  - Output Scenarios!V114:CO114
+  - Output Scenarios!V115:CO115
+  - Output Scenarios!V116:CO116
+  layout: matrix
+  output:
+    compute:
+      name: compute_scenario_debt_to_gdp
+      helper:
+        name: scenario_debt_to_gdp
+        dims:
+        - SCENARIO
+        - TIME_PERIOD
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: float
+      bind:
+        kind: data_cell
+        read: float
+    dimensions:
+    - id: SCENARIO
+      concept: SCENARIO
+      role: key
+      scope: cell
+      bind:
+        kind: row_label
+        label_column: B
+        read: string
+        normalize: strip
+    - id: TIME_PERIOD
+      concept: TIME_PERIOD
+      role: key
+      scope: cell
+      bind:
+        kind: column_header
+        header_row: 109
+        read: int
+    attributes:
+    - concept: UNIT_MEASURE
+      role: attribute
+      value: PC_GDP
+      include_in_record: true
+  key:
+  - SCENARIO
+  - TIME_PERIOD
+  groups:
+  - path:
+    - scenario_outputs
+    order: 3
+  notes: Climate scenario paths only (excludes the baseline comparison row).
+- id: scenario_debt_stabilizing_primary_balance_paris
+  sheet: Paris
+  data_range: Paris!E36:CP36
+  layout: series
+  output:
+    compute:
+      name: compute_scenario_debt_stabilizing_primary_balance_paris
+      helper:
+        name: scenario_debt_stabilizing_primary_balance_paris
+        dims:
+        - TIME_PERIOD
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: float
+      bind:
+        kind: data_cell
+        read: float
+    dimensions:
+    - id: TIME_PERIOD
+      concept: TIME_PERIOD
+      role: key
+      scope: cell
+      bind:
+        kind: column_header
+        header_row: 2
+        read: int
+    attributes:
+    - concept: UNIT_MEASURE
+      role: attribute
+      value: PC_GDP
+      include_in_record: true
+  key:
+  - TIME_PERIOD
+  series_context:
+    SCENARIO: Paris
+    INDICATOR: Debt-stabilising primary balance
+  groups:
+  - path:
+    - scenario_outputs
+    order: 4
+  notes: 'Formulas start at E36; D36 embeds a literal #REF! (no prior-year debt) and
+    is excluded from extraction targets and the binding range.'
+- id: scenario_debt_stabilizing_primary_balance_moderate
+  sheet: Moderate
+  data_range: Moderate!E36:CP36
+  layout: series
+  output:
+    compute:
+      name: compute_scenario_debt_stabilizing_primary_balance_moderate
+      helper:
+        name: scenario_debt_stabilizing_primary_balance_moderate
+        dims:
+        - TIME_PERIOD
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: float
+      bind:
+        kind: data_cell
+        read: float
+    dimensions:
+    - id: TIME_PERIOD
+      concept: TIME_PERIOD
+      role: key
+      scope: cell
+      bind:
+        kind: column_header
+        header_row: 2
+        read: int
+    attributes:
+    - concept: UNIT_MEASURE
+      role: attribute
+      value: PC_GDP
+      include_in_record: true
+  key:
+  - TIME_PERIOD
+  series_context:
+    SCENARIO: Moderate
+    INDICATOR: Debt-stabilising primary balance
+  groups:
+  - path:
+    - scenario_outputs
+    order: 5
+  notes: 'Formulas start at E36; D36 embeds a literal #REF! (no prior-year debt) and
+    is excluded from extraction targets and the binding range.'
+- id: scenario_debt_stabilizing_primary_balance_high
+  sheet: High
+  data_range: High!E36:CP36
+  layout: series
+  output:
+    compute:
+      name: compute_scenario_debt_stabilizing_primary_balance_high
+      helper:
+        name: scenario_debt_stabilizing_primary_balance_high
+        dims:
+        - TIME_PERIOD
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: float
+      bind:
+        kind: data_cell
+        read: float
+    dimensions:
+    - id: TIME_PERIOD
+      concept: TIME_PERIOD
+      role: key
+      scope: cell
+      bind:
+        kind: column_header
+        header_row: 2
+        read: int
+    attributes:
+    - concept: UNIT_MEASURE
+      role: attribute
+      value: PC_GDP
+      include_in_record: true
+  key:
+  - TIME_PERIOD
+  series_context:
+    SCENARIO: High
+    INDICATOR: Debt-stabilising primary balance
+  groups:
+  - path:
+    - scenario_outputs
+    order: 6
+  notes: 'Formulas start at E36; D36 embeds a literal #REF! (no prior-year debt) and
+    is excluded from extraction targets and the binding range.'
+- id: scenario_debt_stabilizing_primary_balance_hot
+  sheet: Hot
+  data_range: Hot!E36:CP36
+  layout: series
+  output:
+    compute:
+      name: compute_scenario_debt_stabilizing_primary_balance_hot
+      helper:
+        name: scenario_debt_stabilizing_primary_balance_hot
+        dims:
+        - TIME_PERIOD
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: float
+      bind:
+        kind: data_cell
+        read: float
+    dimensions:
+    - id: TIME_PERIOD
+      concept: TIME_PERIOD
+      role: key
+      scope: cell
+      bind:
+        kind: column_header
+        header_row: 2
+        read: int
+    attributes:
+    - concept: UNIT_MEASURE
+      role: attribute
+      value: PC_GDP
+      include_in_record: true
+  key:
+  - TIME_PERIOD
+  series_context:
+    SCENARIO: Hot
+    INDICATOR: Debt-stabilising primary balance
+  groups:
+  - path:
+    - scenario_outputs
+    order: 7
+  notes: 'Formulas start at E36; D36 embeds a literal #REF! (no prior-year debt) and
+    is excluded from extraction targets and the binding range.'
+- id: scenario_debt_stabilizing_primary_balance_hot_adapted
+  sheet: Hot Adapted
+  data_range: Hot Adapted!E36:CP36
+  layout: series
+  output:
+    compute:
+      name: compute_scenario_debt_stabilizing_primary_balance_hot_adapted
+      helper:
+        name: scenario_debt_stabilizing_primary_balance_hot_adapted
+        dims:
+        - TIME_PERIOD
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: float
+      bind:
+        kind: data_cell
+        read: float
+    dimensions:
+    - id: TIME_PERIOD
+      concept: TIME_PERIOD
+      role: key
+      scope: cell
+      bind:
+        kind: column_header
+        header_row: 2
+        read: int
+    attributes:
+    - concept: UNIT_MEASURE
+      role: attribute
+      value: PC_GDP
+      include_in_record: true
+  key:
+  - TIME_PERIOD
+  series_context:
+    SCENARIO: Hot adapted
+    INDICATOR: Debt-stabilising primary balance
+  groups:
+  - path:
+    - scenario_outputs
+    order: 8
+  notes: 'Formulas start at E36; D36 embeds a literal #REF! (no prior-year debt) and
+    is excluded from extraction targets and the binding range.'
+- id: scenario_debt_stabilizing_primary_balance_hot_unadapted
+  sheet: Hot Unadapted
+  data_range: Hot Unadapted!E36:CP36
+  layout: series
+  output:
+    compute:
+      name: compute_scenario_debt_stabilizing_primary_balance_hot_unadapted
+      helper:
+        name: scenario_debt_stabilizing_primary_balance_hot_unadapted
+        dims:
+        - TIME_PERIOD
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: float
+      bind:
+        kind: data_cell
+        read: float
+    dimensions:
+    - id: TIME_PERIOD
+      concept: TIME_PERIOD
+      role: key
+      scope: cell
+      bind:
+        kind: column_header
+        header_row: 2
+        read: int
+    attributes:
+    - concept: UNIT_MEASURE
+      role: attribute
+      value: PC_GDP
+      include_in_record: true
+  key:
+  - TIME_PERIOD
+  series_context:
+    SCENARIO: Hot unadapted
+    INDICATOR: Debt-stabilising primary balance
+  groups:
+  - path:
+    - scenario_outputs
+    order: 9
+  notes: 'Formulas start at E36; D36 embeds a literal #REF! (no prior-year debt) and
+    is excluded from extraction targets and the binding range.'
+- id: scenario_nominal_gdp_growth_paris
+  sheet: Paris
+  data_range: Paris!D11:CP11
+  layout: series
+  output:
+    compute:
+      name: compute_scenario_nominal_gdp_growth_paris
+      helper:
+        name: scenario_nominal_gdp_growth_paris
+        dims:
+        - TIME_PERIOD
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: float
+      bind:
+        kind: data_cell
+        read: float
+    dimensions:
+    - id: TIME_PERIOD
+      concept: TIME_PERIOD
+      role: key
+      scope: cell
+      bind:
+        kind: column_header
+        header_row: 2
+        read: int
+    attributes:
+    - concept: UNIT_MEASURE
+      role: attribute
+      value: PC
+      include_in_record: true
+  key:
+  - TIME_PERIOD
+  series_context:
+    SCENARIO: Paris
+    INDICATOR: Nominal GDP growth
+  groups:
+  - path:
+    - scenario_outputs
+    order: 10
+  notes: Engine-sheet shard for one climate scenario with its own compute function.
+    Real GDP level supports index/deviation derivation.
+- id: scenario_nominal_gdp_growth_moderate
+  sheet: Moderate
+  data_range: Moderate!D11:CP11
+  layout: series
+  output:
+    compute:
+      name: compute_scenario_nominal_gdp_growth_moderate
+      helper:
+        name: scenario_nominal_gdp_growth_moderate
+        dims:
+        - TIME_PERIOD
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: float
+      bind:
+        kind: data_cell
+        read: float
+    dimensions:
+    - id: TIME_PERIOD
+      concept: TIME_PERIOD
+      role: key
+      scope: cell
+      bind:
+        kind: column_header
+        header_row: 2
+        read: int
+    attributes:
+    - concept: UNIT_MEASURE
+      role: attribute
+      value: PC
+      include_in_record: true
+  key:
+  - TIME_PERIOD
+  series_context:
+    SCENARIO: Moderate
+    INDICATOR: Nominal GDP growth
+  groups:
+  - path:
+    - scenario_outputs
+    order: 11
+  notes: Engine-sheet shard for one climate scenario with its own compute function.
+    Real GDP level supports index/deviation derivation.
+- id: scenario_nominal_gdp_growth_high
+  sheet: High
+  data_range: High!D11:CP11
+  layout: series
+  output:
+    compute:
+      name: compute_scenario_nominal_gdp_growth_high
+      helper:
+        name: scenario_nominal_gdp_growth_high
+        dims:
+        - TIME_PERIOD
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: float
+      bind:
+        kind: data_cell
+        read: float
+    dimensions:
+    - id: TIME_PERIOD
+      concept: TIME_PERIOD
+      role: key
+      scope: cell
+      bind:
+        kind: column_header
+        header_row: 2
+        read: int
+    attributes:
+    - concept: UNIT_MEASURE
+      role: attribute
+      value: PC
+      include_in_record: true
+  key:
+  - TIME_PERIOD
+  series_context:
+    SCENARIO: High
+    INDICATOR: Nominal GDP growth
+  groups:
+  - path:
+    - scenario_outputs
+    order: 12
+  notes: Engine-sheet shard for one climate scenario with its own compute function.
+    Real GDP level supports index/deviation derivation.
+- id: scenario_nominal_gdp_growth_hot
+  sheet: Hot
+  data_range: Hot!D11:CP11
+  layout: series
+  output:
+    compute:
+      name: compute_scenario_nominal_gdp_growth_hot
+      helper:
+        name: scenario_nominal_gdp_growth_hot
+        dims:
+        - TIME_PERIOD
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: float
+      bind:
+        kind: data_cell
+        read: float
+    dimensions:
+    - id: TIME_PERIOD
+      concept: TIME_PERIOD
+      role: key
+      scope: cell
+      bind:
+        kind: column_header
+        header_row: 2
+        read: int
+    attributes:
+    - concept: UNIT_MEASURE
+      role: attribute
+      value: PC
+      include_in_record: true
+  key:
+  - TIME_PERIOD
+  series_context:
+    SCENARIO: Hot
+    INDICATOR: Nominal GDP growth
+  groups:
+  - path:
+    - scenario_outputs
+    order: 13
+  notes: Engine-sheet shard for one climate scenario with its own compute function.
+    Real GDP level supports index/deviation derivation.
+- id: scenario_nominal_gdp_growth_hot_adapted
+  sheet: Hot Adapted
+  data_range: Hot Adapted!D11:CP11
+  layout: series
+  output:
+    compute:
+      name: compute_scenario_nominal_gdp_growth_hot_adapted
+      helper:
+        name: scenario_nominal_gdp_growth_hot_adapted
+        dims:
+        - TIME_PERIOD
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: float
+      bind:
+        kind: data_cell
+        read: float
+    dimensions:
+    - id: TIME_PERIOD
+      concept: TIME_PERIOD
+      role: key
+      scope: cell
+      bind:
+        kind: column_header
+        header_row: 2
+        read: int
+    attributes:
+    - concept: UNIT_MEASURE
+      role: attribute
+      value: PC
+      include_in_record: true
+  key:
+  - TIME_PERIOD
+  series_context:
+    SCENARIO: Hot adapted
+    INDICATOR: Nominal GDP growth
+  groups:
+  - path:
+    - scenario_outputs
+    order: 14
+  notes: Engine-sheet shard for one climate scenario with its own compute function.
+    Real GDP level supports index/deviation derivation.
+- id: scenario_nominal_gdp_growth_hot_unadapted
+  sheet: Hot Unadapted
+  data_range: Hot Unadapted!D11:CP11
+  layout: series
+  output:
+    compute:
+      name: compute_scenario_nominal_gdp_growth_hot_unadapted
+      helper:
+        name: scenario_nominal_gdp_growth_hot_unadapted
+        dims:
+        - TIME_PERIOD
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: float
+      bind:
+        kind: data_cell
+        read: float
+    dimensions:
+    - id: TIME_PERIOD
+      concept: TIME_PERIOD
+      role: key
+      scope: cell
+      bind:
+        kind: column_header
+        header_row: 2
+        read: int
+    attributes:
+    - concept: UNIT_MEASURE
+      role: attribute
+      value: PC
+      include_in_record: true
+  key:
+  - TIME_PERIOD
+  series_context:
+    SCENARIO: Hot unadapted
+    INDICATOR: Nominal GDP growth
+  groups:
+  - path:
+    - scenario_outputs
+    order: 15
+  notes: Engine-sheet shard for one climate scenario with its own compute function.
+    Real GDP level supports index/deviation derivation.
+- id: scenario_primary_expenditure_pct_gdp_paris
+  sheet: Paris
+  data_range: Paris!D20:CP20
+  layout: series
+  output:
+    compute:
+      name: compute_scenario_primary_expenditure_pct_gdp_paris
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: float
+      bind:
+        kind: data_cell
+        read: float
+    dimensions:
+    - id: TIME_PERIOD
+      concept: TIME_PERIOD
+      role: key
+      scope: cell
+      bind:
+        kind: column_header
+        header_row: 2
+        read: int
+    attributes:
+    - concept: UNIT_MEASURE
+      role: attribute
+      value: PC_GDP
+      include_in_record: true
+  key:
+  - TIME_PERIOD
+  series_context:
+    SCENARIO: Paris
+    INDICATOR: Primary expenditure
+  groups:
+  - path:
+    - scenario_outputs
+    order: 16
+  notes: Engine-sheet shard for one climate scenario with its own compute function.
+    Real GDP level supports index/deviation derivation.
+- id: scenario_primary_expenditure_pct_gdp_moderate
+  sheet: Moderate
+  data_range: Moderate!D20:CP20
+  layout: series
+  output:
+    compute:
+      name: compute_scenario_primary_expenditure_pct_gdp_moderate
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: float
+      bind:
+        kind: data_cell
+        read: float
+    dimensions:
+    - id: TIME_PERIOD
+      concept: TIME_PERIOD
+      role: key
+      scope: cell
+      bind:
+        kind: column_header
+        header_row: 2
+        read: int
+    attributes:
+    - concept: UNIT_MEASURE
+      role: attribute
+      value: PC_GDP
+      include_in_record: true
+  key:
+  - TIME_PERIOD
+  series_context:
+    SCENARIO: Moderate
+    INDICATOR: Primary expenditure
+  groups:
+  - path:
+    - scenario_outputs
+    order: 17
+  notes: Engine-sheet shard for one climate scenario with its own compute function.
+    Real GDP level supports index/deviation derivation.
+- id: scenario_primary_expenditure_pct_gdp_high
+  sheet: High
+  data_range: High!D20:CP20
+  layout: series
+  output:
+    compute:
+      name: compute_scenario_primary_expenditure_pct_gdp_high
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: float
+      bind:
+        kind: data_cell
+        read: float
+    dimensions:
+    - id: TIME_PERIOD
+      concept: TIME_PERIOD
+      role: key
+      scope: cell
+      bind:
+        kind: column_header
+        header_row: 2
+        read: int
+    attributes:
+    - concept: UNIT_MEASURE
+      role: attribute
+      value: PC_GDP
+      include_in_record: true
+  key:
+  - TIME_PERIOD
+  series_context:
+    SCENARIO: High
+    INDICATOR: Primary expenditure
+  groups:
+  - path:
+    - scenario_outputs
+    order: 18
+  notes: Engine-sheet shard for one climate scenario with its own compute function.
+    Real GDP level supports index/deviation derivation.
+- id: scenario_primary_expenditure_pct_gdp_hot
+  sheet: Hot
+  data_range: Hot!D20:CP20
+  layout: series
+  output:
+    compute:
+      name: compute_scenario_primary_expenditure_pct_gdp_hot
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: float
+      bind:
+        kind: data_cell
+        read: float
+    dimensions:
+    - id: TIME_PERIOD
+      concept: TIME_PERIOD
+      role: key
+      scope: cell
+      bind:
+        kind: column_header
+        header_row: 2
+        read: int
+    attributes:
+    - concept: UNIT_MEASURE
+      role: attribute
+      value: PC_GDP
+      include_in_record: true
+  key:
+  - TIME_PERIOD
+  series_context:
+    SCENARIO: Hot
+    INDICATOR: Primary expenditure
+  groups:
+  - path:
+    - scenario_outputs
+    order: 19
+  notes: Engine-sheet shard for one climate scenario with its own compute function.
+    Real GDP level supports index/deviation derivation.
+- id: scenario_primary_expenditure_pct_gdp_hot_adapted
+  sheet: Hot Adapted
+  data_range: Hot Adapted!D20:CP20
+  layout: series
+  output:
+    compute:
+      name: compute_scenario_primary_expenditure_pct_gdp_hot_adapted
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: float
+      bind:
+        kind: data_cell
+        read: float
+    dimensions:
+    - id: TIME_PERIOD
+      concept: TIME_PERIOD
+      role: key
+      scope: cell
+      bind:
+        kind: column_header
+        header_row: 2
+        read: int
+    attributes:
+    - concept: UNIT_MEASURE
+      role: attribute
+      value: PC_GDP
+      include_in_record: true
+  key:
+  - TIME_PERIOD
+  series_context:
+    SCENARIO: Hot adapted
+    INDICATOR: Primary expenditure
+  groups:
+  - path:
+    - scenario_outputs
+    order: 20
+  notes: Engine-sheet shard for one climate scenario with its own compute function.
+    Real GDP level supports index/deviation derivation.
+- id: scenario_primary_expenditure_pct_gdp_hot_unadapted
+  sheet: Hot Unadapted
+  data_range: Hot Unadapted!D20:CP20
+  layout: series
+  output:
+    compute:
+      name: compute_scenario_primary_expenditure_pct_gdp_hot_unadapted
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: float
+      bind:
+        kind: data_cell
+        read: float
+    dimensions:
+    - id: TIME_PERIOD
+      concept: TIME_PERIOD
+      role: key
+      scope: cell
+      bind:
+        kind: column_header
+        header_row: 2
+        read: int
+    attributes:
+    - concept: UNIT_MEASURE
+      role: attribute
+      value: PC_GDP
+      include_in_record: true
+  key:
+  - TIME_PERIOD
+  series_context:
+    SCENARIO: Hot unadapted
+    INDICATOR: Primary expenditure
+  groups:
+  - path:
+    - scenario_outputs
+    order: 21
+  notes: Engine-sheet shard for one climate scenario with its own compute function.
+    Real GDP level supports index/deviation derivation.
+- id: scenario_interest_expenditure_pct_gdp_paris
+  sheet: Paris
+  data_range: Paris!D19:CP19
+  layout: series
+  output:
+    compute:
+      name: compute_scenario_interest_expenditure_pct_gdp_paris
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: float
+      bind:
+        kind: data_cell
+        read: float
+    dimensions:
+    - id: TIME_PERIOD
+      concept: TIME_PERIOD
+      role: key
+      scope: cell
+      bind:
+        kind: column_header
+        header_row: 2
+        read: int
+    attributes:
+    - concept: UNIT_MEASURE
+      role: attribute
+      value: PC_GDP
+      include_in_record: true
+  key:
+  - TIME_PERIOD
+  series_context:
+    SCENARIO: Paris
+    INDICATOR: Interest expenditure
+  groups:
+  - path:
+    - scenario_outputs
+    order: 22
+  notes: Engine-sheet shard for one climate scenario with its own compute function.
+    Real GDP level supports index/deviation derivation.
+- id: scenario_interest_expenditure_pct_gdp_moderate
+  sheet: Moderate
+  data_range: Moderate!D19:CP19
+  layout: series
+  output:
+    compute:
+      name: compute_scenario_interest_expenditure_pct_gdp_moderate
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: float
+      bind:
+        kind: data_cell
+        read: float
+    dimensions:
+    - id: TIME_PERIOD
+      concept: TIME_PERIOD
+      role: key
+      scope: cell
+      bind:
+        kind: column_header
+        header_row: 2
+        read: int
+    attributes:
+    - concept: UNIT_MEASURE
+      role: attribute
+      value: PC_GDP
+      include_in_record: true
+  key:
+  - TIME_PERIOD
+  series_context:
+    SCENARIO: Moderate
+    INDICATOR: Interest expenditure
+  groups:
+  - path:
+    - scenario_outputs
+    order: 23
+  notes: Engine-sheet shard for one climate scenario with its own compute function.
+    Real GDP level supports index/deviation derivation.
+- id: scenario_interest_expenditure_pct_gdp_high
+  sheet: High
+  data_range: High!D19:CP19
+  layout: series
+  output:
+    compute:
+      name: compute_scenario_interest_expenditure_pct_gdp_high
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: float
+      bind:
+        kind: data_cell
+        read: float
+    dimensions:
+    - id: TIME_PERIOD
+      concept: TIME_PERIOD
+      role: key
+      scope: cell
+      bind:
+        kind: column_header
+        header_row: 2
+        read: int
+    attributes:
+    - concept: UNIT_MEASURE
+      role: attribute
+      value: PC_GDP
+      include_in_record: true
+  key:
+  - TIME_PERIOD
+  series_context:
+    SCENARIO: High
+    INDICATOR: Interest expenditure
+  groups:
+  - path:
+    - scenario_outputs
+    order: 24
+  notes: Engine-sheet shard for one climate scenario with its own compute function.
+    Real GDP level supports index/deviation derivation.
+- id: scenario_interest_expenditure_pct_gdp_hot
+  sheet: Hot
+  data_range: Hot!D19:CP19
+  layout: series
+  output:
+    compute:
+      name: compute_scenario_interest_expenditure_pct_gdp_hot
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: float
+      bind:
+        kind: data_cell
+        read: float
+    dimensions:
+    - id: TIME_PERIOD
+      concept: TIME_PERIOD
+      role: key
+      scope: cell
+      bind:
+        kind: column_header
+        header_row: 2
+        read: int
+    attributes:
+    - concept: UNIT_MEASURE
+      role: attribute
+      value: PC_GDP
+      include_in_record: true
+  key:
+  - TIME_PERIOD
+  series_context:
+    SCENARIO: Hot
+    INDICATOR: Interest expenditure
+  groups:
+  - path:
+    - scenario_outputs
+    order: 25
+  notes: Engine-sheet shard for one climate scenario with its own compute function.
+    Real GDP level supports index/deviation derivation.
+- id: scenario_interest_expenditure_pct_gdp_hot_adapted
+  sheet: Hot Adapted
+  data_range: Hot Adapted!D19:CP19
+  layout: series
+  output:
+    compute:
+      name: compute_scenario_interest_expenditure_pct_gdp_hot_adapted
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: float
+      bind:
+        kind: data_cell
+        read: float
+    dimensions:
+    - id: TIME_PERIOD
+      concept: TIME_PERIOD
+      role: key
+      scope: cell
+      bind:
+        kind: column_header
+        header_row: 2
+        read: int
+    attributes:
+    - concept: UNIT_MEASURE
+      role: attribute
+      value: PC_GDP
+      include_in_record: true
+  key:
+  - TIME_PERIOD
+  series_context:
+    SCENARIO: Hot adapted
+    INDICATOR: Interest expenditure
+  groups:
+  - path:
+    - scenario_outputs
+    order: 26
+  notes: Engine-sheet shard for one climate scenario with its own compute function.
+    Real GDP level supports index/deviation derivation.
+- id: scenario_interest_expenditure_pct_gdp_hot_unadapted
+  sheet: Hot Unadapted
+  data_range: Hot Unadapted!D19:CP19
+  layout: series
+  output:
+    compute:
+      name: compute_scenario_interest_expenditure_pct_gdp_hot_unadapted
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: float
+      bind:
+        kind: data_cell
+        read: float
+    dimensions:
+    - id: TIME_PERIOD
+      concept: TIME_PERIOD
+      role: key
+      scope: cell
+      bind:
+        kind: column_header
+        header_row: 2
+        read: int
+    attributes:
+    - concept: UNIT_MEASURE
+      role: attribute
+      value: PC_GDP
+      include_in_record: true
+  key:
+  - TIME_PERIOD
+  series_context:
+    SCENARIO: Hot unadapted
+    INDICATOR: Interest expenditure
+  groups:
+  - path:
+    - scenario_outputs
+    order: 27
+  notes: Engine-sheet shard for one climate scenario with its own compute function.
+    Real GDP level supports index/deviation derivation.
+- id: scenario_real_gdp_level_index_paris
+  sheet: Paris
+  data_range: Paris!D14:CP14
+  layout: series
+  output:
+    compute:
+      name: compute_scenario_real_gdp_level_index_paris
+      helper:
+        name: scenario_real_gdp_level_index_paris
+        dims:
+        - TIME_PERIOD
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: float
+      bind:
+        kind: data_cell
+        read: float
+    dimensions:
+    - id: TIME_PERIOD
+      concept: TIME_PERIOD
+      role: key
+      scope: cell
+      bind:
+        kind: column_header
+        header_row: 2
+        read: int
+    attributes:
+    - concept: UNIT_MEASURE
+      role: attribute
+      value: INDEX
+      include_in_record: true
+  key:
+  - TIME_PERIOD
+  series_context:
+    SCENARIO: Paris
+    INDICATOR: Real GDP level
+  groups:
+  - path:
+    - scenario_outputs
+    order: 28
+  notes: Engine-sheet shard for one climate scenario with its own compute function.
+    Real GDP level supports index/deviation derivation.
+- id: scenario_real_gdp_level_index_moderate
+  sheet: Moderate
+  data_range: Moderate!D14:CP14
+  layout: series
+  output:
+    compute:
+      name: compute_scenario_real_gdp_level_index_moderate
+      helper:
+        name: scenario_real_gdp_level_index_moderate
+        dims:
+        - TIME_PERIOD
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: float
+      bind:
+        kind: data_cell
+        read: float
+    dimensions:
+    - id: TIME_PERIOD
+      concept: TIME_PERIOD
+      role: key
+      scope: cell
+      bind:
+        kind: column_header
+        header_row: 2
+        read: int
+    attributes:
+    - concept: UNIT_MEASURE
+      role: attribute
+      value: INDEX
+      include_in_record: true
+  key:
+  - TIME_PERIOD
+  series_context:
+    SCENARIO: Moderate
+    INDICATOR: Real GDP level
+  groups:
+  - path:
+    - scenario_outputs
+    order: 29
+  notes: Engine-sheet shard for one climate scenario with its own compute function.
+    Real GDP level supports index/deviation derivation.
+- id: scenario_real_gdp_level_index_high
+  sheet: High
+  data_range: High!D14:CP14
+  layout: series
+  output:
+    compute:
+      name: compute_scenario_real_gdp_level_index_high
+      helper:
+        name: scenario_real_gdp_level_index_high
+        dims:
+        - TIME_PERIOD
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: float
+      bind:
+        kind: data_cell
+        read: float
+    dimensions:
+    - id: TIME_PERIOD
+      concept: TIME_PERIOD
+      role: key
+      scope: cell
+      bind:
+        kind: column_header
+        header_row: 2
+        read: int
+    attributes:
+    - concept: UNIT_MEASURE
+      role: attribute
+      value: INDEX
+      include_in_record: true
+  key:
+  - TIME_PERIOD
+  series_context:
+    SCENARIO: High
+    INDICATOR: Real GDP level
+  groups:
+  - path:
+    - scenario_outputs
+    order: 30
+  notes: Engine-sheet shard for one climate scenario with its own compute function.
+    Real GDP level supports index/deviation derivation.
+- id: scenario_real_gdp_level_index_hot
+  sheet: Hot
+  data_range: Hot!D14:CP14
+  layout: series
+  output:
+    compute:
+      name: compute_scenario_real_gdp_level_index_hot
+      helper:
+        name: scenario_real_gdp_level_index_hot
+        dims:
+        - TIME_PERIOD
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: float
+      bind:
+        kind: data_cell
+        read: float
+    dimensions:
+    - id: TIME_PERIOD
+      concept: TIME_PERIOD
+      role: key
+      scope: cell
+      bind:
+        kind: column_header
+        header_row: 2
+        read: int
+    attributes:
+    - concept: UNIT_MEASURE
+      role: attribute
+      value: INDEX
+      include_in_record: true
+  key:
+  - TIME_PERIOD
+  series_context:
+    SCENARIO: Hot
+    INDICATOR: Real GDP level
+  groups:
+  - path:
+    - scenario_outputs
+    order: 31
+  notes: Engine-sheet shard for one climate scenario with its own compute function.
+    Real GDP level supports index/deviation derivation.
+- id: scenario_real_gdp_level_index_hot_adapted
+  sheet: Hot Adapted
+  data_range: Hot Adapted!D14:CP14
+  layout: series
+  output:
+    compute:
+      name: compute_scenario_real_gdp_level_index_hot_adapted
+      helper:
+        name: scenario_real_gdp_level_index_hot_adapted
+        dims:
+        - TIME_PERIOD
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: float
+      bind:
+        kind: data_cell
+        read: float
+    dimensions:
+    - id: TIME_PERIOD
+      concept: TIME_PERIOD
+      role: key
+      scope: cell
+      bind:
+        kind: column_header
+        header_row: 2
+        read: int
+    attributes:
+    - concept: UNIT_MEASURE
+      role: attribute
+      value: INDEX
+      include_in_record: true
+  key:
+  - TIME_PERIOD
+  series_context:
+    SCENARIO: Hot adapted
+    INDICATOR: Real GDP level
+  groups:
+  - path:
+    - scenario_outputs
+    order: 32
+  notes: Engine-sheet shard for one climate scenario with its own compute function.
+    Real GDP level supports index/deviation derivation.
+- id: scenario_real_gdp_level_index_hot_unadapted
+  sheet: Hot Unadapted
+  data_range: Hot Unadapted!D14:CP14
+  layout: series
+  output:
+    compute:
+      name: compute_scenario_real_gdp_level_index_hot_unadapted
+      helper:
+        name: scenario_real_gdp_level_index_hot_unadapted
+        dims:
+        - TIME_PERIOD
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: float
+      bind:
+        kind: data_cell
+        read: float
+    dimensions:
+    - id: TIME_PERIOD
+      concept: TIME_PERIOD
+      role: key
+      scope: cell
+      bind:
+        kind: column_header
+        header_row: 2
+        read: int
+    attributes:
+    - concept: UNIT_MEASURE
+      role: attribute
+      value: INDEX
+      include_in_record: true
+  key:
+  - TIME_PERIOD
+  series_context:
+    SCENARIO: Hot unadapted
+    INDICATOR: Real GDP level
+  groups:
+  - path:
+    - scenario_outputs
+    order: 33
+  notes: Engine-sheet shard for one climate scenario with its own compute function.
+    Real GDP level supports index/deviation derivation.
+- id: scenario_fiscal_consolidation_gap_milestones_2050
+  sheet: Output Scenarios
+  data_range:
+  - Output Scenarios!H26
+  - Output Scenarios!H27
+  - Output Scenarios!H28
+  - Output Scenarios!H29
+  - Output Scenarios!H30
+  - Output Scenarios!H31
+  layout: matrix
+  output:
+    compute:
+      name: compute_scenario_fiscal_consolidation_gap_milestones_2050
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: float
+      bind:
+        kind: data_cell
+        read: float
+    dimensions:
+    - id: SCENARIO
+      concept: SCENARIO
+      role: key
+      scope: cell
+      bind:
+        kind: row_label
+        label_column: B
+        read: string
+        normalize: strip
+    - id: TIME_PERIOD
+      concept: TIME_PERIOD
+      role: key
+      scope: cell
+      bind:
+        kind: column_header
+        header_row: 23
+        read: int
+        fill: true
+    attributes:
+    - concept: UNIT_MEASURE
+      role: attribute
+      value: PC_GDP
+      include_in_record: true
+  key:
+  - SCENARIO
+  - TIME_PERIOD
+  groups:
+  - path:
+    - scenario_outputs
+    order: 34
+  notes: PB Gap milestone column for 2050 on Output Scenarios (climate scenarios only;
+    Baseline row is internal). Year headers fill from the DSPB triplet start.
+- id: scenario_fiscal_consolidation_gap_milestones_2075
+  sheet: Output Scenarios
+  data_range:
+  - Output Scenarios!K26
+  - Output Scenarios!K27
+  - Output Scenarios!K28
+  - Output Scenarios!K29
+  - Output Scenarios!K30
+  - Output Scenarios!K31
+  layout: matrix
+  output:
+    compute:
+      name: compute_scenario_fiscal_consolidation_gap_milestones_2075
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: float
+      bind:
+        kind: data_cell
+        read: float
+    dimensions:
+    - id: SCENARIO
+      concept: SCENARIO
+      role: key
+      scope: cell
+      bind:
+        kind: row_label
+        label_column: B
+        read: string
+        normalize: strip
+    - id: TIME_PERIOD
+      concept: TIME_PERIOD
+      role: key
+      scope: cell
+      bind:
+        kind: column_header
+        header_row: 23
+        read: int
+        fill: true
+    attributes:
+    - concept: UNIT_MEASURE
+      role: attribute
+      value: PC_GDP
+      include_in_record: true
+  key:
+  - SCENARIO
+  - TIME_PERIOD
+  groups:
+  - path:
+    - scenario_outputs
+    order: 35
+  notes: PB Gap milestone column for 2075 on Output Scenarios (climate scenarios only;
+    Baseline row is internal). Year headers fill from the DSPB triplet start.
+- id: scenario_fiscal_consolidation_gap_milestones_2099
+  sheet: Output Scenarios
+  data_range:
+  - Output Scenarios!N26
+  - Output Scenarios!N27
+  - Output Scenarios!N28
+  - Output Scenarios!N29
+  - Output Scenarios!N30
+  - Output Scenarios!N31
+  layout: matrix
+  output:
+    compute:
+      name: compute_scenario_fiscal_consolidation_gap_milestones_2099
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: float
+      bind:
+        kind: data_cell
+        read: float
+    dimensions:
+    - id: SCENARIO
+      concept: SCENARIO
+      role: key
+      scope: cell
+      bind:
+        kind: row_label
+        label_column: B
+        read: string
+        normalize: strip
+    - id: TIME_PERIOD
+      concept: TIME_PERIOD
+      role: key
+      scope: cell
+      bind:
+        kind: column_header
+        header_row: 23
+        read: int
+        fill: true
+    attributes:
+    - concept: UNIT_MEASURE
+      role: attribute
+      value: PC_GDP
+      include_in_record: true
+  key:
+  - SCENARIO
+  - TIME_PERIOD
+  groups:
+  - path:
+    - scenario_outputs
+    order: 36
+  notes: PB Gap milestone column for 2099 on Output Scenarios (climate scenarios only;
+    Baseline row is internal). Year headers fill from the DSPB triplet start.

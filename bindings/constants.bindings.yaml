@@ -1,0 +1,1650 @@
+schema_version: 1.19.0
+workbook: data/qcraft-toolv10.xlsx
+series:
+- id: baseline_debt_direction_above_sentinel
+  sheet: Baseline
+  data_range: Baseline!B47
+  layout: scalar
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: float
+      bind:
+        kind: data_cell
+        read: float
+    dimensions: []
+  key: []
+  series_context:
+    PARAMETER: baseline_debt_direction_above_sentinel
+  notes: 'Sentinel (=1) the row-46 debt-trajectory-direction flag is matched against
+    to route to the debt-above-target fiscal gap (row 47): IF(X46=B47, X47, IF(X46=B48,
+    X48, )).'
+  constant: {}
+- id: baseline_debt_direction_below_sentinel
+  sheet: Baseline
+  data_range: Baseline!B48
+  layout: scalar
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: float
+      bind:
+        kind: data_cell
+        read: float
+    dimensions: []
+  key: []
+  series_context:
+    PARAMETER: baseline_debt_direction_below_sentinel
+  notes: Sentinel (=2) the row-46 debt-trajectory-direction flag is matched against
+    to route to the debt-below-target fiscal gap (row 48).
+  constant: {}
+- id: demography_variant_label_medium
+  sheet: Demography
+  data_range: Demography!B8
+  layout: scalar
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: string
+      bind:
+        kind: data_cell
+        read: string
+    dimensions: []
+  key: []
+  series_context:
+    PARAMETER: demography_variant_label_medium
+  notes: Variant name label ('Medium') matched by Demography!B2.
+  constant: {}
+- id: demography_variant_label_high
+  sheet: Demography
+  data_range: Demography!B9
+  layout: scalar
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: string
+      bind:
+        kind: data_cell
+        read: string
+    dimensions: []
+  key: []
+  series_context:
+    PARAMETER: demography_variant_label_high
+  notes: Variant name label ('High') matched by Demography!B2.
+  constant: {}
+- id: demography_variant_label_low
+  sheet: Demography
+  data_range: Demography!B10
+  layout: scalar
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: string
+      bind:
+        kind: data_cell
+        read: string
+    dimensions: []
+  key: []
+  series_context:
+    PARAMETER: demography_variant_label_low
+  notes: Variant name label ('Low') matched by Demography!B2.
+  constant: {}
+- id: productivity_convergence_logistic_steepness
+  sheet: Productivity
+  data_range: Productivity!G21
+  layout: scalar
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: float
+      bind:
+        kind: data_cell
+        read: float
+    dimensions: []
+  key: []
+  series_context:
+    PARAMETER: productivity_convergence_logistic_steepness
+  notes: Logistic steepness/shape exponent G in the row-24 convergence curve start+(end-start)*(1/(1+EXP(-G*(t-midpoint)))^G).
+  constant: {}
+- id: productivity_convergence_logistic_midpoint
+  sheet: Productivity
+  data_range: Productivity!J21
+  layout: scalar
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: float
+      bind:
+        kind: data_cell
+        read: float
+    dimensions: []
+  key: []
+  series_context:
+    PARAMETER: productivity_convergence_logistic_midpoint
+  notes: Logistic midpoint period offset in the row-24 convergence curve.
+  constant: {}
+- id: productivity_convergence_period_index
+  sheet: Productivity
+  data_range: Productivity!B23:BS23
+  layout: series
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: float
+      bind:
+        kind: data_cell
+        read: float
+    dimensions:
+    - id: TIME_PERIOD
+      concept: TIME_PERIOD
+      role: key
+      scope: cell
+      bind:
+        kind: column_header
+        header_row: 2
+        read: int
+  key:
+  - TIME_PERIOD
+  series_context:
+    INDICATOR: Productivity convergence period index
+  validation:
+    warn_on_partial_overlap: false
+  notes: Period index t (1..70) driving the row-24 logistic convergence trajectory.
+  constant: {}
+- id: inflation_convergence_logistic_steepness
+  sheet: Inflation
+  data_range: Inflation!G6
+  layout: scalar
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: float
+      bind:
+        kind: data_cell
+        read: float
+    dimensions: []
+  key: []
+  series_context:
+    PARAMETER: inflation_convergence_logistic_steepness
+  notes: Logistic steepness/shape exponent G in the row-9 convergence curve start+(end-start)*(1/(1+EXP(-G*(t-midpoint)))^G).
+  constant: {}
+- id: inflation_convergence_logistic_midpoint
+  sheet: Inflation
+  data_range: Inflation!J6
+  layout: scalar
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: float
+      bind:
+        kind: data_cell
+        read: float
+    dimensions: []
+  key: []
+  series_context:
+    PARAMETER: inflation_convergence_logistic_midpoint
+  notes: Logistic midpoint period offset in the row-9 convergence curve.
+  constant: {}
+- id: inflation_convergence_period_index
+  sheet: Inflation
+  data_range: Inflation!B8:BS8
+  layout: series
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: float
+      bind:
+        kind: data_cell
+        read: float
+    dimensions:
+    - id: TIME_PERIOD
+      concept: TIME_PERIOD
+      role: key
+      scope: cell
+      bind:
+        kind: column_header
+        header_row: 2
+        read: int
+  key:
+  - TIME_PERIOD
+  series_context:
+    INDICATOR: Inflation convergence period index
+  validation:
+    warn_on_partial_overlap: false
+  notes: Period index t (1..70) driving the row-9 logistic convergence trajectory.
+  constant: {}
+- id: interest_rate_assumption_label_nominal
+  sheet: Interest Rate
+  data_range: Interest Rate!A17
+  layout: scalar
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: string
+      bind:
+        kind: data_cell
+        read: string
+    dimensions: []
+  key: []
+  series_context:
+    PARAMETER: interest_rate_assumption_label_nominal
+  notes: Row label ('Nominal interest rate') for the long-run assumption row selected
+    by interest_rate_mode.
+  constant: {}
+- id: interest_rate_assumption_label_differential
+  sheet: Interest Rate
+  data_range: Interest Rate!A18
+  layout: scalar
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: string
+      bind:
+        kind: data_cell
+        read: string
+    dimensions: []
+  key: []
+  series_context:
+    PARAMETER: interest_rate_assumption_label_differential
+  notes: Row label ('Interest-growth differential') for the long-run assumption row
+    selected by interest_rate_mode.
+  constant: {}
+- id: interest_rate_assumption_label_real
+  sheet: Interest Rate
+  data_range: Interest Rate!A19
+  layout: scalar
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: string
+      bind:
+        kind: data_cell
+        read: string
+    dimensions: []
+  key: []
+  series_context:
+    PARAMETER: interest_rate_assumption_label_real
+  notes: Row label ('Real interest rate (a)') for the long-run assumption row selected
+    by interest_rate_mode.
+  constant: {}
+- id: constant_macrofiscal_a67_a264
+  sheet: Macrofiscal
+  data_range: Macrofiscal!A67:A264
+  layout: series
+  constant: {}
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: string
+      bind:
+        kind: data_cell
+        read: string
+    dimensions:
+    - id: COUNTRY
+      concept: COUNTRY
+      role: key
+      scope: cell
+      bind:
+        kind: row_label
+        label_column: A
+        read: string
+        normalize: strip
+  key:
+  - COUNTRY
+  validation:
+    warn_on_partial_overlap: false
+  notes: INDEX/MATCH lookup keys. Reader-only; the user-facing selector is country.
+- id: constant_macrofiscal_a268_a465
+  sheet: Macrofiscal
+  data_range: Macrofiscal!A268:A465
+  layout: series
+  constant: {}
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: string
+      bind:
+        kind: data_cell
+        read: string
+    dimensions:
+    - id: COUNTRY
+      concept: COUNTRY
+      role: key
+      scope: cell
+      bind:
+        kind: row_label
+        label_column: A
+        read: string
+        normalize: strip
+  key:
+  - COUNTRY
+  validation:
+    warn_on_partial_overlap: false
+  notes: INDEX/MATCH lookup keys. Reader-only; the user-facing selector is country.
+- id: constant_macrofiscal_a469_a666
+  sheet: Macrofiscal
+  data_range: Macrofiscal!A469:A666
+  layout: series
+  constant: {}
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: string
+      bind:
+        kind: data_cell
+        read: string
+    dimensions:
+    - id: COUNTRY
+      concept: COUNTRY
+      role: key
+      scope: cell
+      bind:
+        kind: row_label
+        label_column: A
+        read: string
+        normalize: strip
+  key:
+  - COUNTRY
+  validation:
+    warn_on_partial_overlap: false
+  notes: INDEX/MATCH lookup keys. Reader-only; the user-facing selector is country.
+- id: constant_macrofiscal_a670_a867
+  sheet: Macrofiscal
+  data_range: Macrofiscal!A670:A867
+  layout: series
+  constant: {}
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: string
+      bind:
+        kind: data_cell
+        read: string
+    dimensions:
+    - id: COUNTRY
+      concept: COUNTRY
+      role: key
+      scope: cell
+      bind:
+        kind: row_label
+        label_column: A
+        read: string
+        normalize: strip
+  key:
+  - COUNTRY
+  validation:
+    warn_on_partial_overlap: false
+  notes: INDEX/MATCH lookup keys. Reader-only; the user-facing selector is country.
+- id: constant_macrofiscal_a871_a1068
+  sheet: Macrofiscal
+  data_range: Macrofiscal!A871:A1068
+  layout: series
+  constant: {}
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: string
+      bind:
+        kind: data_cell
+        read: string
+    dimensions:
+    - id: COUNTRY
+      concept: COUNTRY
+      role: key
+      scope: cell
+      bind:
+        kind: row_label
+        label_column: A
+        read: string
+        normalize: strip
+  key:
+  - COUNTRY
+  validation:
+    warn_on_partial_overlap: false
+  notes: INDEX/MATCH lookup keys. Reader-only; the user-facing selector is country.
+- id: constant_macrofiscal_a1072_a1269
+  sheet: Macrofiscal
+  data_range: Macrofiscal!A1072:A1269
+  layout: series
+  constant: {}
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: string
+      bind:
+        kind: data_cell
+        read: string
+    dimensions:
+    - id: COUNTRY
+      concept: COUNTRY
+      role: key
+      scope: cell
+      bind:
+        kind: row_label
+        label_column: A
+        read: string
+        normalize: strip
+  key:
+  - COUNTRY
+  validation:
+    warn_on_partial_overlap: false
+  notes: INDEX/MATCH lookup keys. Reader-only; the user-facing selector is country.
+- id: constant_macrofiscal_a1273_a1470
+  sheet: Macrofiscal
+  data_range: Macrofiscal!A1273:A1470
+  layout: series
+  constant: {}
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: string
+      bind:
+        kind: data_cell
+        read: string
+    dimensions:
+    - id: COUNTRY
+      concept: COUNTRY
+      role: key
+      scope: cell
+      bind:
+        kind: row_label
+        label_column: A
+        read: string
+        normalize: strip
+  key:
+  - COUNTRY
+  validation:
+    warn_on_partial_overlap: false
+  notes: INDEX/MATCH lookup keys. Reader-only; the user-facing selector is country.
+- id: constant_macrofiscal_a1474_a1671
+  sheet: Macrofiscal
+  data_range: Macrofiscal!A1474:A1671
+  layout: series
+  constant: {}
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: string
+      bind:
+        kind: data_cell
+        read: string
+    dimensions:
+    - id: COUNTRY
+      concept: COUNTRY
+      role: key
+      scope: cell
+      bind:
+        kind: row_label
+        label_column: A
+        read: string
+        normalize: strip
+  key:
+  - COUNTRY
+  validation:
+    warn_on_partial_overlap: false
+  notes: INDEX/MATCH lookup keys. Reader-only; the user-facing selector is country.
+- id: constant_demography_b120_b317
+  sheet: Demography
+  data_range: Demography!B120:B317
+  layout: series
+  constant: {}
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: string
+      bind:
+        kind: data_cell
+        read: string
+    dimensions:
+    - id: COUNTRY
+      concept: COUNTRY
+      role: key
+      scope: cell
+      bind:
+        kind: row_label
+        label_column: B
+        read: string
+        normalize: strip
+  key:
+  - COUNTRY
+  validation:
+    warn_on_partial_overlap: false
+  notes: INDEX/MATCH lookup keys. Reader-only; the user-facing selector is country.
+- id: constant_demography_b321_b518
+  sheet: Demography
+  data_range: Demography!B321:B518
+  layout: series
+  constant: {}
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: string
+      bind:
+        kind: data_cell
+        read: string
+    dimensions:
+    - id: COUNTRY
+      concept: COUNTRY
+      role: key
+      scope: cell
+      bind:
+        kind: row_label
+        label_column: B
+        read: string
+        normalize: strip
+  key:
+  - COUNTRY
+  validation:
+    warn_on_partial_overlap: false
+  notes: INDEX/MATCH lookup keys. Reader-only; the user-facing selector is country.
+- id: constant_demography_b522_b719
+  sheet: Demography
+  data_range: Demography!B522:B719
+  layout: series
+  constant: {}
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: string
+      bind:
+        kind: data_cell
+        read: string
+    dimensions:
+    - id: COUNTRY
+      concept: COUNTRY
+      role: key
+      scope: cell
+      bind:
+        kind: row_label
+        label_column: B
+        read: string
+        normalize: strip
+  key:
+  - COUNTRY
+  validation:
+    warn_on_partial_overlap: false
+  notes: INDEX/MATCH lookup keys. Reader-only; the user-facing selector is country.
+- id: constant_demography_b723_b920
+  sheet: Demography
+  data_range: Demography!B723:B920
+  layout: series
+  constant: {}
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: string
+      bind:
+        kind: data_cell
+        read: string
+    dimensions:
+    - id: COUNTRY
+      concept: COUNTRY
+      role: key
+      scope: cell
+      bind:
+        kind: row_label
+        label_column: B
+        read: string
+        normalize: strip
+  key:
+  - COUNTRY
+  validation:
+    warn_on_partial_overlap: false
+  notes: INDEX/MATCH lookup keys. Reader-only; the user-facing selector is country.
+- id: constant_demography_b924_b1121
+  sheet: Demography
+  data_range: Demography!B924:B1121
+  layout: series
+  constant: {}
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: string
+      bind:
+        kind: data_cell
+        read: string
+    dimensions:
+    - id: COUNTRY
+      concept: COUNTRY
+      role: key
+      scope: cell
+      bind:
+        kind: row_label
+        label_column: B
+        read: string
+        normalize: strip
+  key:
+  - COUNTRY
+  validation:
+    warn_on_partial_overlap: false
+  notes: INDEX/MATCH lookup keys. Reader-only; the user-facing selector is country.
+- id: constant_demography_b1125_b1322
+  sheet: Demography
+  data_range: Demography!B1125:B1322
+  layout: series
+  constant: {}
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: string
+      bind:
+        kind: data_cell
+        read: string
+    dimensions:
+    - id: COUNTRY
+      concept: COUNTRY
+      role: key
+      scope: cell
+      bind:
+        kind: row_label
+        label_column: B
+        read: string
+        normalize: strip
+  key:
+  - COUNTRY
+  validation:
+    warn_on_partial_overlap: false
+  notes: INDEX/MATCH lookup keys. Reader-only; the user-facing selector is country.
+- id: constant_climate_database_b26_b223
+  sheet: Climate Database
+  data_range: Climate Database!B26:B223
+  layout: series
+  constant: {}
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: string
+      bind:
+        kind: data_cell
+        read: string
+    dimensions:
+    - id: COUNTRY
+      concept: COUNTRY
+      role: key
+      scope: cell
+      bind:
+        kind: row_label
+        label_column: B
+        read: string
+        normalize: strip
+  key:
+  - COUNTRY
+  validation:
+    warn_on_partial_overlap: false
+  notes: INDEX/MATCH lookup keys. Reader-only; the user-facing selector is country.
+- id: constant_climate_database_b226_b423
+  sheet: Climate Database
+  data_range: Climate Database!B226:B423
+  layout: series
+  constant: {}
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: string
+      bind:
+        kind: data_cell
+        read: string
+    dimensions:
+    - id: COUNTRY
+      concept: COUNTRY
+      role: key
+      scope: cell
+      bind:
+        kind: row_label
+        label_column: B
+        read: string
+        normalize: strip
+  key:
+  - COUNTRY
+  validation:
+    warn_on_partial_overlap: false
+  notes: INDEX/MATCH lookup keys. Reader-only; the user-facing selector is country.
+- id: constant_climate_database_b426_b623
+  sheet: Climate Database
+  data_range: Climate Database!B426:B623
+  layout: series
+  constant: {}
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: string
+      bind:
+        kind: data_cell
+        read: string
+    dimensions:
+    - id: COUNTRY
+      concept: COUNTRY
+      role: key
+      scope: cell
+      bind:
+        kind: row_label
+        label_column: B
+        read: string
+        normalize: strip
+  key:
+  - COUNTRY
+  validation:
+    warn_on_partial_overlap: false
+  notes: INDEX/MATCH lookup keys. Reader-only; the user-facing selector is country.
+- id: constant_climate_database_b626_b823
+  sheet: Climate Database
+  data_range: Climate Database!B626:B823
+  layout: series
+  constant: {}
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: string
+      bind:
+        kind: data_cell
+        read: string
+    dimensions:
+    - id: COUNTRY
+      concept: COUNTRY
+      role: key
+      scope: cell
+      bind:
+        kind: row_label
+        label_column: B
+        read: string
+        normalize: strip
+  key:
+  - COUNTRY
+  validation:
+    warn_on_partial_overlap: false
+  notes: INDEX/MATCH lookup keys. Reader-only; the user-facing selector is country.
+- id: constant_climate_database_b826_b1023
+  sheet: Climate Database
+  data_range: Climate Database!B826:B1023
+  layout: series
+  constant: {}
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: string
+      bind:
+        kind: data_cell
+        read: string
+    dimensions:
+    - id: COUNTRY
+      concept: COUNTRY
+      role: key
+      scope: cell
+      bind:
+        kind: row_label
+        label_column: B
+        read: string
+        normalize: strip
+  key:
+  - COUNTRY
+  validation:
+    warn_on_partial_overlap: false
+  notes: INDEX/MATCH lookup keys. Reader-only; the user-facing selector is country.
+- id: constant_climate_database_b1026_b1223
+  sheet: Climate Database
+  data_range: Climate Database!B1026:B1223
+  layout: series
+  constant: {}
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: string
+      bind:
+        kind: data_cell
+        read: string
+    dimensions:
+    - id: COUNTRY
+      concept: COUNTRY
+      role: key
+      scope: cell
+      bind:
+        kind: row_label
+        label_column: B
+        read: string
+        normalize: strip
+  key:
+  - COUNTRY
+  validation:
+    warn_on_partial_overlap: false
+  notes: INDEX/MATCH lookup keys. Reader-only; the user-facing selector is country.
+- id: constant_productivity_a63_a260
+  sheet: Productivity
+  data_range: Productivity!A63:A260
+  layout: series
+  constant: {}
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: string
+      bind:
+        kind: data_cell
+        read: string
+    dimensions:
+    - id: COUNTRY
+      concept: COUNTRY
+      role: key
+      scope: cell
+      bind:
+        kind: row_label
+        label_column: A
+        read: string
+        normalize: strip
+  key:
+  - COUNTRY
+  validation:
+    warn_on_partial_overlap: false
+  notes: INDEX/MATCH lookup keys. Reader-only; the user-facing selector is country.
+- id: constant_climate_database_q26_ci223
+  sheet: Climate Database
+  data_range: Climate Database!Q26:CI223
+  layout: matrix
+  constant: {}
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: float
+      bind:
+        kind: data_cell
+        read: float
+    dimensions:
+    - id: COUNTRY
+      concept: COUNTRY
+      role: key
+      scope: cell
+      bind:
+        kind: row_label
+        label_column: B
+        read: string
+        normalize: strip
+    - id: TIME_PERIOD
+      concept: TIME_PERIOD
+      role: key
+      scope: cell
+      bind:
+        kind: column_header
+        header_row: 25
+        read: int
+  key:
+  - COUNTRY
+  - TIME_PERIOD
+  validation:
+    warn_on_partial_overlap: false
+  notes: Country × year lookup store classified as a graph constant leaf.
+- id: constant_climate_database_q226_ci423
+  sheet: Climate Database
+  data_range: Climate Database!Q226:CI423
+  layout: matrix
+  constant: {}
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: float
+      bind:
+        kind: data_cell
+        read: float
+    dimensions:
+    - id: COUNTRY
+      concept: COUNTRY
+      role: key
+      scope: cell
+      bind:
+        kind: row_label
+        label_column: B
+        read: string
+        normalize: strip
+    - id: TIME_PERIOD
+      concept: TIME_PERIOD
+      role: key
+      scope: cell
+      bind:
+        kind: column_header
+        header_row: 225
+        read: int
+  key:
+  - COUNTRY
+  - TIME_PERIOD
+  validation:
+    warn_on_partial_overlap: false
+  notes: Country × year lookup store classified as a graph constant leaf.
+- id: constant_climate_database_q426_ci623
+  sheet: Climate Database
+  data_range: Climate Database!Q426:CI623
+  layout: matrix
+  constant: {}
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: float
+      bind:
+        kind: data_cell
+        read: float
+    dimensions:
+    - id: COUNTRY
+      concept: COUNTRY
+      role: key
+      scope: cell
+      bind:
+        kind: row_label
+        label_column: B
+        read: string
+        normalize: strip
+    - id: TIME_PERIOD
+      concept: TIME_PERIOD
+      role: key
+      scope: cell
+      bind:
+        kind: column_header
+        header_row: 425
+        read: int
+  key:
+  - COUNTRY
+  - TIME_PERIOD
+  validation:
+    warn_on_partial_overlap: false
+  notes: Country × year lookup store classified as a graph constant leaf.
+- id: constant_climate_database_q626_ci823
+  sheet: Climate Database
+  data_range: Climate Database!Q626:CI823
+  layout: matrix
+  constant: {}
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: float
+      bind:
+        kind: data_cell
+        read: float
+    dimensions:
+    - id: COUNTRY
+      concept: COUNTRY
+      role: key
+      scope: cell
+      bind:
+        kind: row_label
+        label_column: B
+        read: string
+        normalize: strip
+    - id: TIME_PERIOD
+      concept: TIME_PERIOD
+      role: key
+      scope: cell
+      bind:
+        kind: column_header
+        header_row: 625
+        read: int
+  key:
+  - COUNTRY
+  - TIME_PERIOD
+  validation:
+    warn_on_partial_overlap: false
+  notes: Country × year lookup store classified as a graph constant leaf.
+- id: constant_climate_database_q826_ci1023
+  sheet: Climate Database
+  data_range: Climate Database!Q826:CI1023
+  layout: matrix
+  constant: {}
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: float
+      bind:
+        kind: data_cell
+        read: float
+    dimensions:
+    - id: COUNTRY
+      concept: COUNTRY
+      role: key
+      scope: cell
+      bind:
+        kind: row_label
+        label_column: B
+        read: string
+        normalize: strip
+    - id: TIME_PERIOD
+      concept: TIME_PERIOD
+      role: key
+      scope: cell
+      bind:
+        kind: column_header
+        header_row: 825
+        read: int
+  key:
+  - COUNTRY
+  - TIME_PERIOD
+  validation:
+    warn_on_partial_overlap: false
+  notes: Country × year lookup store classified as a graph constant leaf.
+- id: constant_climate_database_q1026_ci1223
+  sheet: Climate Database
+  data_range: Climate Database!Q1026:CI1223
+  layout: matrix
+  constant: {}
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: float
+      bind:
+        kind: data_cell
+        read: float
+    dimensions:
+    - id: COUNTRY
+      concept: COUNTRY
+      role: key
+      scope: cell
+      bind:
+        kind: row_label
+        label_column: B
+        read: string
+        normalize: strip
+    - id: TIME_PERIOD
+      concept: TIME_PERIOD
+      role: key
+      scope: cell
+      bind:
+        kind: column_header
+        header_row: 1025
+        read: int
+  key:
+  - COUNTRY
+  - TIME_PERIOD
+  validation:
+    warn_on_partial_overlap: false
+  notes: Country × year lookup store classified as a graph constant leaf.
+- id: constant_demography_bv120_ev317
+  sheet: Demography
+  data_range: Demography!BV120:EV317
+  layout: matrix
+  constant: {}
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: float
+      bind:
+        kind: data_cell
+        read: float
+    dimensions:
+    - id: COUNTRY
+      concept: COUNTRY
+      role: key
+      scope: cell
+      bind:
+        kind: row_label
+        label_column: B
+        read: string
+        normalize: strip
+    - id: TIME_PERIOD
+      concept: TIME_PERIOD
+      role: key
+      scope: cell
+      bind:
+        kind: column_header
+        header_row: 119
+        read: int
+  key:
+  - COUNTRY
+  - TIME_PERIOD
+  validation:
+    warn_on_partial_overlap: false
+  notes: Country × year lookup store classified as a graph constant leaf.
+- id: constant_demography_bv321_ev518
+  sheet: Demography
+  data_range: Demography!BV321:EV518
+  layout: matrix
+  constant: {}
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: float
+      bind:
+        kind: data_cell
+        read: float
+    dimensions:
+    - id: COUNTRY
+      concept: COUNTRY
+      role: key
+      scope: cell
+      bind:
+        kind: row_label
+        label_column: B
+        read: string
+        normalize: strip
+    - id: TIME_PERIOD
+      concept: TIME_PERIOD
+      role: key
+      scope: cell
+      bind:
+        kind: column_header
+        header_row: 320
+        read: int
+  key:
+  - COUNTRY
+  - TIME_PERIOD
+  validation:
+    warn_on_partial_overlap: false
+  notes: Country × year lookup store classified as a graph constant leaf.
+- id: constant_demography_bv522_ev719
+  sheet: Demography
+  data_range: Demography!BV522:EV719
+  layout: matrix
+  constant: {}
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: float
+      bind:
+        kind: data_cell
+        read: float
+    dimensions:
+    - id: COUNTRY
+      concept: COUNTRY
+      role: key
+      scope: cell
+      bind:
+        kind: row_label
+        label_column: B
+        read: string
+        normalize: strip
+    - id: TIME_PERIOD
+      concept: TIME_PERIOD
+      role: key
+      scope: cell
+      bind:
+        kind: column_header
+        header_row: 521
+        read: int
+  key:
+  - COUNTRY
+  - TIME_PERIOD
+  validation:
+    warn_on_partial_overlap: false
+  notes: Country × year lookup store classified as a graph constant leaf.
+- id: constant_demography_bi723_ev920
+  sheet: Demography
+  data_range: Demography!BI723:EV920
+  layout: matrix
+  constant: {}
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: float
+      bind:
+        kind: data_cell
+        read: float
+    dimensions:
+    - id: COUNTRY
+      concept: COUNTRY
+      role: key
+      scope: cell
+      bind:
+        kind: row_label
+        label_column: B
+        read: string
+        normalize: strip
+    - id: TIME_PERIOD
+      concept: TIME_PERIOD
+      role: key
+      scope: cell
+      bind:
+        kind: column_header
+        header_row: 722
+        read: int
+  key:
+  - COUNTRY
+  - TIME_PERIOD
+  validation:
+    warn_on_partial_overlap: false
+  notes: Country × year lookup store classified as a graph constant leaf.
+- id: constant_demography_bi924_ev1121
+  sheet: Demography
+  data_range: Demography!BI924:EV1121
+  layout: matrix
+  constant: {}
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: float
+      bind:
+        kind: data_cell
+        read: float
+    dimensions:
+    - id: COUNTRY
+      concept: COUNTRY
+      role: key
+      scope: cell
+      bind:
+        kind: row_label
+        label_column: B
+        read: string
+        normalize: strip
+    - id: TIME_PERIOD
+      concept: TIME_PERIOD
+      role: key
+      scope: cell
+      bind:
+        kind: column_header
+        header_row: 923
+        read: int
+  key:
+  - COUNTRY
+  - TIME_PERIOD
+  validation:
+    warn_on_partial_overlap: false
+  notes: Country × year lookup store classified as a graph constant leaf.
+- id: constant_demography_bi1125_ev1322
+  sheet: Demography
+  data_range: Demography!BI1125:EV1322
+  layout: matrix
+  constant: {}
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: float
+      bind:
+        kind: data_cell
+        read: float
+    dimensions:
+    - id: COUNTRY
+      concept: COUNTRY
+      role: key
+      scope: cell
+      bind:
+        kind: row_label
+        label_column: B
+        read: string
+        normalize: strip
+    - id: TIME_PERIOD
+      concept: TIME_PERIOD
+      role: key
+      scope: cell
+      bind:
+        kind: column_header
+        header_row: 1124
+        read: int
+  key:
+  - COUNTRY
+  - TIME_PERIOD
+  validation:
+    warn_on_partial_overlap: false
+  notes: Country × year lookup store classified as a graph constant leaf.
+- id: constant_macrofiscal_ag67_bb264
+  sheet: Macrofiscal
+  data_range: Macrofiscal!AG67:BB264
+  layout: matrix
+  constant: {}
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: float
+      bind:
+        kind: data_cell
+        read: float
+    dimensions:
+    - id: COUNTRY
+      concept: COUNTRY
+      role: key
+      scope: cell
+      bind:
+        kind: row_label
+        label_column: A
+        read: string
+        normalize: strip
+    - id: TIME_PERIOD
+      concept: TIME_PERIOD
+      role: key
+      scope: cell
+      bind:
+        kind: column_header
+        header_row: 66
+        read: int
+  key:
+  - COUNTRY
+  - TIME_PERIOD
+  validation:
+    warn_on_partial_overlap: false
+  notes: Country × year lookup store classified as a graph constant leaf.
+- id: constant_macrofiscal_ag268_bb465
+  sheet: Macrofiscal
+  data_range: Macrofiscal!AG268:BB465
+  layout: matrix
+  constant: {}
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: float
+      bind:
+        kind: data_cell
+        read: float
+    dimensions:
+    - id: COUNTRY
+      concept: COUNTRY
+      role: key
+      scope: cell
+      bind:
+        kind: row_label
+        label_column: A
+        read: string
+        normalize: strip
+    - id: TIME_PERIOD
+      concept: TIME_PERIOD
+      role: key
+      scope: cell
+      bind:
+        kind: column_header
+        header_row: 267
+        read: int
+  key:
+  - COUNTRY
+  - TIME_PERIOD
+  validation:
+    warn_on_partial_overlap: false
+  notes: Country × year lookup store classified as a graph constant leaf.
+- id: constant_macrofiscal_ag469_bb666
+  sheet: Macrofiscal
+  data_range: Macrofiscal!AG469:BB666
+  layout: matrix
+  constant: {}
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: float
+      bind:
+        kind: data_cell
+        read: float
+    dimensions:
+    - id: COUNTRY
+      concept: COUNTRY
+      role: key
+      scope: cell
+      bind:
+        kind: row_label
+        label_column: A
+        read: string
+        normalize: strip
+    - id: TIME_PERIOD
+      concept: TIME_PERIOD
+      role: key
+      scope: cell
+      bind:
+        kind: column_header
+        header_row: 468
+        read: int
+  key:
+  - COUNTRY
+  - TIME_PERIOD
+  validation:
+    warn_on_partial_overlap: false
+  notes: Country × year lookup store classified as a graph constant leaf.
+- id: constant_macrofiscal_ah670_bb867
+  sheet: Macrofiscal
+  data_range: Macrofiscal!AH670:BB867
+  layout: matrix
+  constant: {}
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: float
+      bind:
+        kind: data_cell
+        read: float
+    dimensions:
+    - id: COUNTRY
+      concept: COUNTRY
+      role: key
+      scope: cell
+      bind:
+        kind: row_label
+        label_column: A
+        read: string
+        normalize: strip
+    - id: TIME_PERIOD
+      concept: TIME_PERIOD
+      role: key
+      scope: cell
+      bind:
+        kind: column_header
+        header_row: 669
+        read: int
+  key:
+  - COUNTRY
+  - TIME_PERIOD
+  validation:
+    warn_on_partial_overlap: false
+  notes: Country × year lookup store classified as a graph constant leaf.
+- id: constant_macrofiscal_ah871_bb1068
+  sheet: Macrofiscal
+  data_range: Macrofiscal!AH871:BB1068
+  layout: matrix
+  constant: {}
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: float
+      bind:
+        kind: data_cell
+        read: float
+    dimensions:
+    - id: COUNTRY
+      concept: COUNTRY
+      role: key
+      scope: cell
+      bind:
+        kind: row_label
+        label_column: A
+        read: string
+        normalize: strip
+    - id: TIME_PERIOD
+      concept: TIME_PERIOD
+      role: key
+      scope: cell
+      bind:
+        kind: column_header
+        header_row: 870
+        read: int
+  key:
+  - COUNTRY
+  - TIME_PERIOD
+  validation:
+    warn_on_partial_overlap: false
+  notes: Country × year lookup store classified as a graph constant leaf.
+- id: constant_macrofiscal_ah1072_bb1269
+  sheet: Macrofiscal
+  data_range: Macrofiscal!AH1072:BB1269
+  layout: matrix
+  constant: {}
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: float
+      bind:
+        kind: data_cell
+        read: float
+    dimensions:
+    - id: COUNTRY
+      concept: COUNTRY
+      role: key
+      scope: cell
+      bind:
+        kind: row_label
+        label_column: A
+        read: string
+        normalize: strip
+    - id: TIME_PERIOD
+      concept: TIME_PERIOD
+      role: key
+      scope: cell
+      bind:
+        kind: column_header
+        header_row: 1071
+        read: int
+  key:
+  - COUNTRY
+  - TIME_PERIOD
+  validation:
+    warn_on_partial_overlap: false
+  notes: Country × year lookup store classified as a graph constant leaf.
+- id: constant_macrofiscal_ah1273_bb1470
+  sheet: Macrofiscal
+  data_range: Macrofiscal!AH1273:BB1470
+  layout: matrix
+  constant: {}
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: float
+      bind:
+        kind: data_cell
+        read: float
+    dimensions:
+    - id: COUNTRY
+      concept: COUNTRY
+      role: key
+      scope: cell
+      bind:
+        kind: row_label
+        label_column: A
+        read: string
+        normalize: strip
+    - id: TIME_PERIOD
+      concept: TIME_PERIOD
+      role: key
+      scope: cell
+      bind:
+        kind: column_header
+        header_row: 1272
+        read: int
+  key:
+  - COUNTRY
+  - TIME_PERIOD
+  validation:
+    warn_on_partial_overlap: false
+  notes: Country × year lookup store classified as a graph constant leaf.
+- id: constant_macrofiscal_ah1474_bb1671
+  sheet: Macrofiscal
+  data_range: Macrofiscal!AH1474:BB1671
+  layout: matrix
+  constant: {}
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: float
+      bind:
+        kind: data_cell
+        read: float
+    dimensions:
+    - id: COUNTRY
+      concept: COUNTRY
+      role: key
+      scope: cell
+      bind:
+        kind: row_label
+        label_column: A
+        read: string
+        normalize: strip
+    - id: TIME_PERIOD
+      concept: TIME_PERIOD
+      role: key
+      scope: cell
+      bind:
+        kind: column_header
+        header_row: 1473
+        read: int
+  key:
+  - COUNTRY
+  - TIME_PERIOD
+  validation:
+    warn_on_partial_overlap: false
+  notes: Country × year lookup store classified as a graph constant leaf.
+- id: constant_productivity_s63_ag260
+  sheet: Productivity
+  data_range: Productivity!S63:AG260
+  layout: matrix
+  constant: {}
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: float
+      bind:
+        kind: data_cell
+        read: float
+    dimensions:
+    - id: COUNTRY
+      concept: COUNTRY
+      role: key
+      scope: cell
+      bind:
+        kind: row_label
+        label_column: A
+        read: string
+        normalize: strip
+    - id: TIME_PERIOD
+      concept: TIME_PERIOD
+      role: key
+      scope: cell
+      bind:
+        kind: column_header
+        header_row: 62
+        read: int
+  key:
+  - COUNTRY
+  - TIME_PERIOD
+  validation:
+    warn_on_partial_overlap: false
+  notes: Country × year lookup store classified as a graph constant leaf.
+- id: constant_output_scenarios_v99_years
+  sheet: Output Scenarios
+  data_range: Output Scenarios!V100:CO100
+  layout: series
+  constant: {}
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: int
+      bind:
+        kind: data_cell
+        read: int
+    dimensions:
+    - id: TIME_PERIOD
+      concept: TIME_PERIOD
+      role: key
+      scope: cell
+      bind:
+        kind: column_header
+        header_row: 100
+        read: int
+  key:
+  - TIME_PERIOD
+  series_context:
+    INDICATOR: projection_year
+  validation:
+    warn_on_partial_overlap: false
+  notes: Year labels on a profile/engine header row. Formulas compare these to projection
+    years.
+- id: constant_output_scenarios_v108_years
+  sheet: Output Scenarios
+  data_range: Output Scenarios!V109:CO109
+  layout: series
+  constant: {}
+  structure:
+    measure:
+      concept: OBS_VALUE
+      dtype: int
+      bind:
+        kind: data_cell
+        read: int
+    dimensions:
+    - id: TIME_PERIOD
+      concept: TIME_PERIOD
+      role: key
+      scope: cell
+      bind:
+        kind: column_header
+        header_row: 109
+        read: int
+  key:
+  - TIME_PERIOD
+  series_context:
+    INDICATOR: projection_year
+  validation:
+    warn_on_partial_overlap: false
+  notes: Year labels on a profile/engine header row. Formulas compare these to projection
+    years.

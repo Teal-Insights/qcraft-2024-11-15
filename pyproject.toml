@@ -3,11 +3,12 @@ requires = ["setuptools>=69", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "qcraft"
+name = "qcraft-2024-11-15"
 version = "0.1.0"
-description = "Python implementation of the IMF Quantitative Climate Risk Assessment Fiscal Tool."
+description = "Python implementation of the IMF Quantitative Climate Risk Assessment Fiscal Tool (workbook vintage 2024-11-15)."
 requires-python = ">=3.13"
 dependencies = [
+    "excel-grapher>=23.6.7",
     "fastpyxl",
     "numpy",
 ]

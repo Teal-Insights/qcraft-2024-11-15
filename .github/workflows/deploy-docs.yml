@@ -37,11 +37,6 @@ jobs:
         run: uv sync --group dev
 
       - name: Build documentation site
-        env:
-          # Generated docstrings contain non-Latin-1 characters (e.g. U+2192).
-          # Force UTF-8 mode so the API-reference step cannot fall back to a
-          # locale codec. No-op on the Linux runner; required on Windows.
-          PYTHONUTF8: "1"
         run: uv run --with great-docs great-docs build --project-path .
 
       - name: Upload Pages artifact

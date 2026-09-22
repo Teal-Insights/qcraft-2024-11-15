@@ -2,43 +2,38 @@
 title: "Excel parity validation"
 ---
 
-Q-CRAFT includes an exported validation bundle that checks the generated
-`qcraft` package against the source Excel workbook. The test drives
-the workbook with Microsoft Excel through `xlwings`, applies the same inputs
-through the package's public `set_*` functions, and compares calculated outputs
-cell by cell.
+Q-CRAFT includes an exported validation bundle that checks the generated `qcraft` package against the extraction graph. The test evaluates the graph with FormulaEvaluator, applies the same inputs through keyword-only `compute_*` functions, and compares outputs cell by cell.
 
 ## Current reference result
 
-The current reference run is **PASS**: **371,979 / 371,979**
+The current reference run is **PASS**: **371,565 / 371,565**
 cell-level comparisons passed at `atol = 1e-06, rtol = 1e-12`.
 
 - Result: **PASS**
-- Generated: `2026-07-26T22:49:42+00:00`
-- Passed: **371,979**
+- Generated: `2026-09-20T15:12:56+00:00`
+- Passed: **371,565**
 - Failed: **0**
 - Pass rate: **100.00%**
 - Acceptance bar: **100.00%**
 - Evidence: **exported_library**
 
-The sweep covers **371,979** cell-level comparisons against Excel.
+The sweep covers **371,565** cell-level comparisons against the FormulaEvaluator.
 
 ## What Was Tested
 
-The validation checks the exported standalone library, not just the extraction graph. It imports `qcraft.api`, creates a fresh context for each scenario, sets inputs through the records-shaped public setters, computes the exported output series, and compares those values against the workbook's calculated output cells.
+The validation checks the exported standalone library, not just the extraction graph. It imports `qcraft.api`, calls keyword-only `compute_*` for each scenario, and compares those values against excel-grapher's FormulaEvaluator on the same input cells.
 
 ## Inspect Or Re-run
 
 The validation bundle is shipped in the source repository under `tests/`.
-Because the golden-master oracle uses Microsoft Excel through COM automation,
-reruns require Windows with Microsoft Excel installed.
+The golden-master oracle is FormulaEvaluator; Microsoft Excel is not required. Run the sweep from the extraction repository after export.
 
 - Reference parity report: `tests/results/reference/parity_report.txt`
 - Validation bundle README: `tests/README.md`
 - Differential test harness: `tests/differential/differential_test_exported_library.py`
 
-To re-run exported-library validation from the exported project:
+To re-run exported-library validation from the extraction repo:
 
 ```pwsh
-uv run --project . --group validation python -m tests.differential.differential_test_exported_library --layout exported
+uv run python -m tests.differential.differential_test_exported_library
 ```

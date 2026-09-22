@@ -1,26 +1,27 @@
-# Excel parity validation
+# Q-CRAFT (2024-11-15) graph-oracle parity validation
 
 This folder ships the exported-library differential test, the workbook fixture,
-and reference parity reports produced in a maintainer Windows environment with
-Microsoft Excel installed.
+and reference parity reports produced against excel-grapher's FormulaEvaluator.
 
 ## Reference results
 
 `results/reference/` contains the last committed parity report from the
 extraction pipeline. These reports document that the exported `qcraft`
-package matched Excel for the configured scenario sweep.
+package matched the extraction graph for the configured scenario sweep.
 
-## Re-run locally (Windows + Excel only)
+## Re-run from the extraction repository
 
-The test drives Excel through `xlwings` and cannot run in Linux CI.
+The test reads every `compute_*` formula attribute from one `Model.from_defaults`
+per scenario and compares those values to FormulaEvaluator. It does not drive
+Microsoft Excel. Callers still use `compute_*`.
 
 ```pwsh
-uv run --project . --group validation python -m tests.differential.differential_test_exported_library --layout exported
+uv run python -m tests.differential.differential_test_exported_library
 ```
 
-Local reruns write to `results/local/` by default. To refresh the shipped
-reference reports after a passing run:
+Local reruns from this exported project write to `results/local/` when the
+extraction graph cache and `excel-grapher` are available:
 
 ```pwsh
-uv run --project . --group validation python -m tests.differential.differential_test_exported_library --layout exported --report-dir tests/results/reference
+uv run python -m tests.differential.differential_test_exported_library --layout exported
 ```
