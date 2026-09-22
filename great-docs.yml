@@ -36,15 +36,11 @@ exclude:
 
 # Logo & Favicon
 # ---------------
-# Point to a single logo file (replaces the text title in the navbar):
-# logo: assets/logo.svg
-#
-# For light/dark variants:
-# logo:
-#   light: assets/logo-light.svg
-#   dark: assets/logo-dark.svg
-#
-# To show the text title alongside the logo, add: show_title: true
+logo: README_files/logo.png
+show_title: true
+# Navbar logo only. The auto hero writes a raw HTML fence that Quarto leaves
+# open, so the homepage body renders as one code block.
+hero: false
 
 # Funding / Copyright Holder
 # --------------------------

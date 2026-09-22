@@ -1,76 +1,68 @@
 ---
-title: "Methodology and interpretation"
+title: "Choose and interpret assumptions"
 ---
 
-## Baseline production structure
+The package is useful when the assumption you change has a clear place in the identities below. Read a debt path as the result of those identities under the `from_defaults` overrides you set, and put the overrides in the same note as the number.
 
-Q-CRAFT decomposes nominal GDP into real output and the GDP deflator:
+## Baseline production
+
+Nominal GDP is real output times the GDP deflator:
 
 $$N_t = Y_t P_t.$$
 
-Real output is represented by a simple production relationship:
+Real output is a one-factor production relationship:
 
 $$Y_t = A_t L_t,$$
 
-where $A_t$ is labour productivity and $L_t$ is employment. Consequently, nominal GDP growth is approximately the sum of productivity growth, employment growth, and GDP-deflator growth.
+where $A_t$ is labour productivity and $L_t$ is employment. Nominal GDP growth is then approximately productivity growth, plus employment growth, plus GDP-deflator growth. After the medium-term data horizon, employment follows projected working-age population growth. Labour productivity moves from `productivity_start` to `productivity_end`. Inflation moves from `inflation_start` to `inflation_end`. Both pairs are percentage points.
 
-After the medium-term data horizon, employment follows projected working-age population growth. Labour productivity follows the analyst's path from `productivity_start` to `productivity_end`. Inflation converges from `inflation_start` to `inflation_end`.
-
-These relationships make the assumptions economically interpretable, but they are not a complete macroeconomic model. External demand, monetary conditions, exchange rates, and feedback from fiscal adjustment are outside the model.
+External demand, monetary conditions, exchange rates, and feedback from fiscal adjustment sit outside this relationship. `compute_baseline_labour_productivity_growth`, `compute_baseline_gdp_deflator_growth`, and `compute_baseline_nominal_gdp_growth` expose the pieces.
 
 ## Fiscal identities
 
-In the baseline, revenue remains constant as a share of nominal GDP. Primary expenditure grows with inflation, productivity, and total population. This distinction means demographic ageing can raise primary expenditure relative to GDP when total population grows faster than working-age population.
+In the baseline, revenue stays constant as a share of nominal GDP. Primary expenditure grows with inflation, productivity, and total population. Ageing can therefore raise primary expenditure relative to GDP when total population grows faster than the working-age population.
 
-Debt-to-GDP follows the standard debt-dynamics relationship:
+Debt-to-GDP follows the standard debt-dynamics identity:
 
 $$D_{t+1} = D_t \frac{1+i_t}{1+g_t} - PB_t,$$
 
-where $D$ is debt as a percentage of GDP, $i$ is the nominal interest rate, $g$ is nominal GDP growth, and $PB$ is the primary balance as a percentage of GDP. A primary surplus lowers debt; a higher interest-growth differential raises it.
+where $D$ is debt as a percent of GDP, $i$ is the nominal interest rate, $g$ is nominal GDP growth, and $PB$ is the primary balance as a percent of GDP. A primary surplus reduces debt. A wider interest-growth differential raises it.
 
-`compute_baseline_debt_stabilizing_primary_balance` reports the primary balance consistent with stable debt at each point in the projection. Compare it with the model's projected primary balance to describe the implied fiscal task or fiscal space.
+`compute_baseline_debt_stabilizing_primary_balance` is the primary balance that would hold debt still at each date. Set it next to the projected primary balance to describe the fiscal gap along that assumption path. `fiscal_rule_enabled` (`"Yes"` or `"No"`) and `debt_target` (a percent of GDP) are the workbook's rule for whether the baseline closes toward a target.
 
-## Interest-rate choices
+## Interest-rate mode
 
-The API exposes three workbook choices through `interest_rate_mode`:
+`interest_rate_mode` takes the workbook's labels exactly:
 
-| Value | Interpretation |
+| Value | What stays fixed |
 |---|---|
-| `"Nominal interest rate"` | Hold the nominal rate at the end of the medium-term projection. |
-| `"Interest-growth differential"` | Hold the nominal interest-growth differential constant. |
-| `"Real interest rate"` | Hold the real rate assumption constant. |
+| `"Nominal interest rate"` | The nominal rate at the end of the medium-term projection. |
+| `"Interest-growth differential"` | The nominal interest-growth differential. |
+| `"Real interest rate (a)"` | The real-rate assumption. |
 
-Long-term debt results can be highly sensitive to this choice. Presenting more than one interest-rate mode is usually more informative than selecting a single path without a sensitivity check.
+Long-horizon debt moves with this choice. Report more than one mode when the ranking of scenarios depends on it. `real_interest_rate` is always an input; under `"Real interest rate (a)"` it is the rate the mode holds fixed.
 
 ## Climate scenarios
 
-Climate scenarios affect the macroeconomic path by applying empirical estimates of persistent temperature effects to GDP per capita. The package then propagates the resulting GDP effect through revenue, primary expenditure, balances, and debt.
+Climate scenarios apply empirical estimates of persistent temperature effects to GDP per capita, then pass the resulting GDP path through revenue, primary expenditure, balances, and debt. The six labels combine an emissions path with an adaptation case:
 
-The scenario distinction is both emissions- and adaptation-related:
-
-- **Paris** uses the low-emissions pathway;
-- **Moderate** uses an intermediate pathway;
-- **High** uses a high-emissions pathway;
-- **Hot** uses a high-temperature outcome under high emissions;
-- **Hot adapted** assumes faster adaptation; and
+- **Paris** is the low-emissions pathway.
+- **Moderate** is an intermediate pathway.
+- **High** is a high-emissions pathway.
+- **Hot** is a high-temperature outcome under high emissions.
+- **Hot adapted** assumes faster adaptation.
 - **Hot unadapted** assumes slower adaptation.
 
-In the default rigid-expenditure case, revenue falls with nominal GDP while primary expenditure remains at its baseline level. The expenditure-rigidity parameter relaxes that assumption. This is a scenario convention, not an estimate of the government's optimal response.
+With `expenditure_rigidity` at `1.0`, revenue falls with nominal GDP and primary expenditure stays at its baseline level. Lower rigidity lets expenditure adjust toward the baseline expenditure-to-GDP ratio. Treat the parameter as a scenario convention you choose.
 
-## Discrete fiscal risks
+## Discrete fiscal shocks
 
-Natural disasters and contingent liabilities are not generated endogenously. They can be represented by placing revenue-loss and primary-expenditure shocks in the two named-axis `Series` accepted by fiscal scenario functions. Use the package's declared `SCENARIO` and `TIME_PERIOD` domains, document the year/key mapping, and store the shock series with the analysis inputs.
+Natural disasters and contingent liabilities are entered, not generated. Fiscal scenario functions accept `discrete_revenue_shocks` and `discrete_primary_expenditure_shocks` on the `SCENARIO` × `TIME_PERIOD` domain from 2030 through 2099. The vintage default is an empty cell at every coordinate. To record a shock, build a series on that domain, pass it to `from_defaults`, and store it with the other overrides.
 
-These shocks affect fiscal aggregates, but the package does not add an independent GDP shock, inflation shock, or adaptation-spending channel. Avoid interpreting the resulting debt path as a complete estimate of disaster macroeconomic damage.
+A positive primary-expenditure value is an expenditure shock. A positive revenue-loss value is a revenue shock. The shock moves fiscal aggregates along the climate path. It does not add a separate GDP shock, inflation shock, or adaptation-spending channel.
 
-## Appropriate use
+## Where the tool fits
 
-Q-CRAFT is most useful as a transparent first-pass assessment and as a way to organize sensitivity analysis. It can help an economist:
+Q-CRAFT organises a first long-term baseline and a set of climate comparisons an analyst can reproduce. It can show how a slower growth path changes revenue and debt, how expenditure rigidity changes that result, and which assumption deserves a closer model.
 
-- establish a common long-term baseline;
-- show how climate-related growth losses can worsen revenue and debt dynamics;
-- quantify the effect of alternative expenditure responses; and
-- identify assumptions that need deeper work in a debt-sustainability, macroeconomic, or sectoral model.
-
-It should not replace a medium-term budget framework, a debt-sustainability analysis, a climate-impact model, or country-specific policy advice. The parity page documents agreement with the extracted Excel implementation; parity confirms implementation consistency, not that the assumptions are forecasts or causal estimates.
-
+A medium-term budget framework, a debt-sustainability analysis, a climate-impact model, and country-specific policy advice each answer a question this package leaves open. The [parity page](excel-parity-validation.qmd) records whether the Python package matches this workbook vintage. Agreement with the workbook supports the implementation; the assumptions still need an economic defense of their own.

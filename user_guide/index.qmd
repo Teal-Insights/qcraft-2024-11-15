@@ -1,53 +1,50 @@
 ---
 title: "Using Q-CRAFT from Python"
-subtitle: "A practical guide for macro-fiscal and climate-risk analysis"
+subtitle: "Teal Insights' scriptable counterpart to the IMF Q-CRAFT workbook"
 ---
 
-Q-CRAFT (2024-11-15) is a Python reimplementation of the Q-CRAFT workbook. It combines country data with assumptions about demography, labour productivity, inflation, and interest rates to produce a baseline through 2099. Climate scenarios then alter the growth path and fiscal position.
+Q-CRAFT (2024-11-15) is Teal Insights' Python package for the IMF Quantitative Climate Risk Assessment Fiscal Tool, workbook vintage 2024-11-15. It lets an economist rerun that workbook's baseline and climate scenarios from code, with the assumptions named next to the result.
 
-This site documents the generated Python package, whose public interface is in `qcraft.api`. It is intended for economists who want a reproducible, scriptable counterpart to the Q-CRAFT Excel workbook. Results are conditional scenarios, not forecasts.
+The calculation is a partial-equilibrium scenario. Country data and assumptions for demography, labour productivity, inflation, and interest rates produce a baseline through 2099. Climate scenarios then apply empirical temperature effects to that path and trace the fiscal consequences. A result holds for the assumptions you pass in. Report those assumptions with the numbers.
+
+Teal Insights publishes this package. The methodology and the workbook are the IMF's. Reuse does not imply IMF endorsement.
 
 ## Read in this order
 
-1. [Install the package and learn the result objects](user-guide/functional-overview.qmd)
-2. [Build a baseline and compare climate scenarios](user-guide/illustrative-example.qmd)
-3. [Interpret the model and choose assumptions](user-guide/methodology-and-interpretation.qmd)
-4. [Review the Excel parity evidence](user-guide/excel-parity-validation.qmd)
+1. [Run a calculation and read the result](user-guide/functional-overview.qmd)
+2. [Compare climate scenarios under one set of assumptions](user-guide/illustrative-example.qmd)
+3. [Choose assumptions and interpret the identities](user-guide/methodology-and-interpretation.qmd)
+4. [Check the package against the workbook](user-guide/excel-parity-validation.qmd)
 5. Browse the generated [API reference](reference/index.qmd)
 
 ## Installation
-
-Install the package directly from GitHub:
 
 ```bash
 uv add "qcraft-2024-11-15 @ git+https://github.com/Teal-Insights/qcraft-2024-11-15"
 ```
 
-Import public calculations from `qcraft.api`:
+Public calculations live in `qcraft.api`. Each one takes a single `*Inputs` object. Build that object with `from_defaults(...)`: omitted leaves stay at the values stored in this workbook vintage, and the keyword arguments you pass replace them.
 
 ```{python}
 from qcraft import BaselinePopulationGrowthInputs
 from qcraft.api import compute_baseline_population_growth
 
-result = compute_baseline_population_growth(BaselinePopulationGrowthInputs(
-    country="France",
-    demography_scenario="Medium",
-))
-result.domain.axes[0].keys[0], result.domain.axes[0].keys[-1], result[2099]
+population_growth = compute_baseline_population_growth(
+    BaselinePopulationGrowthInputs.from_defaults(country="France")
+)
+(
+    population_growth.domain.axes[0].keys[0],
+    population_growth.domain.axes[0].keys[-1],
+    population_growth[2099],
+)
 ```
 
-Each public function accepts one explicit `*Inputs` object. The input classes and calculation functions are re-exported from `qcraft`; calculation functions themselves are available from `qcraft.api`. Annual results are immutable named-axis `Series` objects: use `.domain.axes` to inspect their keys, `.items()` to iterate coordinate/value pairs, and `.sel(...)` to select a scenario. This preserves year and scenario identity instead of relying on positional tuple indices.
+`country="France"` is the only override in that call. Productivity, inflation, the interest-rate mode, the fiscal rule, the debt target, and expenditure rigidity stay at the vintage's stored dashboard values. The workbook's default country is Afghanistan, so those stored values are Afghanistan's dashboard settings. Replace any setting that does not belong in the analysis.
 
-## What the results mean
+Annual results are immutable named-axis series. Inspect `.domain.axes` for the year and scenario keys, iterate `.items()` for coordinate/value pairs, and select a scenario with `.sel(SCENARIO=...)`.
 
-Q-CRAFT is a partial-equilibrium scenario tool, not a forecast or a general-equilibrium model. Its results are conditional on the assumptions supplied by the analyst. The baseline uses a simple production relationship and debt dynamics; climate scenarios apply empirical GDP effects and then trace their fiscal consequences.
+## What a run is for
 
-Use the results to:
+Use a run to compare long-term fiscal pressure under alternative assumptions, and to see how a climate path changes debt relative to the baseline you chose. The [methodology page](user-guide/methodology-and-interpretation.qmd) explains the identities behind those comparisons.
 
-- compare the direction and scale of long-term fiscal pressures;
-- identify sensitivity to demographic, productivity, inflation, and interest-rate assumptions;
-- quantify the additional fiscal task associated with climate scenarios; and
-- identify questions that require a country-specific model or granular sectoral analysis.
-
-The package does not endogenise adaptation spending, natural-disaster GDP losses, sea-level rise, monetary conditions, external balances, or the GDP effects of fiscal consolidation. Discrete revenue and expenditure shocks can be entered separately, but their GDP effects are not modelled.
-
+Adaptation spending, disaster GDP losses, sea-level rise, monetary conditions, external balances, and the GDP effects of fiscal consolidation sit outside the calculation. Discrete revenue and expenditure shocks can be entered on their own; the package leaves their GDP effects unmodelled.

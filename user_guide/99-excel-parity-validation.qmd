@@ -2,7 +2,9 @@
 title: "Excel parity validation"
 ---
 
-Q-CRAFT (2024-11-15) includes a FormulaEvaluator parity check for the generated `qcraft` package. The test evaluates the extraction graph and compares those cells to the formula attributes `compute_*` returns, read from one `Model` per scenario.
+This page records whether Q-CRAFT (2024-11-15) matches the calculations in its source workbook. The check compares the generated `qcraft` package with excel-grapher's FormulaEvaluator, reading each `compute_*` result from one `Model` per scenario.
+
+Passing parity confirms that `qcraft` reproduces this workbook vintage. Use the methodology page to decide what the paths mean; this page does not grade assumptions or turn scenarios into forecasts.
 
 ## Current reference result
 
@@ -17,13 +19,11 @@ cell-level comparisons passed at `atol = 1e-06, rtol = 1e-12`.
 - Acceptance bar: **100.00%**
 - Evidence: **formula_evaluator**
 
-The current run covers **366,180** cell-level comparisons against the FormulaEvaluator.
+## What was compared
 
-## What Was Tested
+Each comparison evaluates one workbook cell with excel-grapher's FormulaEvaluator and the same cell through `qcraft` `compute_*`. The check uses the workbook's stored scenario. Microsoft Excel stays closed.
 
-The validation compares `qcraft` `compute_*` results against excel-grapher's FormulaEvaluator on the extraction graph, using the workbook's default scenario. It does not drive Microsoft Excel or public `set_*` setters.
-
-## Inspect Or Re-run
+## Re-run
 
 The validation bundle is shipped in the source repository under `tests/`.
 Rerun the pipeline `validate` stage after export and annotate. Microsoft Excel is not required.
@@ -32,4 +32,4 @@ Rerun the pipeline `validate` stage after export and annotate. Microsoft Excel i
 - Validation bundle README: `tests/README.md`
 - Differential test harness: the pipeline `validate` stage (`FormulaEvaluator`)
 
-To re-run FormulaEvaluator parity, run the extraction pipeline through the `validate` stage.
+

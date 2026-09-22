@@ -1,111 +1,77 @@
 ---
-title: "A first Q-CRAFT workflow"
+title: "Run a calculation"
 ---
 
-## The calculation pattern
-
-Every public calculation accepts one typed `*Inputs` object and returns an immutable named-axis `Series`. Input classes and result types are exposed by `qcraft`; calculation functions are in `qcraft.api`.
+Every public calculation follows one pattern: build an inputs object with `from_defaults`, pass it to `compute_*`, and read a named-axis series.
 
 ```{python}
 from qcraft import BaselinePopulationGrowthInputs
 from qcraft.api import compute_baseline_population_growth
 
-inputs = BaselinePopulationGrowthInputs(
-    country="France",
-    demography_scenario="Medium",
-)
-population_growth = compute_baseline_population_growth(inputs)
-
-{
-    "axes": [(axis.name, axis.keys[:2], axis.keys[-2:]) for axis in population_growth.domain.axes],
-    "first_value": population_growth[2009],
-    "last_value": population_growth[2099],
-}
-```
-
-Baseline annual series use a `TIME_PERIOD` axis from 2009 through 2099. Fiscal climate series use `SCENARIO` and `TIME_PERIOD` axes; the six scenario labels are `Paris`, `Moderate`, `High`, `Hot`, `Hot adapted`, and `Hot unadapted`. Inspect `result.domain.axes` rather than assuming a positional layout.
-
-## Demography
-
-The demographic selector uses the workbook's labels exactly. The following call computes the annual population-growth series:
-
-Use `"Medium"`, `"High"`, or `"Low"` for `demography_scenario`. These labels are case-sensitive workbook values.
-
-## Macro assumptions
-
-The baseline is assembled from:
-
-- `productivity_start` and `productivity_end`, expressed in percentage points;
-- `inflation_start` and `inflation_end`, also in percentage points;
-- one of `"Nominal interest rate"`, `"Interest-growth differential"`, or `"Real interest rate"`;
-- `real_interest_rate`, required by the interest-rate calculation interface; and
-- a fiscal-rule flag and debt target.
-
-For exploratory work, first inspect the real and nominal growth paths:
-
-```{python}
-from qcraft import BaselineLabourProductivityGrowthInputs, BaselineNominalGdpGrowthInputs
-from qcraft.api import (
-    compute_baseline_labour_productivity_growth,
-    compute_baseline_nominal_gdp_growth,
-)
-
-assumptions = {
-    "country": "France",
-    "demography_scenario": "Medium",
-    "productivity_start": 5.0,
-    "productivity_end": 1.2,
-    "inflation_start": 3.5,
-    "inflation_end": 3.5,
-}
-
-productivity = compute_baseline_labour_productivity_growth(
-    BaselineLabourProductivityGrowthInputs(
-        country=assumptions["country"],
-        demography_scenario=assumptions["demography_scenario"],
-        productivity_start=assumptions["productivity_start"],
-        productivity_end=assumptions["productivity_end"],
+population_growth = compute_baseline_population_growth(
+    BaselinePopulationGrowthInputs.from_defaults(
+        country="France",
+        demography_scenario="Medium",
     )
 )
-nominal_gdp_growth = compute_baseline_nominal_gdp_growth(
-    BaselineNominalGdpGrowthInputs(**assumptions)
-)
 
-list(zip(list(productivity.items())[-3:], list(nominal_gdp_growth.items())[-3:], strict=True))
+{
+    "axis": population_growth.domain.axes[0].name,
+    "first_year": population_growth.domain.axes[0].keys[0],
+    "last_year": population_growth.domain.axes[0].keys[-1],
+    "value_in_2099": population_growth[2099],
+}
 ```
 
-The nominal GDP path is approximately the sum of employment growth, labour-productivity growth, and GDP-deflator growth. Use `compute_baseline_gdp_deflator_growth` to inspect the inflation component directly.
+`from_defaults` fills every leaf on that inputs class from `data.*_DEFAULT`, then applies the keywords you pass. `demography_scenario="Medium"` is explicit here so the call shows the choice; omitting it would have used the same stored default. The labels are the workbook's, and they are case-sensitive: `"Medium"`, `"High"`, and `"Low"`.
 
-## Fiscal baseline
+## Read the series before you interpret it
 
-Fiscal functions use the full set of baseline assumptions:
+Baseline annual series use a `TIME_PERIOD` axis. For population growth that axis runs from 2009 through 2099. Index with the year: `population_growth[2099]`. Fiscal climate series add a `SCENARIO` axis. The scenario labels are `Paris`, `Moderate`, `High`, `Hot`, `Hot adapted`, and `Hot unadapted`. Select one with `.sel(SCENARIO="Paris")`, then index the year on the series that remains.
+
+Look at `result.domain.axes` when a function's horizon is not obvious. Scenario debt, for example, starts in 2028 rather than 2009.
+
+## Set the assumptions that define the baseline
+
+A fiscal result needs the full baseline assumption set. Pass the ones you mean to choose, and leave the rest to the vintage defaults only when those defaults are the assumption you want on the record.
 
 ```{python}
 from qcraft import BaselineDebtToGdpInputs
 from qcraft.api import compute_baseline_debt_to_gdp
 
-baseline_debt = compute_baseline_debt_to_gdp(BaselineDebtToGdpInputs(
-    country="France",
-    demography_scenario="Medium",
-    productivity_start=5.0,
-    productivity_end=1.2,
-    inflation_start=3.5,
-    inflation_end=3.5,
-    interest_rate_mode="Nominal interest rate",
-    real_interest_rate=1.0,
-    fiscal_rule_enabled="Yes",
-    debt_target=60.0,
-))
+baseline_debt = compute_baseline_debt_to_gdp(
+    BaselineDebtToGdpInputs.from_defaults(
+        country="France",
+        demography_scenario="Medium",
+        productivity_start=1.0,
+        productivity_end=1.1,
+        inflation_start=2.0,
+        inflation_end=2.0,
+        interest_rate_mode="Nominal interest rate",
+        real_interest_rate=1.0,
+        fiscal_rule_enabled="Yes",
+        debt_target=60.0,
+    )
+)
 
 {
-    "first_year_debt_to_gdp": baseline_debt[2009],
-    "last_year_debt_to_gdp": baseline_debt[2099],
+    "debt_to_gdp_2009": baseline_debt[2009],
+    "debt_to_gdp_2099": baseline_debt[2099],
 }
 ```
 
-The main baseline outputs are debt-to-GDP, primary and overall balances, revenue and primary expenditure as percentages of GDP, interest expenditure, interest rates, debt-stabilising primary balances, and fiscal-consolidation gaps. See the API reference for each function's exact signature.
+The numbers above are round illustrative assumptions for a reproducible example. The vintage dashboard stores `productivity_start` as `5.0` because its default country is Afghanistan; use that stored value only when it is the assumption you mean to publish.
 
-## Reproducible inputs
+Units follow the workbook. Productivity and inflation are percentage points (`1.1` means 1.1 percent). `debt_target` is a percent of GDP. `interest_rate_mode` is one of:
 
-Keep the assumptions in a configuration object or a data file, construct the relevant input class, and save the named result records with the assumptions and package version. This makes sensitivity analysis and review easier than editing workbook cells manually.
+- `"Nominal interest rate"`
+- `"Interest-growth differential"`
+- `"Real interest rate (a)"`
 
+`fiscal_rule_enabled` is `"Yes"` or `"No"`. `real_interest_rate` is part of the inputs object even when the selected mode does not use it as the operative rate; pass the workbook's value, or your own, so the call states it.
+
+Other baseline functions take a subset of these leaves. `compute_baseline_labour_productivity_growth` needs country, demography, and the productivity path. `compute_baseline_gdp_deflator_growth` needs the inflation path. The API reference lists the fields on each `*Inputs` class. `from_defaults` rejects a keyword that class does not have.
+
+## Keep the run reproducible
+
+Store the keyword overrides with the package version and the workbook vintage. Two calls match when they pass the same overrides, because omitted leaves resolve to the same stored defaults. When you publish a table, publish the overrides beside it.

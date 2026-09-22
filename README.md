@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="README_files/logo.png" alt="Teal Insights" width="420">
+</p>
+
 # Q-CRAFT (2024-11-15)
 
 Python implementation of the IMF Quantitative Climate Risk Assessment Fiscal Tool (workbook vintage 2024-11-15).
@@ -12,3 +16,4 @@ uv add "qcraft-2024-11-15 @ git+https://github.com/Teal-Insights/qcraft-2024-11-
 
 See the [full documentation](https://teal-insights.github.io/qcraft-2024-11-15/).
 
+Published by Teal Insights. Q-CRAFT is an IMF tool; this package reimplements workbook vintage 2024-11-15. Reuse does not imply IMF endorsement.
