@@ -13,8 +13,16 @@ from typing import Any
 ATOL = 1e-6
 
 
-def _close(a: float, b: float, tol: float = ATOL) -> bool:
-    return abs(float(a) - float(b)) <= tol
+def _close(a: Any, b: Any, tol: float = ATOL) -> bool:
+    if a is None and b is None:
+        return True
+    # Empty discrete-risk shocks are None on the model and 0 in the workbook.
+    if a is None or b is None:
+        other = b if a is None else a
+        return isinstance(other, (int, float)) and not isinstance(other, bool) and float(other) == 0.0
+    if isinstance(a, (int, float)) and isinstance(b, (int, float)) and not isinstance(a, bool) and not isinstance(b, bool):
+        return abs(float(a) - float(b)) <= tol
+    return a == b
 
 
 def compare(left: dict[str, Any], right: dict[str, Any]) -> list[str]:
@@ -27,22 +35,10 @@ def compare(left: dict[str, Any], right: dict[str, Any]) -> list[str]:
                 continue
             for k, v in pv.items():
                 rk = k if k in jv else str(k)
-                if rk not in jv or not _close(float(v), float(jv[rk])):
+                if rk not in jv or not _close(v, jv[rk]):
                     errors.append(f"{key}[{k}]: export={v} formula_evaluator={jv.get(rk)}")
-        else:
-            if jv is None or (
-                isinstance(pv, (int, float))
-                and isinstance(jv, (int, float))
-                and not _close(float(pv), float(jv))
-            ):
-                if not (isinstance(pv, str) and pv == jv):
-                    if not (
-                        isinstance(pv, (int, float))
-                        and isinstance(jv, (int, float))
-                        and _close(float(pv), float(jv))
-                    ):
-                        if pv != jv:
-                            errors.append(f"{key}: export={pv} formula_evaluator={jv}")
+        elif not _close(pv, jv):
+            errors.append(f"{key}: export={pv} formula_evaluator={jv}")
     return errors
 
 

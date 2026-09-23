@@ -8,9 +8,12 @@ __pycache__/
 .quarto/
 great-docs/
 user_guide/
-tests/
+tests/*
+!tests/fixtures/
+tests/fixtures/*
+!tests/fixtures/qcraft-toolv10.xlsx
 examples/
-bindings/
+.cache/
 docs/
 *.qmd
 uv.lock

@@ -6,8 +6,9 @@ Endpoints:
   POST /api/evaluate           recompute; body {"backend":"...","inputs":{...}}
   GET  /                       static assets/graph/ (viz UI)
 
-Default backend is the exported ``Model`` (``export``). FormulaEvaluator is
-optional when excel-grapher can load ``tests/fixtures/qcraft-toolv10.xlsx``.
+Default backend is FormulaEvaluator when the workbook fixture is present.
+The exported ``Model`` (``export``) remains available. The FormulaEvaluator
+graph is loaded from ``.cache/dependency-graph`` at startup.
 """
 
 from __future__ import annotations
@@ -49,6 +50,8 @@ def _json_response(handler: BaseHTTPRequestHandler, status: int, payload: Any) -
 
 
 def _default_backend() -> BackendName:
+    if "formula_evaluator" in available_backends():
+        return "formula_evaluator"
     return "export"
 
 
@@ -166,6 +169,17 @@ def main(argv: list[str] | None = None) -> int:
         default=int(os.environ.get("PORT", "8765")),
     )
     args = parser.parse_args(argv)
+    from qcraft.graph_formula_evaluator import is_available, warm
+
+    if is_available():
+        print("loading FormulaEvaluator graph…")
+        ready = warm()
+        print(
+            "formula_evaluator ready "
+            f"({ready['nodes']} graph nodes, {ready['series']} series)"
+        )
+    else:
+        print("formula_evaluator unavailable; serving export backend")
     server = ThreadingHTTPServer((args.host, args.port), GraphApiHandler)
     print(f"Q-CRAFT graph API on http://{args.host}:{args.port}/")
     print("  GET  /api/health")

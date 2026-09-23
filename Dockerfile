@@ -6,11 +6,16 @@ WORKDIR /app
 
 COPY pyproject.toml README.md ./
 COPY qcraft ./qcraft
+COPY bindings ./bindings
+COPY tests/fixtures/qcraft-toolv10.xlsx ./tests/fixtures/qcraft-toolv10.xlsx
 COPY assets/graph ./assets/graph
 COPY scripts/serve_graph_api.py ./scripts/serve_graph_api.py
 
-# Export-backend viz only needs the installed package (Model + data).
-RUN uv pip install --system --no-cache .
+# FormulaEvaluator needs the workbook, bindings, and excel-grapher (a project dep).
+# Build the dependency graph into the image so the container loads it instead of
+# recomputing 200k+ nodes before it can pass the healthcheck.
+RUN uv pip install --system --no-cache . \
+    && python -c "from qcraft.graph_formula_evaluator import warm; print(warm())"
 
 ENV HOST=0.0.0.0
 ENV PORT=8080

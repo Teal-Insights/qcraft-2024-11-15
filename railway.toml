@@ -5,5 +5,5 @@ dockerfilePath = "Dockerfile.graph"
 [deploy]
 startCommand = "python scripts/serve_graph_api.py"
 healthcheckPath = "/api/health"
-healthcheckTimeout = 300
+healthcheckTimeout = 600
 restartPolicyType = "ON_FAILURE"

@@ -1,24 +1,26 @@
 """Series topology for the interactive Q-CRAFT dependency-graph viz.
 
-Pedagogical subset (not the full 380+ binding surface): Dashboard scalars →
-assumption paths → baseline debt engine → Paris / Hot-unadapted climate lanes
-→ milestone debt summaries. Addresses come from ``data`` so provenance stays
-aligned with bindings.
+Dashboard scalars and the hand-written story edges stay. Every series in the
+input, internal, and output binding shards is also a node so FormulaEvaluator
+can return the full bound surface. Addresses come from ``data``.
 """
 
 from __future__ import annotations
 
+from pathlib import Path
 from typing import Any, Literal, Mapping
 
 from . import data
 from .model import Model
+
+_BINDINGS_DIR = Path(__file__).resolve().parents[1] / "bindings"
 
 BackendName = Literal["export", "formula_evaluator"]
 
 # Full Model constructor surface (includes matrix shocks used at evaluate time).
 INPUT_IDS: tuple[str, ...] = tuple(Model._INPUT_IDS)
 
-# Viz nodes: scalars + curated internals/outputs (omit 420-cell shock matrices).
+# Story inputs. Bound shock matrices are appended after the binding shards load.
 VIZ_INPUT_IDS: tuple[str, ...] = (
     "country",
     "demography_scenario",
@@ -193,6 +195,109 @@ def _year_node(series_id: str, role: str, spec: Any, *, domain: dict[str, float]
         addresses=_flat_addresses(spec.cells),
         domain=domain,
     )
+
+
+def _json_key(coord: Any) -> Any:
+    """Match ``graph_api`` flat maps: one-tuples unwrap, longer tuples join with ``|``."""
+    if isinstance(coord, tuple) and len(coord) == 1:
+        return _json_key(coord[0])
+    if isinstance(coord, tuple):
+        return "|".join(str(part) for part in coord)
+    return coord
+
+
+def _binding_series(filename: str) -> list[dict[str, Any]]:
+    path = _BINDINGS_DIR / filename
+    if not path.is_file():
+        return []
+    import yaml
+
+    document = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+    series = document.get("series") or []
+    return [entry for entry in series if isinstance(entry.get("id"), str) and entry.get("id")]
+
+
+def _lane(series: dict[str, Any], default: str) -> str:
+    groups = series.get("groups") or []
+    if groups:
+        path = (groups[0] or {}).get("path") or []
+        if path:
+            return str(path[0])
+    sheet = series.get("sheet")
+    if isinstance(sheet, str) and sheet:
+        return sheet
+    return default
+
+
+def _quote_sheet(address: str) -> str:
+    if "!" not in address:
+        return address
+    sheet, cell = address.split("!", 1)
+    if " " in sheet and not (sheet.startswith("'") and sheet.endswith("'")):
+        sheet = f"'{sheet}'"
+    return f"{sheet}!{cell}"
+
+
+def _bound_series_node(
+    series_id: str,
+    role: str,
+    lane: str,
+    data_range: Any,
+) -> dict[str, Any]:
+    spec = getattr(data, series_id.upper(), None)
+    if spec is not None and hasattr(spec, "cells") and hasattr(spec, "domain"):
+        flat = _flat_addresses(spec.cells)
+        keys: list[Any] = []
+        addresses: dict[Any, str] = {}
+        for coord in spec.domain:
+            raw = coord[0] if isinstance(coord, tuple) and len(coord) == 1 else coord
+            key = _json_key(raw)
+            keys.append(key)
+            addresses[key] = flat[raw]
+        kind = "matrix" if keys and isinstance(keys[0], str) and "|" in keys[0] else "year_map"
+        node = _node(
+            series_id=series_id,
+            role=role,
+            kind=kind,
+            keys=keys,
+            addresses=addresses,
+        )
+        node["lane"] = lane
+        return node
+    if isinstance(data_range, str):
+        cell = data_range.split("!", 1)[-1]
+        if ":" not in cell:
+            node = _node(
+                series_id=series_id,
+                role=role,
+                kind="float",
+                keys=[None],
+                address=_quote_sheet(data_range),
+            )
+            node["lane"] = lane
+            return node
+    raise KeyError(f"no cell map for bound series {series_id}")
+
+
+def _append_bound(
+    nodes: tuple[dict[str, Any], ...],
+    filename: str,
+    role: str,
+) -> tuple[dict[str, Any], ...]:
+    """Append bound series that are not already story nodes."""
+    present = {node["id"] for node in nodes}
+    extra: list[dict[str, Any]] = []
+    for series in _binding_series(filename):
+        series_id = series["id"]
+        if series_id in present:
+            continue
+        extra.append(
+            _bound_series_node(series_id, role, _lane(series, role), series.get("data_range"))
+        )
+        present.add(series_id)
+    if not extra:
+        return nodes
+    return nodes + tuple(extra)
 
 
 NODES: tuple[dict[str, Any], ...] = (
@@ -380,7 +485,12 @@ NODES: tuple[dict[str, Any], ...] = (
     ),
 )
 
+NODES = _append_bound(NODES, "inputs.bindings.yaml", "input")
+NODES = _append_bound(NODES, "internals.bindings.yaml", "internal")
+NODES = _append_bound(NODES, "outputs.bindings.yaml", "output")
 NODES_BY_ID: dict[str, dict[str, Any]] = {node["id"]: node for node in NODES}
+SERIES_IDS = tuple(node["id"] for node in NODES)
+VIZ_INPUT_IDS = tuple(node["id"] for node in NODES if node["role"] == "input")
 
 
 def all_cell_addresses() -> tuple[str, ...]:

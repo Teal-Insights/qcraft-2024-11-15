@@ -1,4 +1,4 @@
-"""Pedagogical series-graph API for the docs dependency-graph viz.
+"""Series-graph API for the docs dependency-graph viz.
 
 Recomputes via the exported ``Model`` (default) or excel-grapher's
 ``FormulaEvaluator``. JSON shapes match ``assets/graph/app.js``
@@ -110,7 +110,11 @@ def flatten_defaults() -> FlatInputs:
     """
     defaults: FlatInputs = {}
     for name in VIZ_INPUT_IDS:
-        defaults[name] = _json_number(getattr(data, f"{name.upper()}_DEFAULT"))
+        raw = getattr(data, f"{name.upper()}_DEFAULT")
+        if isinstance(raw, Series):
+            defaults[name] = flatten_series(raw)
+        else:
+            defaults[name] = _json_number(raw)
     defaults["country"] = "France"
     return defaults
 
@@ -147,9 +151,16 @@ def normalize_inputs(raw: Mapping[str, Any] | None) -> FlatInputs:
 
 
 def bind_model_inputs(flat: FlatInputs) -> dict[str, Any]:
-    """Flat viz inputs → keyword args for ``Model.from_defaults``."""
-    kwargs = {name: flat[name] for name in VIZ_INPUT_IDS}
-    # Matrix shocks stay at workbook defaults (not exposed in the pedagogical viz).
+    """Flat viz inputs → keyword args for ``Model.from_defaults``.
+
+    Shock matrices stay Series objects. The FormulaEvaluator path writes the
+    flat maps onto workbook cells instead.
+    """
+    kwargs = {
+        name: flat[name]
+        for name in VIZ_INPUT_IDS
+        if not isinstance(flat[name], dict)
+    }
     kwargs["discrete_revenue_shocks"] = data.DISCRETE_REVENUE_SHOCKS_DEFAULT
     kwargs["discrete_primary_expenditure_shocks"] = (
         data.DISCRETE_PRIMARY_EXPENDITURE_SHOCKS_DEFAULT
@@ -216,6 +227,16 @@ def evaluate(
     raise GraphApiError(f"unknown backend: {backend!r}", status=400)
 
 
+def _layout_edges(backend: BackendName) -> list[list[str]]:
+    """Series edges used to place nodes by hop count from the inputs."""
+    if backend == "formula_evaluator":
+        from . import graph_formula_evaluator as fe
+
+        if fe.is_available():
+            return [list(edge) for edge in fe.series_dependency_edges()]
+    return [list(edge) for edge in EDGES]
+
+
 def bootstrap(*, backend: BackendName = "export") -> dict[str, Any]:
     """Schema + defaults + initial values for the viz."""
     defaults = flatten_defaults()
@@ -223,7 +244,7 @@ def bootstrap(*, backend: BackendName = "export") -> dict[str, Any]:
         "axes": axes(),
         "defaults": defaults,
         "nodes": list(NODES),
-        "edges": [list(edge) for edge in EDGES],
+        "edges": _layout_edges(backend),
         "values": evaluate(defaults, backend=backend),
         "backend": backend,
         "backends": available_backends(),

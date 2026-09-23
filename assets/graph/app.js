@@ -1,13 +1,13 @@
 /**
  * Q-CRAFT interactive dependency graph.
  * Loads series topology from GET /api/graph and recomputes via
- * POST /api/evaluate with backend=export (qcraft.model.Model).
+ * POST /api/evaluate with backend=formula_evaluator.
  * Fall back: ./bootstrap.json for static docs preview when the API is offline.
  */
 (function () {
   "use strict";
 
-  const BACKEND = "export";
+  const BACKEND = "formula_evaluator";
   const LAYER_ORIGIN_X = 140;
   const LAYER_GAP_X = 280;
   const LAYER_ROW = 78;
@@ -230,12 +230,24 @@
   function addressText(series) {
     if (series.address) return series.address;
     if (series.addresses) {
-      return series.keys.map((key) => {
-        const addresses = series.addresses;
-        return addresses[key] ?? addresses[String(key)];
-      }).join(", ");
+      const addresses = series.keys.map((key) => {
+        const table = series.addresses;
+        return table[key] ?? table[String(key)];
+      }).filter(Boolean);
+      if (addresses.length > 4) {
+        return `${addresses[0]} … ${addresses[addresses.length - 1]} (${addresses.length} cells)`;
+      }
+      return addresses.join(", ");
     }
     return "";
+  }
+
+  function keysHintText(series) {
+    if (!series.keys.length || series.keys[0] == null) return "scalar";
+    if (series.keys.length > 8) {
+      return `${series.keys.length} keys: ${series.keys[0]} … ${series.keys[series.keys.length - 1]}`;
+    }
+    return series.keys.join(", ");
   }
 
   function nodeSize(valuesStr) {
@@ -276,30 +288,82 @@
 
   function computeLayers() {
     const ids = SERIES.map((s) => s.id);
-    const preds = Object.fromEntries(ids.map((id) => [id, []]));
     const succs = Object.fromEntries(ids.map((id) => [id, []]));
     for (const [source, target] of SERIES_EDGES) {
-      preds[target].push(source);
+      if (!succs[source] || succs[target] === undefined) continue;
       succs[source].push(target);
     }
 
-    const layer = Object.fromEntries(ids.map((id) => [id, 0]));
-    const indegree = Object.fromEntries(ids.map((id) => [id, preds[id].length]));
-    const queue = ids.filter((id) => indegree[id] === 0);
-    let seen = 0;
-    while (queue.length) {
-      const u = queue.shift();
-      seen += 1;
-      for (const v of succs[u]) {
-        layer[v] = Math.max(layer[v], layer[u] + 1);
-        indegree[v] -= 1;
-        if (indegree[v] === 0) queue.push(v);
+    // Strongly connected components, then longest path on that DAG.
+    // A cycle would otherwise stop the hop count; nodes in one component
+    // share the hop count of the component.
+    const index = new Map();
+    const low = new Map();
+    const stack = [];
+    const onStack = new Set();
+    const comps = [];
+    let nextIndex = 0;
+    function strong(v) {
+      index.set(v, nextIndex);
+      low.set(v, nextIndex);
+      nextIndex += 1;
+      stack.push(v);
+      onStack.add(v);
+      for (const w of succs[v]) {
+        if (!index.has(w)) {
+          strong(w);
+          low.set(v, Math.min(low.get(v), low.get(w)));
+        } else if (onStack.has(w)) {
+          low.set(v, Math.min(low.get(v), index.get(w)));
+        }
+      }
+      if (low.get(v) === index.get(v)) {
+        const comp = [];
+        let w;
+        do {
+          w = stack.pop();
+          onStack.delete(w);
+          comp.push(w);
+        } while (w !== v);
+        comps.push(comp);
       }
     }
-    if (seen !== ids.length) {
-      console.warn("Series graph has a cycle; falling back to role columns");
-      return null;
+    for (const id of ids) {
+      if (!index.has(id)) strong(id);
     }
+
+    const compOf = {};
+    comps.forEach((comp, compIndex) => {
+      for (const id of comp) compOf[id] = compIndex;
+    });
+    const compSuccs = comps.map(() => new Set());
+    const indegree = comps.map(() => 0);
+    for (const [source, target] of SERIES_EDGES) {
+      const from = compOf[source];
+      const to = compOf[target];
+      if (from === undefined || to === undefined || from === to) continue;
+      if (!compSuccs[from].has(to)) {
+        compSuccs[from].add(to);
+        indegree[to] += 1;
+      }
+    }
+    const compLayer = comps.map(() => 0);
+    const queue = [];
+    indegree.forEach((degree, compIndex) => {
+      if (degree === 0) queue.push(compIndex);
+    });
+    let head = 0;
+    while (head < queue.length) {
+      const current = queue[head];
+      head += 1;
+      for (const next of compSuccs[current]) {
+        compLayer[next] = Math.max(compLayer[next], compLayer[current] + 1);
+        indegree[next] -= 1;
+        if (indegree[next] === 0) queue.push(next);
+      }
+    }
+    const layer = {};
+    for (const id of ids) layer[id] = compLayer[compOf[id]];
     return layer;
   }
 
@@ -458,8 +522,7 @@
     const series = SERIES_BY_ID[nodeId];
     const editable = series.role === "input";
     const vals = valuesText(series, values);
-    const keysHint =
-      series.keys[0] == null ? "scalar" : series.keys.join(", ");
+    const keysHint = keysHintText(series);
 
     let editor = "";
     if (editable) {
