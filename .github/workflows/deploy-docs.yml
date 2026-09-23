@@ -34,10 +34,22 @@ jobs:
         run: uv python install
 
       - name: Install project dependencies
-        run: uv sync --group dev
+        run: uv sync --group dev --group graph
+
+      - name: Refresh static graph bootstrap snapshot
+        run: uv run python scripts/write_graph_bootstrap.py
+        continue-on-error: true
 
       - name: Build documentation site
         run: uv run --with great-docs great-docs build --project-path .
+
+      - name: Ensure interactive graph assets are published
+        run: |
+          mkdir -p great-docs/_site/assets
+          if [ -d assets/graph ]; then
+            cp -a assets/graph great-docs/_site/assets/
+            test -f great-docs/_site/assets/graph/index.html
+          fi
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v4

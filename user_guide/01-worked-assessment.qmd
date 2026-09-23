@@ -1,0 +1,191 @@
+---
+title: "A France assessment"
+---
+
+This page runs one assumption set for France and reads the debt ratio. France is a reproducible name. Treat the numbers as an illustration you can defend or replace. The workbook's stored dashboard belongs to Afghanistan, the vintage default country, so this page sets its own assumptions.
+
+## State the assumptions
+
+Each choice is doing economic work:
+
+- **Demography** is the UN medium variant. Employment after the medium-term horizon follows working-age population on that path.
+- **Productivity** rises from 1.0 to 1.1 percent. That is an advanced-economy pace, in the neighborhood of the OECD benchmark the workbook uses. The vintage dashboard stores a starting rate of 5 percent because its default country is Afghanistan.
+- **Inflation** is 2 percent throughout, a stand-in for a long-run target. The package uses the GDP deflator.
+- **Interest** holds the nominal rate at the end of the medium-term projection.
+- **The fiscal rule** is on, with a debt target of 60 percent of GDP. The path does not reach 60. The next section shows what the rule does instead.
+- **Expenditure rigidity** is 1. Spending stays at the baseline level when climate change reduces GDP. A later section sets it to 0.
+
+```{python}
+assumptions = {
+    "country": "France",
+    "demography_scenario": "Medium",
+    "productivity_start": 1.0,
+    "productivity_end": 1.1,
+    "inflation_start": 2.0,
+    "inflation_end": 2.0,
+    "interest_rate_mode": "Nominal interest rate",
+    "real_interest_rate": 1.0,
+    "fiscal_rule_enabled": "Yes",
+    "debt_target": 60.0,
+    "expenditure_rigidity": 1.0,
+}
+```
+
+Productivity and inflation are percentage points. The debt target is a percent of GDP. Scenario labels and the interest-rate mode are the workbook's strings, matched exactly. `real_interest_rate` is always passed, so the call states it even though this mode holds the nominal rate.
+
+Omitted leaves stay at the vintage default. The shock series are omitted here, so every discrete-risk cell stays empty. That is the workbook's case with no extra disaster or contingent-liability shock.
+
+## The baseline needs a rule
+
+The debt target in the call is 60 percent of GDP. Under these assumptions the rule-on path finishes near 132. The workbook closes a gap with a lag, so the target is the direction of adjustment. What the rule changes is whether the baseline is usable as a backdrop.
+
+```{python}
+from qcraft import BaselineDebtToGdpInputs
+from qcraft.api import compute_baseline_debt_to_gdp
+
+baseline_kwargs = {
+    key: value
+    for key, value in assumptions.items()
+    if key != "expenditure_rigidity"
+}
+rule_off = dict(baseline_kwargs)
+rule_off["fiscal_rule_enabled"] = "No"
+
+with_rule = compute_baseline_debt_to_gdp(
+    BaselineDebtToGdpInputs.from_defaults(**baseline_kwargs)
+)
+without_rule = compute_baseline_debt_to_gdp(
+    BaselineDebtToGdpInputs.from_defaults(**rule_off)
+)
+
+{year: (round(with_rule[year], 1), round(without_rule[year], 1)) for year in (2028, 2050, 2099)}
+```
+
+Each pair is debt as a percent of GDP, rule on then rule off. In 2099 the rule-off path is about 584 percent of GDP. The rule-on path stays near 132. Climate comparisons below use the rule-on baseline. A path that finishes above 500 is not a backdrop against which a climate wedge can be read.
+
+## Climate shows up in the debt ratio
+
+The six scenario labels are Paris, Moderate, High, Hot, Hot adapted, and Hot unadapted. Paris is the low-emissions path. Hot unadapted is the high-temperature path with slower adaptation. One debt call returns every scenario. The horizon starts in 2028, the end of the medium-term data, and runs to 2099.
+
+```{python}
+from IPython.display import HTML
+
+from qcraft import (
+    ScenarioDebtToGdpInputs,
+    ScenarioFiscalConsolidationGapMilestones2099Inputs,
+    ScenarioRealGdpLevelIndexHotUnadaptedInputs,
+    ScenarioRealGdpLevelIndexParisInputs,
+)
+from qcraft.api import (
+    compute_scenario_debt_to_gdp,
+    compute_scenario_fiscal_consolidation_gap_milestones_2099,
+    compute_scenario_real_gdp_level_index_hot_unadapted,
+    compute_scenario_real_gdp_level_index_paris,
+)
+
+debt = compute_scenario_debt_to_gdp(
+    ScenarioDebtToGdpInputs.from_defaults(**assumptions)
+)
+gap = compute_scenario_fiscal_consolidation_gap_milestones_2099(
+    ScenarioFiscalConsolidationGapMilestones2099Inputs.from_defaults(**assumptions)
+)
+growth = {
+    key: assumptions[key]
+    for key in (
+        "country",
+        "demography_scenario",
+        "productivity_start",
+        "productivity_end",
+    )
+}
+paris_gdp = compute_scenario_real_gdp_level_index_paris(
+    ScenarioRealGdpLevelIndexParisInputs.from_defaults(**growth)
+)
+hot_unadapted_gdp = compute_scenario_real_gdp_level_index_hot_unadapted(
+    ScenarioRealGdpLevelIndexHotUnadaptedInputs.from_defaults(**growth)
+)
+
+milestones = (2028, 2050, 2075, 2099)
+rows = []
+for scenario in debt.domain.axes[0].keys:
+    series = debt.sel(SCENARIO=scenario)
+    rows.append(
+        "<tr><td>"
+        + scenario
+        + "</td>"
+        + "".join(f"<td>{series[year]:.1f}</td>" for year in milestones)
+        + f"<td>{gap.sel(SCENARIO=scenario)[2099]:.2f}</td></tr>"
+    )
+HTML(
+    "<table><thead><tr><th>Scenario</th><th>2028</th><th>2050</th>"
+    "<th>2075</th><th>2099</th><th>2099 gap</th></tr></thead><tbody>"
+    + "".join(rows)
+    + "</tbody></table>"
+)
+```
+
+Debt columns are percent of GDP. The 2099 gap is the extra primary balance, in percent of GDP, associated with holding the debt ratio steady at that date. A positive gap is consolidation. Paris is about zero. Hot unadapted is about 3.4 percent of GDP per year. The stock ratio and the flow gap answer different questions: 251 percent of GDP is where the path arrives; 3.4 points is the annual adjustment implied at the end.
+
+The real GDP level in 2099 on the hot unadapted path is lower than Paris by about 7 percent:
+
+```{python}
+round(hot_unadapted_gdp[2099] / paris_gdp[2099] - 1, 3)
+```
+
+A level gap of that size, held for decades with spending fixed, is what takes the debt ratio from about 125 to about 251. Revenue falls with nominal GDP. Primary expenditure stays at the baseline level because rigidity is 1. The ratio absorbs the difference. That is the result Q-CRAFT is built to show.
+
+```{python}
+import matplotlib.pyplot as plt
+
+years = list(range(2028, 2100))
+fig, ax = plt.subplots(figsize=(7.2, 4.0))
+for scenario, color in (
+    ("Paris", "#1F4E5F"),
+    ("Hot", "#6B8F71"),
+    ("Hot unadapted", "#C46B4A"),
+):
+    series = debt.sel(SCENARIO=scenario)
+    ax.plot(
+        years,
+        [series[year] for year in years],
+        label=scenario,
+        color=color,
+        linewidth=2.0,
+    )
+ax.set_ylabel("Debt, percent of GDP")
+ax.set_xlabel("Year")
+ax.set_title("France, primary expenditure held at the baseline level")
+ax.legend(frameon=False)
+ax.spines["top"].set_visible(False)
+ax.spines["right"].set_visible(False)
+fig.tight_layout()
+```
+
+## Let expenditure move with GDP
+
+Rigidity of 0 adjusts primary expenditure so the expenditure-to-GDP ratio stays at the baseline ratio. The GDP effect of that adjustment is outside the model. Report the rigidity you used beside the debt ratio.
+
+```{python}
+flexible = dict(assumptions)
+flexible["expenditure_rigidity"] = 0.0
+flexible_debt = compute_scenario_debt_to_gdp(
+    ScenarioDebtToGdpInputs.from_defaults(**flexible)
+)
+
+{
+    "rigid_2099": round(debt.sel(SCENARIO="Hot unadapted")[2099], 1),
+    "flexible_2099": round(flexible_debt.sel(SCENARIO="Hot unadapted")[2099], 1),
+}
+```
+
+Under these assumptions the hot unadapted ratio in 2099 falls from about 251 to about 139 when spending moves with GDP. The temperature path supplies the GDP loss. Rigidity decides how much of that loss becomes debt.
+
+## Reuse the call
+
+`from_defaults` fills every leaf from the vintage defaults, then applies the dictionary. Pass the same dictionary into every fiscal call. Growth-only functions take the four-key subset, so the GDP comparison uses the same productivity path. Select a scenario with `.sel(SCENARIO="Paris")`, then a year with `[2099]`.
+
+Replace `"France"` and any value you do not mean to publish. `from_defaults` rejects a keyword the inputs class does not have. When you publish a table, publish `assumptions` with it.
+
+The [methodology page](02-methodology-and-interpretation.qmd) is where each of
+these results sits in the identities: the fiscal rule, the debt dynamics, and
+expenditure rigidity.

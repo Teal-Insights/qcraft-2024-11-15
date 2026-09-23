@@ -1,0 +1,75 @@
+---
+title: "Where the results come from"
+---
+
+The [France assessment](01-worked-assessment.qmd) produces three results
+worth being able to explain. With the fiscal rule off, debt in 2099 is about
+584 percent of GDP; with the rule on, it stays near 132. The hot unadapted
+debt ratio finishes near 251 against about 125 on the Paris path, while the
+real GDP level is only about 7 percent lower. Setting expenditure rigidity to
+0 brings the hot unadapted ratio down to about 139. The identities below are
+why.
+
+## Debt dynamics
+
+Debt as a percent of GDP follows
+
+$$D_{t+1} = D_t \frac{1+i_t}{1+g_t} - PB_t,$$
+
+where $i$ is the nominal interest rate, $g$ is nominal GDP growth, and $PB$ is the primary balance as a percent of GDP. A primary surplus reduces the ratio. A wider gap between the interest rate and growth raises it. The primary balance is the term a government sets. The interest-growth differential is the term that compounds a starting stock.
+
+In the baseline, revenue stays a constant share of nominal GDP after the medium-term horizon. Primary expenditure grows with inflation, productivity, and total population, while GDP grows with inflation, productivity, and working-age population. Where total population grows faster than the working-age population, the expenditure ratio rises on its own. That is the ageing channel, before any climate path.
+
+The stabilizing primary balance is the primary balance that would hold the ratio still at each date. The 2099 consolidation gap on the assessment page is that idea at the milestone: the extra primary balance, in percent of GDP, associated with a stable ratio. Paris is about zero on the example's assumption set. Hot unadapted is about 3.4 percent of GDP a year. The stock can be 251 percent while the flow gap at the end is a few points. Report both.
+
+## The fiscal rule
+
+`fiscal_rule_enabled` is `"Yes"` or `"No"`. `debt_target` is a percent of GDP. With the rule on, the workbook reduces primary expenditure by the gap required to stabilize the ratio, with a lag, and repeats that step through the horizon. The ceiling is not hit exactly. In the France assessment the target is 60 and the rule-on path finishes near 132. The comparison that justifies the rule is the rule-off path, which finishes near 584.
+
+The consolidation that keeps the rule-on path in that range has no GDP effect inside the model. A baseline that depends on a large adjustment is a baseline whose growth path is too optimistic if you believe consolidation is contractionary. Say so when you use it.
+
+## Production
+
+Nominal GDP is real output times the GDP deflator, and real output is labour productivity times employment:
+
+$$N_t = Y_t P_t, \qquad Y_t = A_t L_t.$$
+
+Nominal growth is approximately productivity growth, plus employment growth, plus deflator growth. After the medium-term horizon, employment follows working-age population. Productivity moves from `productivity_start` to `productivity_end`. Inflation, as the GDP deflator, moves from `inflation_start` to `inflation_end`. Both pairs are percentage points.
+
+External demand, monetary conditions, exchange rates, and feedback from fiscal adjustment sit outside this relationship. The assessment's productivity path, 1.0 rising to 1.1, is an assumption about the structural pace, not a forecast the package estimates.
+
+## Interest-rate mode
+
+`interest_rate_mode` takes the workbook's labels exactly:
+
+| Value | What stays fixed |
+|---|---|
+| `"Nominal interest rate"` | The nominal rate at the end of the medium-term projection. |
+| `"Interest-growth differential"` | The nominal interest-growth differential. |
+| `"Real interest rate (a)"` | The real-rate assumption in `real_interest_rate`. |
+
+The France assessment holds the nominal rate. Long-horizon debt moves with this choice because $i - g$ is the compounding term. When you change the mode, rerun the debt table before you keep a ranking of scenarios.
+
+## Climate paths and expenditure rigidity
+
+Climate scenarios apply empirical estimates of persistent temperature effects to GDP per capita, then pass the GDP path through revenue, primary expenditure, balances, and debt.
+
+- **Paris** is the low-emissions pathway.
+- **Moderate** is an intermediate pathway.
+- **High** is a high-emissions pathway.
+- **Hot** is a high-temperature outcome under high emissions.
+- **Hot adapted** assumes faster adaptation.
+- **Hot unadapted** assumes slower adaptation.
+
+With `expenditure_rigidity` at 1, revenue falls with nominal GDP and primary expenditure stays at its baseline level. At 0, expenditure adjusts so the expenditure-to-GDP ratio stays at the baseline ratio. Values between them are a partial adjustment. The parameter is a scenario convention. The assessment's rigid case is where a 7 percent GDP-level gap becomes a debt ratio of about 251 percent. The flexible case is where that ratio falls to about 139. The spending response is most of the wedge.
+
+## Discrete shocks
+
+Natural disasters and contingent liabilities are entered. Fiscal scenario functions accept `discrete_revenue_shocks` and `discrete_primary_expenditure_shocks` on the `SCENARIO` × `TIME_PERIOD` domain from 2030 through 2099. The vintage default, used in the assessment, is an empty cell at every coordinate. A positive primary-expenditure value is an expenditure shock. A positive revenue-loss value is a revenue shock. The shock moves the fiscal aggregates. It does not add a GDP shock, an inflation shock, or an adaptation-spending channel.
+
+## What you still need another model for
+
+Q-CRAFT is the reproducible long-term comparison: a baseline you can explain, a climate wedge you can attribute to rigidity or to the temperature path, and a consolidation gap at the milestone. A medium-term budget, a debt-sustainability analysis with financing, and a climate-impact model answer questions these identities leave open.
+
+Agreement with the workbook supports the implementation. The assumptions
+still need an economic defense, which is what the assessment page is for.
