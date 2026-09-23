@@ -1,8 +1,8 @@
 """FormulaEvaluator backend for the series-graph API.
 
-Builds an excel-grapher dependency graph over the Tiny DSA workbook fixture
+Builds an excel-grapher dependency graph over the Q-CRAFT workbook fixture
 and evaluates series cells after writing input leaves. Optional: requires
-``excel-grapher`` and ``tests/fixtures/tiny-dsa.xlsx``.
+``excel-grapher`` and ``tests/fixtures/qcraft-toolv10.xlsx``.
 """
 
 from __future__ import annotations
@@ -13,19 +13,24 @@ from typing import Any, Literal
 from .graph_schema import (
     NODES_BY_ID,
     SERIES_IDS,
+    VIZ_INPUT_IDS,
     all_cell_addresses,
     input_cell_writes,
 )
 
 _REPO_ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_WORKBOOK = _REPO_ROOT / "tests" / "fixtures" / "tiny-dsa.xlsx"
+DEFAULT_WORKBOOK = _REPO_ROOT / "tests" / "fixtures" / "qcraft-toolv10.xlsx"
 DEFAULT_BINDINGS = _REPO_ROOT / "bindings"
 
 # Fallback dynamic-ref domains when series bindings cannot be loaded.
 _CONSTRAINTS_SCHEMA: dict[str, Any] = {
-    "Inputs!B5": Literal["Borvelia", "Litellia", "Aurelium"],
-    "Inputs!B21": Literal[1, 2, 3, 4, 5],
-    "Inputs!B22": Literal[1, 2, 3],
+    "Dashboard!C17": Literal["High", "Low", "Medium"],
+    "Dashboard!C28": Literal[
+        "Interest-growth differential",
+        "Nominal interest rate",
+        "Real interest rate (a)",
+    ],
+    "Dashboard!C33": Literal["No", "Yes"],
 }
 
 _driver: _FormulaEvaluatorDriver | None = None
@@ -39,6 +44,12 @@ def is_available(*, workbook: Path | None = None) -> bool:
     try:
         import excel_grapher  # noqa: F401
         from excel_grapher.grapher import DynamicRefConfig, create_dependency_graph  # noqa: F401
+        import fastpyxl
+        import inspect
+
+        # excel-grapher may require a newer fastpyxl than is installed.
+        if "keep_formula_cache" not in inspect.signature(fastpyxl.load_workbook).parameters:
+            return False
     except ImportError:
         return False
     return True
@@ -102,16 +113,7 @@ class _FormulaEvaluatorDriver:
     @staticmethod
     def _input_addresses() -> list[str]:
         addresses: list[str] = []
-        for series_id in (
-            "country_name",
-            "country_initial_debt",
-            "growth_baseline",
-            "interest_baseline",
-            "primary_balance_baseline",
-            "shock_year",
-            "shock_type",
-            "shock_magnitudes",
-        ):
+        for series_id in VIZ_INPUT_IDS:
             node = NODES_BY_ID[series_id]
             if "address" in node:
                 addresses.append(node["address"])
@@ -128,16 +130,7 @@ class _FormulaEvaluatorDriver:
             self.graph.set_node_value(address, value)
 
     def read_series_values(self, flat_inputs: dict[str, Any]) -> dict[str, Any]:
-        values: dict[str, Any] = {
-            "country_name": flat_inputs["country_name"],
-            "country_initial_debt": dict(flat_inputs["country_initial_debt"]),
-            "growth_baseline": dict(flat_inputs["growth_baseline"]),
-            "interest_baseline": dict(flat_inputs["interest_baseline"]),
-            "primary_balance_baseline": dict(flat_inputs["primary_balance_baseline"]),
-            "shock_year": flat_inputs["shock_year"],
-            "shock_type": flat_inputs["shock_type"],
-            "shock_magnitudes": dict(flat_inputs["shock_magnitudes"]),
-        }
+        values: dict[str, Any] = {name: flat_inputs[name] for name in VIZ_INPUT_IDS}
         for series_id in SERIES_IDS:
             if series_id in values:
                 continue

@@ -1,13 +1,13 @@
 /**
- * Tiny DSA interactive dependency graph.
+ * Q-CRAFT interactive dependency graph.
  * Loads series topology from GET /api/graph and recomputes via
- * POST /api/evaluate with backend=formula_evaluator (excel-grapher).
+ * POST /api/evaluate with backend=export (qcraft.model.Model).
  * Fall back: ./bootstrap.json for static docs preview when the API is offline.
  */
 (function () {
   "use strict";
 
-  const BACKEND = "formula_evaluator";
+  const BACKEND = "export";
   const LAYER_ORIGIN_X = 140;
   const LAYER_GAP_X = 280;
   const LAYER_ROW = 78;
@@ -182,7 +182,7 @@
     if (!apiBase && !window.location.pathname.includes("api")) {
       // Static bootstrap-only mode (docs preview): no live recompute.
       throw new Error(
-        "Live recompute needs the FormulaEvaluator API. Run: uv run python scripts/serve_graph_api.py"
+        "Live recompute needs the graph API. Run: uv run python scripts/serve_graph_api.py"
       );
     }
     const url = apiUrl(`/api/evaluate`);
@@ -217,7 +217,14 @@
     if (series.keys.length === 1 && series.keys[0] == null) {
       return formatValue(raw);
     }
-    return series.keys.map((key) => formatValue(raw[key])).join(", ");
+    if (!raw || typeof raw !== "object") return formatValue(raw);
+    const keys = series.keys;
+    if (keys.length <= 5) {
+      return keys.map((key) => formatValue(raw[key] ?? raw[String(key)])).join(", ");
+    }
+    const first = formatValue(raw[keys[0]] ?? raw[String(keys[0])]);
+    const last = formatValue(raw[keys[keys.length - 1]] ?? raw[String(keys[keys.length - 1])]);
+    return `${keys.length} yrs: ${first} … ${last}`;
   }
 
   function addressText(series) {
@@ -456,29 +463,43 @@
 
     let editor = "";
     if (editable) {
+      const current = inputs[series.id];
       if (series.kind === "enum") {
         editor = `<label for="edit-value">Value</label><select id="edit-value">${series.options
           .map(
             (o) =>
-              `<option value="${o}" ${o === inputs.country_name ? "selected" : ""}>${o}</option>`
+              `<option value="${o}" ${o === current ? "selected" : ""}>${o}</option>`
           )
           .join("")}</select>`;
       } else if (series.kind === "enum_int") {
         editor = `<label for="edit-value">Value</label><select id="edit-value">${series.options
           .map(
             (o) =>
-              `<option value="${o}" ${Number(o) === Number(inputs.shock_type) ? "selected" : ""}>${optionLabel(
+              `<option value="${o}" ${Number(o) === Number(current) ? "selected" : ""}>${optionLabel(
                 series,
                 o
               )}</option>`
           )
           .join("")}</select>`;
-      } else if (series.kind === "int") {
-        editor = `<label for="edit-value">Value (integer ${series.domain.min}–${series.domain.max})</label><input id="edit-value" type="number" step="1" min="${series.domain.min}" max="${series.domain.max}" value="${inputs.shock_year}" />`;
+      } else if (series.kind === "int" || (series.kind === "float" && series.keys[0] == null)) {
+        const step = series.kind === "int" ? "1" : "any";
+        const min = series.domain ? ` min="${series.domain.min}"` : "";
+        const max = series.domain ? ` max="${series.domain.max}"` : "";
+        const rangeHint = series.domain
+          ? ` (${series.domain.min}–${series.domain.max})`
+          : "";
+        editor = `<label for="edit-value">Value${rangeHint}</label><input id="edit-value" type="number" step="${step}"${min}${max} value="${current}" />`;
       } else {
         editor = `<label for="edit-value">Values (comma-separated · ${keysHint})</label><input id="edit-value" type="text" value="${vals}" />`;
       }
       editor += `<button class="primary" type="button" id="apply-edit">Apply</button>`;
+      if (series.id === "real_interest_rate") {
+        const mode = inputs.interest_rate_mode;
+        const active = mode === "Real interest rate (a)";
+        editor += active
+          ? `<p class="hint">Used while interest_rate_mode is “Real interest rate (a)”.</p>`
+          : `<p class="hint">Inactive under interest_rate_mode “${mode}”. Switch that input to “Real interest rate (a)” for this value to move baseline_interest_rate.</p>`;
+      }
     } else {
       editor = `<p class="hint">Read-only ${series.role} series. Edit an amber input upstream to change these values.</p>`;
     }
@@ -507,22 +528,27 @@
   function commitEdit(series, raw) {
     try {
       if (series.kind === "enum") {
-        if (!series.options.includes(raw)) throw new Error("Invalid country");
-        inputs.country_name = raw;
+        if (!series.options.includes(raw)) throw new Error("Invalid option");
+        inputs[series.id] = raw;
         return true;
       }
       if (series.kind === "enum_int") {
         const n = Number(raw);
-        if (!series.options.map(Number).includes(n)) throw new Error("Invalid shock type");
-        inputs.shock_type = n;
+        if (!series.options.map(Number).includes(n)) throw new Error("Invalid option");
+        inputs[series.id] = n;
         return true;
       }
-      if (series.kind === "int") {
+      if (series.kind === "int" || (series.kind === "float" && series.keys[0] == null)) {
         const n = Number(raw);
-        if (!Number.isInteger(n) || n < series.domain.min || n > series.domain.max) {
+        if (!Number.isFinite(n)) throw new Error("Not a number");
+        if (series.kind === "int" && !Number.isInteger(n)) throw new Error("Must be an integer");
+        if (
+          series.domain &&
+          (n < series.domain.min || n > series.domain.max)
+        ) {
           throw new Error("Out of range");
         }
-        inputs.shock_year = n;
+        inputs[series.id] = n;
         return true;
       }
       const parts = String(raw)
@@ -788,7 +814,7 @@
     } catch (err) {
       console.error("Tiny DSA graph failed to initialize", err);
       cyEl.innerHTML =
-        '<p style="padding:1rem;font:14px system-ui;color:#b91c1c;">Graph failed to load. Serve with <code>uv run python scripts/serve_graph_api.py</code> (FormulaEvaluator) or provide <code>bootstrap.json</code>.</p>';
+        '<p style="padding:1rem;font:14px system-ui;color:#b91c1c;">Graph failed to load. Serve with <code>uv run python scripts/serve_graph_api.py</code> or provide <code>bootstrap.json</code>.</p>';
     }
   }
 

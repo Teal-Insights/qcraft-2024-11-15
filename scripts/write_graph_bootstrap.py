@@ -16,10 +16,11 @@ OUT = ROOT / "assets" / "graph" / "bootstrap.json"
 
 def main() -> int:
     sys.path.insert(0, str(ROOT))
-    from tiny_dsa.graph_api import available_backends, bootstrap
+    from qcraft.graph_api import available_backends, bootstrap
 
     backends = available_backends()
-    backend = "formula_evaluator" if "formula_evaluator" in backends else "export"
+    # Prefer the exported Model: FE over the full Q-CRAFT workbook is optional.
+    backend = "export" if "export" in backends else backends[0]
     payload = bootstrap(backend=backend)
     OUT.write_text(json.dumps(payload, indent=2, allow_nan=False) + "\n", encoding="utf-8")
     print(f"wrote {OUT} (backend={backend})")

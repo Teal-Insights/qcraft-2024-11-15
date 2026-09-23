@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
-"""Serve the Tiny DSA series-graph API (stdlib HTTP).
+"""Serve the Q-CRAFT series-graph API (stdlib HTTP).
 
 Endpoints:
   GET  /api/graph              bootstrap (schema + defaults + values)
   POST /api/evaluate           recompute; body {"backend":"...","inputs":{...}}
   GET  /                       static assets/graph/ (viz UI)
 
-Default backend is FormulaEvaluator when available (``uv sync --group graph``).
+Default backend is the exported ``Model`` (``export``). FormulaEvaluator is
+optional when excel-grapher can load ``tests/fixtures/qcraft-toolv10.xlsx``.
 """
 
 from __future__ import annotations
@@ -24,13 +25,13 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from tiny_dsa.graph_api import (  # noqa: E402
+from qcraft.graph_api import (  # noqa: E402
     GraphApiError,
     available_backends,
     bootstrap,
     evaluate,
 )
-from tiny_dsa.graph_schema import BackendName  # noqa: E402
+from qcraft.graph_schema import BackendName  # noqa: E402
 
 STATIC_ROOT = ROOT / "assets" / "graph"
 
@@ -48,9 +49,6 @@ def _json_response(handler: BaseHTTPRequestHandler, status: int, payload: Any) -
 
 
 def _default_backend() -> BackendName:
-    backends = available_backends()
-    if "formula_evaluator" in backends:
-        return "formula_evaluator"
     return "export"
 
 
@@ -63,7 +61,7 @@ def _parse_backend(raw: Any) -> BackendName:
 
 
 class GraphApiHandler(BaseHTTPRequestHandler):
-    server_version = "TinyDsaGraphAPI/0.1"
+    server_version = "QcraftGraphAPI/0.1"
 
     def log_message(self, format: str, *args: Any) -> None:  # noqa: A003
         sys.stderr.write("%s - %s\n" % (self.address_string(), format % args))
@@ -78,7 +76,7 @@ class GraphApiHandler(BaseHTTPRequestHandler):
     def do_GET(self) -> None:  # noqa: N802
         parsed = urlparse(self.path)
         if parsed.path in ("/api/health", "/api/health/"):
-            from tiny_dsa.graph_api import available_backends
+            from qcraft.graph_api import available_backends
 
             _json_response(
                 self,
@@ -158,7 +156,9 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "--host",
-        default=os.environ.get("HOST", "127.0.0.1"),
+        # Railway / containers need 0.0.0.0; local default stays loopback unless PORT is set by the platform.
+        default=os.environ.get("HOST")
+        or ("0.0.0.0" if os.environ.get("PORT") else "127.0.0.1"),
     )
     parser.add_argument(
         "--port",
@@ -167,7 +167,7 @@ def main(argv: list[str] | None = None) -> int:
     )
     args = parser.parse_args(argv)
     server = ThreadingHTTPServer((args.host, args.port), GraphApiHandler)
-    print(f"Tiny DSA graph API on http://{args.host}:{args.port}/")
+    print(f"Q-CRAFT graph API on http://{args.host}:{args.port}/")
     print("  GET  /api/health")
     print("  GET  /api/graph")
     print("  POST /api/evaluate")
