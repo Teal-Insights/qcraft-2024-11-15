@@ -1,8 +1,8 @@
 """Pedagogical series-graph API for the docs dependency-graph viz.
 
 Recomputes via the exported ``Model`` (default) or excel-grapher's
-``FormulaEvaluator``. JSON shapes match ``assets/graph/app.js`` defaults /
-evaluate output (flat key→value maps, not tuple coordinates).
+``FormulaEvaluator``. JSON shapes match ``assets/graph/app.js``
+(flat key→value maps, not tuple coordinates).
 """
 
 from __future__ import annotations
@@ -15,6 +15,7 @@ from .graph_schema import (
     INPUT_IDS,
     NODES,
     SERIES_IDS,
+    VIZ_INPUT_IDS,
     BackendName,
     axes,
 )
@@ -24,6 +25,22 @@ from .tensor import Series
 JsonValue = Any
 FlatInputs = dict[str, JsonValue]
 FlatValues = dict[str, JsonValue]
+
+_ENUM_INPUTS = {
+    "country",
+    "demography_scenario",
+    "interest_rate_mode",
+    "fiscal_rule_enabled",
+}
+_FLOAT_INPUTS = {
+    "productivity_start",
+    "productivity_end",
+    "inflation_start",
+    "inflation_end",
+    "real_interest_rate",
+    "debt_target",
+    "expenditure_rigidity",
+}
 
 
 class GraphApiError(Exception):
@@ -51,6 +68,8 @@ class GraphApiError(Exception):
 def _unwrap_key(key: object) -> object:
     if isinstance(key, tuple) and len(key) == 1:
         return key[0]
+    if isinstance(key, tuple):
+        return "|".join(str(part) for part in key)
     return key
 
 
@@ -83,109 +102,59 @@ def _json_number(value: object) -> JsonValue:
 
 
 def flatten_defaults() -> FlatInputs:
-    """Canonical workbook defaults in viz-flat shape."""
-    return {
-        "country_name": data.COUNTRY_NAME_DEFAULT,
-        "country_initial_debt": flatten_series(data.COUNTRY_INITIAL_DEBT_DEFAULT),
-        "growth_baseline": flatten_series(data.GROWTH_BASELINE_DEFAULT),
-        "interest_baseline": flatten_series(data.INTEREST_BASELINE_DEFAULT),
-        "primary_balance_baseline": flatten_series(data.PRIMARY_BALANCE_BASELINE_DEFAULT),
-        "shock_year": data.SHOCK_YEAR_DEFAULT,
-        "shock_type": data.SHOCK_TYPE_DEFAULT,
-        "shock_magnitudes": flatten_series(data.SHOCK_MAGNITUDES_DEFAULT),
-    }
+    """Canonical Dashboard defaults for the pedagogical viz.
 
-
-def _normalize_map_keys(raw: Mapping[Any, Any], *, int_keys: bool) -> dict[Any, Any]:
-    out: dict[Any, Any] = {}
-    for key, value in raw.items():
-        if int_keys:
-            out[int(key)] = float(value)
-        else:
-            out[str(key) if not isinstance(key, str) else key] = (
-                float(value) if not isinstance(value, str) else value
-            )
-    return out
+    Uses France rather than ``data.COUNTRY_DEFAULT`` (Afghanistan): several
+    climate / scenario paths are blank for countries without climate coverage,
+    which surfaces as ``#VALUE!`` in the graph.
+    """
+    defaults: FlatInputs = {}
+    for name in VIZ_INPUT_IDS:
+        defaults[name] = _json_number(getattr(data, f"{name.upper()}_DEFAULT"))
+    defaults["country"] = "France"
+    return defaults
 
 
 def normalize_inputs(raw: Mapping[str, Any] | None) -> FlatInputs:
-    """Accept JSON inputs (stringified year keys ok); fill missing from defaults."""
+    """Accept JSON inputs; fill missing Dashboard scalars from defaults."""
     base = flatten_defaults()
     if not raw:
         return base
-    unknown = set(raw) - set(INPUT_IDS)
+    allowed = set(VIZ_INPUT_IDS)
+    unknown = set(raw) - allowed - set(INPUT_IDS)
     if unknown:
         raise GraphApiError(
             f"unknown inputs: {sorted(unknown)}",
             errors={name: "unknown input" for name in sorted(unknown)},
         )
     merged = dict(base)
-    if "country_name" in raw:
-        merged["country_name"] = str(raw["country_name"])
-    if "shock_year" in raw:
-        merged["shock_year"] = int(raw["shock_year"])
-    if "shock_type" in raw:
-        merged["shock_type"] = int(raw["shock_type"])
-    if "country_initial_debt" in raw:
-        merged["country_initial_debt"] = _normalize_map_keys(
-            raw["country_initial_debt"], int_keys=False
-        )
-        # country keys stay strings; coerce values
-        merged["country_initial_debt"] = {
-            str(k): float(v) for k, v in merged["country_initial_debt"].items()
-        }
-    if "growth_baseline" in raw:
-        merged["growth_baseline"] = _normalize_map_keys(raw["growth_baseline"], int_keys=True)
-    if "interest_baseline" in raw:
-        merged["interest_baseline"] = _normalize_map_keys(raw["interest_baseline"], int_keys=True)
-    if "primary_balance_baseline" in raw:
-        merged["primary_balance_baseline"] = _normalize_map_keys(
-            raw["primary_balance_baseline"], int_keys=True
-        )
-    if "shock_magnitudes" in raw:
-        merged["shock_magnitudes"] = {
-            str(k): float(v) for k, v in raw["shock_magnitudes"].items()
-        }
+    for name in VIZ_INPUT_IDS:
+        if name not in raw:
+            continue
+        value = raw[name]
+        if name in _ENUM_INPUTS:
+            merged[name] = str(value)
+        elif name in _FLOAT_INPUTS:
+            if isinstance(value, (dict, list)):
+                raise GraphApiError(
+                    f"{name} must be a number",
+                    errors={name: "expected scalar"},
+                )
+            merged[name] = float(value)
+        else:
+            merged[name] = value
     return merged
 
 
-def _ordered_values(template: Series, flat: Mapping[Any, Any]) -> tuple[Any, ...]:
-    values: list[Any] = []
-    for coord in template.domain:
-        key = _unwrap_key(coord)
-        if key not in flat:
-            raise GraphApiError(
-                f"missing key {key!r} for {template.schema.series_id}",
-                errors={template.schema.series_id: f"missing key {key!r}"},
-            )
-        values.append(flat[key])
-    return tuple(values)
-
-
 def bind_model_inputs(flat: FlatInputs) -> dict[str, Any]:
-    """Flat viz inputs → keyword args for ``Model`` / ``from_defaults``."""
-    return {
-        "country_name": flat["country_name"],
-        "country_initial_debt": data.COUNTRY_INITIAL_DEBT_DEFAULT.with_values(
-            _ordered_values(data.COUNTRY_INITIAL_DEBT_DEFAULT, flat["country_initial_debt"])
-        ),
-        "growth_baseline": data.GROWTH_BASELINE_DEFAULT.with_values(
-            _ordered_values(data.GROWTH_BASELINE_DEFAULT, flat["growth_baseline"])
-        ),
-        "interest_baseline": data.INTEREST_BASELINE_DEFAULT.with_values(
-            _ordered_values(data.INTEREST_BASELINE_DEFAULT, flat["interest_baseline"])
-        ),
-        "primary_balance_baseline": data.PRIMARY_BALANCE_BASELINE_DEFAULT.with_values(
-            _ordered_values(
-                data.PRIMARY_BALANCE_BASELINE_DEFAULT, flat["primary_balance_baseline"]
-            )
-        ),
-        "shock_year": flat["shock_year"],
-        "shock_type": flat["shock_type"],
-        "shock_magnitudes": data.SHOCK_MAGNITUDES_DEFAULT.with_values(
-            _ordered_values(data.SHOCK_MAGNITUDES_DEFAULT, flat["shock_magnitudes"])
-        ),
-    }
+    """Flat viz inputs → keyword args for ``Model.from_defaults``."""
+    kwargs = {name: flat[name] for name in VIZ_INPUT_IDS}
+    # Matrix shocks stay at workbook defaults (not exposed in the pedagogical viz).
+    kwargs["discrete_revenue_shocks"] = data.DISCRETE_REVENUE_SHOCKS_DEFAULT
+    kwargs["discrete_primary_expenditure_shocks"] = (
+        data.DISCRETE_PRIMARY_EXPENDITURE_SHOCKS_DEFAULT
+    )
+    return kwargs
 
 
 def available_backends() -> list[BackendName]:
@@ -201,23 +170,14 @@ def available_backends() -> list[BackendName]:
 
 
 def evaluate_export(inputs: Mapping[str, Any] | None = None) -> FlatValues:
-    """Recompute every series via the exported ``Model``."""
+    """Recompute every viz series via the exported ``Model``."""
     flat = normalize_inputs(inputs)
     try:
-        model = Model(**bind_model_inputs(flat))
+        model = Model.from_defaults(**bind_model_inputs(flat))
     except (TypeError, ValueError) as exc:
         raise GraphApiError(str(exc), errors={"_model": str(exc)}) from exc
 
-    values: FlatValues = {
-        "country_name": flat["country_name"],
-        "country_initial_debt": dict(flat["country_initial_debt"]),
-        "growth_baseline": dict(flat["growth_baseline"]),
-        "interest_baseline": dict(flat["interest_baseline"]),
-        "primary_balance_baseline": dict(flat["primary_balance_baseline"]),
-        "shock_year": flat["shock_year"],
-        "shock_type": flat["shock_type"],
-        "shock_magnitudes": dict(flat["shock_magnitudes"]),
-    }
+    values: FlatValues = {name: flat[name] for name in VIZ_INPUT_IDS}
     for series_id in SERIES_IDS:
         if series_id in values:
             continue
@@ -231,7 +191,8 @@ def evaluate_formula_evaluator(inputs: Mapping[str, Any] | None = None) -> FlatV
 
     if not fe.is_available():
         raise GraphApiError(
-            "formula_evaluator backend requires excel-grapher and the Tiny DSA workbook fixture",
+            "formula_evaluator backend requires excel-grapher and "
+            "tests/fixtures/qcraft-toolv10.xlsx",
             status=503,
         )
     flat = normalize_inputs(inputs)
