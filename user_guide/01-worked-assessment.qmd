@@ -16,26 +16,46 @@ from qcraft.api import compute_scenario_debt_to_gdp
 print(inspect.signature(compute_scenario_debt_to_gdp))
 ```
 
-Every `*Inputs` class has a `describe()` method. It reports each field's allowed values, its axes and keys, its workbook default, and the worksheet cells that default came from:
+Every `*Inputs` class has a `describe()` method. It reports each field's
+allowed values, axes and keys, workbook default, and source cells. The
+following prints that contract in a compact form; series fields show their
+first and last coordinates so the output remains readable:
 
 ```{python}
-from typing import Literal, get_args, get_origin
+from typing import Annotated, Literal, get_args, get_origin
 
 from qcraft import ScenarioDebtToGdpInputs
 
 fields = ScenarioDebtToGdpInputs.describe()
 
 
-def allowed(values: object) -> str:
-    if get_origin(values) is Literal:
-        choices = get_args(values)
+def allowed(annotation: object) -> str:
+    origin = get_origin(annotation)
+    if origin is Literal:
+        choices = get_args(annotation)
         return repr(list(choices)) if len(choices) <= 4 else f"{len(choices)} choices"
-    return repr(values).replace("typing.", "")
+    if origin is Annotated:
+        base, *metadata = get_args(annotation)
+        return f"{base!r}, bounds={metadata!r}"
+    return repr(annotation).replace("typing.", "")
 
 
 for name, field in fields.items():
-    axes = " x ".join(f"{axis.name}[{len(axis.keys)}]" for axis in field.axes) or "scalar"
-    print(f"{name}: {allowed(field.values)}  [{axes}]")
+    axes = "; ".join(
+        f"{axis.name} keys={axis.keys!r}" for axis in field.axes
+    ) or "scalar"
+    if field.is_series:
+        coordinates = tuple(field.default.domain)
+        shown = (coordinates[0], coordinates[-1])
+        default = {coordinate: field.default[coordinate] for coordinate in shown}
+        source_cells = {coordinate: field.cells[coordinate] for coordinate in shown}
+    else:
+        default = field.default
+        source_cells = field.cells
+    print(
+        f"{name}: allowed={allowed(field.values)}; "
+        f"axes={axes}; default={default!r}; source_cells={source_cells!r}"
+    )
 ```
 
 Eleven fields are scalars. A `Literal` field takes one of the workbook's dropdown strings, matched exactly. An `Annotated[float, RealBetween(...)]` field takes a number inside the bounds. The two shock fields are series over 6 scenarios and 70 years, and each value may be empty (`Optional`). Values outside the domain fail at construction, before any evaluation:
@@ -52,6 +72,10 @@ A scalar field's `default` is the vintage value, and `cells` names the dashboard
 ```{python}
 {name: (fields[name].default, fields[name].cells[()]) for name in ("country", "debt_target", "expenditure_rigidity")}
 ```
+
+The examples below override selected leaves, but every omitted leaf stays at
+the workbook vintage's stored default rather than receiving a country-specific
+calibration.
 
 ## State the assumptions
 
@@ -82,7 +106,10 @@ assumptions = {
 
 Productivity and inflation are percentage points. The debt target is a percent of GDP. Scenario labels and the interest-rate mode are the workbook's strings, matched exactly. `real_interest_rate` is always passed, so the call states it even though this mode holds the nominal rate.
 
-Omitted leaves stay at the vintage default. The shock series are omitted here, so every discrete-risk cell stays empty. That is the workbook's case with no extra disaster or contingent-liability shock.
+The shock series are omitted here, so every discrete-risk cell stays empty.
+That is the workbook's case with no extra disaster or contingent-liability
+shock. Every other omitted leaf also stays at the workbook vintage's stored
+default rather than receiving a country-specific calibration.
 
 ## The baseline needs a rule
 

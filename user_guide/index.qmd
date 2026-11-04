@@ -9,10 +9,10 @@ reproducible paths for GDP, balances, and debt through 2099. Teal Insights
 publishes this Python package; the tool and its underlying guidance note are
 from the IMF. This publication does not imply IMF endorsement.
 
-The [worked assessment](01-worked-assessment.qmd) shows the economic result
+The [worked assessment](user-guide/worked-assessment.qmd) shows the economic result
 first: for one France assumption set, rigid primary expenditure produces a
 2099 debt ratio of about 125 percent of GDP under Paris and 251 percent under
-Hot unadapted. The [methodology guide](02-methodology-and-interpretation.qmd)
+Hot unadapted. The [methodology guide](user-guide/methodology-and-interpretation.qmd)
 explains what those comparisons do and do not measure.
 
 ## Install
@@ -36,8 +36,8 @@ uv add "qcraft-2024-11-15 @ git+https://github.com/Teal-Insights/qcraft-2024-11-
 
 ## Start here
 
-1. [Run the worked assessment](01-worked-assessment.qmd).
-2. [Interpret the identities and scenario conventions](02-methodology-and-interpretation.qmd).
+1. [Run the worked assessment](user-guide/worked-assessment.qmd).
+2. [Interpret the identities and scenario conventions](user-guide/methodology-and-interpretation.qmd).
 3. Browse the generated [API reference](../reference/index.qmd).
 
 Q-CRAFT is a partial-equilibrium, stylized long-term assessment. It does not

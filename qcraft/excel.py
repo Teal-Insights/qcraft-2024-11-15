@@ -11,6 +11,9 @@ from typing import Any, Protocol, TypeAlias, TypeGuard, TypeVar, cast, runtime_c
 import math
 import numbers
 import re
+
+class AmbiguousWorkbookNeedle(ValueError):
+    """More than one public key stores this workbook needle."""
 MIN_OPERATOR_FASTPATH_CELLS = 64
 NormalizedAddress: TypeAlias = str
 T = TypeVar('T', str, float)
@@ -225,6 +228,18 @@ def _round_half_away_from_zero(number: float, digits: int) -> float:
     shifted = Decimal(str(number)) * factor
     return float(shifted.to_integral_value(rounding=ROUND_HALF_UP) / factor)
 
+def _same_workbook_needle(stored: object, cell: object) -> bool:
+    """Return whether `cell` is the authored workbook needle `stored`.
+
+    Excel often caches a whole number as `int` when the map stored `float`.
+    `True` is not `1`.
+    """
+    if isinstance(stored, bool) or isinstance(cell, bool):
+        return type(stored) is type(cell) and stored == cell
+    if isinstance(stored, int | float) and isinstance(cell, int | float):
+        return stored == cell
+    return stored == cell
+
 def _try_import_numpy() -> ModuleType | None:
     try:
         return import_module('numpy')
@@ -402,6 +417,30 @@ def _materialize_grid(grid: Grid) -> Any:
             arr = arr.reshape(grid.nrows, grid.ncols)
         return arr
     return np.array([[grid.at(row0, col0) for col0 in range(grid.ncols)] for row0 in range(grid.nrows)], dtype=object)
+
+def public_value_from_workbook(value: object, mapping: Mapping[Any, Any], *, series_id: str) -> object:
+    """Return the public `input.value_map` key stored as `value` in a workbook.
+
+    Args:
+        value: Cached cell value from a workbook of this vintage.
+        mapping: Public value to workbook needle.
+        series_id: Binding series id used in the error message.
+
+    Returns:
+        The unique public key whose needle equals `value`.
+
+    Raises:
+        AmbiguousWorkbookNeedle: More than one public key stores `value`.
+        ValueError: `value` is not a needle of `mapping`.
+    """
+    matches = [key for key, needle in mapping.items() if _same_workbook_needle(needle, value)]
+    if len(matches) == 1:
+        return matches[0]
+    if len(matches) > 1:
+        listed = ', '.join((repr(key) for key in matches))
+        raise AmbiguousWorkbookNeedle(f'{series_id} workbook value {value!r} matches multiple value_map keys: {listed}')
+    needles = ', '.join((repr(needle) for needle in mapping.values()))
+    raise ValueError(f'{series_id} workbook value {value!r} is not a value_map needle; expected one of {{{needles}}}')
 
 def quote_sheet_if_needed(sheet: str) -> str:
     """Return a sheet name quoted for formulas when quoting is required."""

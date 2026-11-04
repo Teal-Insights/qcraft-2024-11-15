@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generator": "excel-grapher 24.1.0 clustered_force_layout",
+  "generator": "excel-grapher 24.1.6 clustered_force_layout",
   "orientation": "top_to_bottom",
   "link_distance": 40.0,
   "positions": {
