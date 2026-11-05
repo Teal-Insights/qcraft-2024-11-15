@@ -4,10 +4,16 @@ subtitle: "Long-term fiscal risk under climate scenarios"
 resources: [../assets/graph/**]
 ---
 
+A SovTech tool, built by Teal Insights and commissioned by NatureFinance.
+
 Q-CRAFT turns a named set of macro-fiscal and climate assumptions into
 reproducible paths for GDP, balances, and debt through 2099. Teal Insights
 publishes this Python package; the tool and its underlying guidance note are
 from the IMF. This publication does not imply IMF endorsement.
+
+The [MIT license](https://github.com/Teal-Insights/qcraft-2024-11-15/blob/main/LICENSE.md)
+covers this Python software and its associated documentation. The underlying
+IMF workbook remains subject to its own terms.
 
 The [worked assessment](user-guide/worked-assessment.qmd) shows the economic result
 first: for one France assumption set, rigid primary expenditure produces a
